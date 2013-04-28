@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="onCreationComplete()" currentState="default"
+		 width="610" height="440">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="network"/>
+		<s:State name="knowledge"/>
+		<s:State name="status"/>
+	</s:states>
+	<s:Label x="10" y="8" color="#522E34" fontSize="12" text="Note: There can only be ONE intent and ONE type of intent (ie Bud Up) entry inside that intent.  All others will be ignored."/>
+	<s:TextInput id="description" x="156" y="27" width="446"
+				 contentBackgroundColor="#FFFFFF" enabled="true"
+				 fontWeight="bold" prompt="Author Notes" 
+				 />
+	<s:List id="intentTypeList" x="10" y="81" width="130" height="200"
+			contentBackgroundColor="#FFFFFF" 
+			></s:List>
+	<s:Label x="10" y="61" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Intents"/>
+	<s:Label x="10" y="319" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Details"
+			 />
+	<s:Button x="156" y="81" label="Add"
+			  click="addIntent(intentTypeList.selectedIndex)"/>
+	<s:Button x="156" y="110" label="Remove"
+			  click="removeIntent(predicateEditor.selectedIndex)"/>
+	<s:List id="predicateEditor" x="234" y="81" width="368" height="200"
+			click="clickOnPredicateEditor(predicateEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF"
+			dataProvider="{this.intents}" enabled="false"
+			 selectedIndex="1"
+			
+			></s:List>
+	<s:DropDownList id="knowledgeList" includeIn="knowledge" x="110"
+					y="349" width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.knowledgeTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor()"></s:DropDownList>
+	<s:DropDownList id="statusList" includeIn="status" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.statusTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor()"></s:DropDownList>
+	<s:DropDownList id="networkList" includeIn="network" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.networkTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor()"></s:DropDownList>
+	<s:DropDownList id="firstRole" includeIn="knowledge,network,status" x="110" y="378"
+					width="175" change="updatePredicateEditor()"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="secondRole" includeIn="network,status" x="428" y="378" width="175"
+					change="updatePredicateEditor()"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="status" x="10" y="352" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="Status"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="network" x="10" y="352" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="Network"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="knowledge" x="10" y="352" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="Knowledge"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="network,status" x="328" y="381" width="96" height="21" fontSize="14"
+			 fontWeight="bold" text="Second Role" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="network,status" x="10" y="381" width="96" height="21" fontSize="14"
+			 fontWeight="bold" text="First Role" textAlign="right" verticalAlign="middle"/>
+	<mx:HRule x="10" y="292" width="592" height="10"
+			  />
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			[Bindable] public var intents:ArrayCollection; 
+			public var workingIntents:Vector.<Predicate> = new Vector.<Predicate>();
+			
+			public function onCreationComplete():void {
+				this.intents = new ArrayCollection();
+				this.intentTypeList.dataProvider = this.dte.intentTypes;
+				this.intentTypeList.selectedIndex = 0;
+			}				
+			
+			// Takes a predicate clones it, updates the appropriate field based on UI state
+			// returns the cloned predicate
+			public function updatePredicateByState(workingPredicate:Predicate):Predicate
+			{
+				var newPredicate:Predicate = workingPredicate.clone();
+				
+				switch (this.currentState)
+				{
+					case "network":
+						newPredicate.networkType = this.networkList.selectedIndex;
+						if (this.intentTypeList.selectedIndex == Predicate.INTENT_NETWORK_UP)
+							newPredicate.comparator = "+";
+						else
+							newPredicate.comparator = "-";
+							newPredicate.networkValue = 0;
+							newPredicate.first = this.firstRole.selectedItem;
+							newPredicate.second = this.secondRole.selectedItem;
+							if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					case "knowledge":
+						newPredicate.knowledge = this.knowledgeList.selectedIndex;
+						break;
+					case "status":
+						if (this.intentTypeList.selectedIndex == Predicate.INTENT_ADD_STATUS)
+							newPredicate.negated = false;
+						else
+							newPredicate.negated = true;
+							newPredicate.status = this.statusList.selectedIndex;
+							newPredicate.first = this.firstRole.selectedItem;
+							newPredicate.second = this.secondRole.selectedItem;
+							if (secondRole.enabled == false && getCurrentStatusDirected()){
+								secondRole.enabled = true;
+							} else if (secondRole.enabled == true && !getCurrentStatusDirected()) {
+								secondRole.enabled = false;
+							}
+						break;
+					default:
+						trace ("state not found");
+				}
+				return newPredicate;
+				
+			}
+			
+			// Changes the string in the predicate editor box based on futzing with the drop downs
+			// ItemSelected refers to the line currently active in the predicate editor
+			// Also updates the working Intents list
+			public function updatePredicateEditor():void
+			{
+				var itemSelected:Number = predicateEditor.selectedIndex;
+				var workingPredicate:Predicate = this.workingIntents[itemSelected];
+				if (!workingPredicate)
+					trace("Crap, this isn't working. Bug Anne.");
+				// create the string of the type "Intent - Romance down: Buddy"
+				var resultString:String = Predicate.getIntentNameByNumber(workingPredicate.intentType) + ": ";
+				
+				resultString += getDropDownValueByState(this.currentState);
+				intents[itemSelected] = resultString;
+				workingIntents[itemSelected].intentType = this.intentTypeList.selectedIndex;
+				workingIntents[itemSelected] = updatePredicateByState(workingPredicate);
+				workingIntents[itemSelected].name = resultString;
+				workingIntents[itemSelected].first = this.firstRole.selectedItem;
+				workingIntents[itemSelected].second = this.secondRole.selectedItem;
+			}
+			
+			// Updates the appropriate drop down based on the state
+			// Sets it to the value stored in the chosen line in the predicate editor
+			public function updateDropDownValueByState():void
+			{
+				var workingPredicate:Predicate = this.workingIntents[this.predicateEditor.selectedIndex];
+				switch (this.currentState)
+				{
+					case "network":
+						this.networkList.selectedIndex = workingPredicate.networkType;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					case "status":
+						this.statusList.selectedIndex = workingPredicate.status;
+						if (secondRole.enabled == false && getCurrentStatusDirected()){
+							secondRole.enabled = true;
+						} else if (secondRole.enabled == true && !getCurrentStatusDirected()) {
+							secondRole.enabled = false;
+						}
+						break;
+					case "knowledge":
+						this.knowledgeList.selectedIndex = workingPredicate.knowledge;
+						break;
+					default:
+						"updateDropDownValueByState: State not found";
+						break;
+				}
+			}
+			
+			// Updates UI elements based on selecting a line in the predicate editor
+			public function clickOnPredicateEditor(itemSelected:Number):void {
+				var workingPredicate:Predicate = this.workingIntents[itemSelected];
+				
+				changeState(workingPredicate.intentType);
+				updateDropDownValueByState();
+			}			
+			
+			// Changes the UI state based on a given intent Type
+			public function changeState(intentType:Number):void {
+				switch (intentType)
+				{
+					case Predicate.INTENT_NETWORK_UP:
+					case Predicate.INTENT_NETWORK_DOWN:
+						setCurrentState("network");
+						break;
+					case Predicate.INTENT_ADD_STATUS:
+					case Predicate.INTENT_REMOVE_STATUS:
+						setCurrentState("status");
+						break;
+					default:
+						trace("Unknown intent type");
+						break;
+				}				
+			}
+			
+			// Checks if the current status is directed or not
+			// Used to change output strings and to disable responder dropdowns
+			public function getCurrentStatusDirected():Boolean {
+				if (Status.getStatusNumberByName(statusList.selectedItem) >= Status.FIRST_DIRECTED_STATUS ||
+					Status.getStatusNumberByName(statusList.selectedItem) == Status.CAT_FEELING_BAD_ABOUT_SOMEONE ||
+					Status.getStatusNumberByName(statusList.selectedItem) == Status.CAT_FEELING_GOOD_ABOUT_SOMEONE)
+					return true;
+				else
+					return false;
+			}
+			
+			// Gets the value of the appropriate drop down given the current state
+			// (April) Actually gets a little bit more info now!
+			public function getDropDownValueByState(state:String):String
+			{
+				switch (state.toLowerCase())
+				{
+					case "network":
+						return (networkList.selectedItem + " (" + this.firstRole.selectedItem + " toward " + this.secondRole.selectedItem + ")");
+					case "status":
+						if (!getCurrentStatusDirected())
+							return (this.firstRole.selectedItem + " is " + statusList.selectedItem);
+						else 
+							return (this.firstRole.selectedItem + " " + statusList.selectedItem + " " + this.secondRole.selectedItem);
+					case "knowledge":
+						return (knowledgeList.selectedItem);
+					default:
+						trace("unknown state");
+						return null;
+				}
+			}
+			
+			// Add an intent to the predicate editor box
+			// Enables the predicate editor box if it was currently disabled
+			// Adds a string to the window in mostly human readable form
+			// Changes the state of the UI based on the intent chosen
+			// Adds a filled out predicate to the working intents list
+			// Moves the selection in the predicate editor to the most recently added item
+			public function addIntent(intentType:Number):void {
+				var resultString:String = Predicate.getIntentNameByNumber(intentType) + ": ";
+				
+				changeState(intentType);
+				resultString += getDropDownValueByState(this.currentState);
+				
+				this.intents.addItem(resultString);
+				if (!this.predicateEditor.enabled)
+				{
+					this.predicateEditor.enabled = true;
+				}
+				
+				// Add this to the working predicates
+				var workingPredicate:Predicate = new Predicate();
+				workingPredicate.intent = true;
+				workingPredicate.intentType = intentType;
+				workingPredicate = updatePredicateByState(workingPredicate);
+				workingPredicate.name = resultString;
+				this.workingIntents.push(workingPredicate);
+				
+				this.predicateEditor.selectedIndex = this.workingIntents.length;
+			}
+			
+			// Removes the selected intent from the predicate editor box and the working intent list
+			// Disables the predicate editor box if there is nothing left in it
+			// Moves the selection to the first item
+			public function removeIntent(selection:Number):void {
+				try {
+					this.intents.removeItemAt(selection);
+					this.workingIntents.splice(selection, 1);
+				} catch (e:Error) {
+					return; // TODO: Create a popup error message that something must be selected to remove it?
+				}
+				if (this.intents.length == 0)
+				{
+					this.predicateEditor.enabled = false;
+					setCurrentState("default");
+				}
+				else
+				{
+					this.predicateEditor.selectedIndex = 0;
+					changeState(workingIntents[0].intentType);
+					updateDropDownValueByState();
+				}
+			}
+			
+			// set everything back to defaults, ready for new intent to be created
+			public function reset(): void
+			{
+				this.intents.removeAll();
+				this.predicateEditor.enabled = false;
+				this.intentTypeList.selectedIndex = 0;
+				setCurrentState("network");
+				this.networkList.selectedIndex = 0;
+				setCurrentState("knowledge");
+				this.knowledgeList.selectedIndex = 0;
+				setCurrentState("status");
+				this.statusList.selectedIndex = 0;
+				setCurrentState("default");
+				this.description.text = "";
+				
+				this.workingIntents = new Vector.<Predicate>;
+			}
+			
+	]]>
+	</fx:Script>
+</s:Group>

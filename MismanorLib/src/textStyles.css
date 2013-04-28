@@ -1,0 +1,13 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+
+s|TextArea
+{
+	contentBackgroundAlpha:0.0;
+	color:#000000;
+	fontSize:28pt;
+	fontFamily:"bodoni";
+}
+	

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:Tool="tool.*"
+		 creationComplete="onCreationComplete()"
+		 width="1012" height="614">
+		 
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<mx:TabNavigator left="379" top="10" bottom="0" width="614" minWidth="0"
+					 backgroundAlpha="0.7" borderVisible="true" creationPolicy="all"
+					 dropShadowVisible="false" id="questEditor" selectedIndex="5" change="questEditorTabChange()" creationComplete="questEditorCreated()">
+		<s:NavigatorContent label="Intent" backgroundAlpha="1.0">
+			<mx:VBox label="Intent Editor" width="100%" height="100%">
+				<Tool:IntentEditor id="intentEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="add_to_move" x="10" y="28" width="130"
+					  label="Save Intent to Move" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Preconditions">
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Characters">
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Goal States">
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Completion States">
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Instantiations">
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Tags">
+			<mx:VBox label="Tags Editor" width="100%" height="100%">
+				<Tool:TagsEditor id="tagsEditor" width="100%" height="100%"/>
+			</mx:VBox>
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+	<mx:Accordion id="questOverview" x="10" y="102" width="350" height="497" 
+				  contentBackgroundAlpha=".7" contentBackgroundColor="#ffffff" change="questChange()">							
+		<s:NavigatorContent width="100%" height="100%" label="Intent" fontWeight="normal">
+			<s:List id="questSetupList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.questSetupListDP}" creationComplete="questSetupListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newSetup" x="270" y="10" label="New" click="createNewSetup(), this.checkCreated()"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Preconditions" fontWeight="normal">
+			<s:List id="questIntentList" x="0" y="0" width="262" height="100%" contentBackgroundAlpha="0.8" dataProvider="{this.questIntentListDP}"
+					creationComplete="questIntentListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newSetup0" x="270" y="10" label="New" click="createNewSetup(), this.checkCreated()"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Characters">
+			<s:Button id="newSetup1" x="270" y="10" label="New" click="createNewSetup(), this.checkCreated()"/>
+			<s:List id="questIntentList0" x="0" y="0" width="262" height="100%" contentBackgroundAlpha="0.8" dataProvider="{this.questIntentListDP}"
+					creationComplete="questIntentListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Goal States">
+			<s:Button id="newSetup2" x="270" y="10" label="New" click="createNewSetup(), this.checkCreated()"/>
+			<s:List id="questIntentList1" x="0" y="0" width="262" height="100%" contentBackgroundAlpha="0.8" dataProvider="{this.questIntentListDP}"
+					creationComplete="questIntentListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Completion States">
+			<s:Button id="newSetup3" x="270" y="10" label="New" click="createNewSetup(), this.checkCreated()"/>
+			<s:List id="questIntentList2" x="0" y="0" width="262" height="100%" contentBackgroundAlpha="0.8" dataProvider="{this.questIntentListDP}"
+					creationComplete="questIntentListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Instantiations">
+			<s:Button id="newSetup4" x="270" y="10" label="New" click="createNewSetup(), this.checkCreated()"/>
+			<s:List id="questIntentList3" x="0" y="0" width="262" height="100%" contentBackgroundAlpha="0.8" dataProvider="{this.questIntentListDP}"
+					creationComplete="questIntentListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Tags" fontWeight="normal">
+			<s:List id="questTagsList" x="0" y="0" width="262" height="100%" contentBackgroundAlpha="0.8" dataProvider="{this.questTagsListDP}"
+					creationComplete="questTagsListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newSetup5" x="270" y="10" label="New" click="createNewSetup(), this.checkCreated()"/>
+		</s:NavigatorContent>
+	</mx:Accordion>
+	
+	<s:TextInput id="questName" x="10" y="72" width="250"
+				 contentBackgroundColor="#FFFFFF" enabled="true"
+				 prompt="Quest Name" change="updateQuestName()"
+				 />
+	
+	<s:Label x="10" y="16" color="#F5E9EB" fontSize="20"
+			 text="Quest Overview"
+			 />
+	
+	<s:Button id="newQuest" x="274" y="16" width="83" label="Create New" click="createNewQuest()"
+			  />
+	
+	<s:Button id="deleteQuest" x="274" y="43" width="83" label="Delete" click="deleteSelectedQuest()"
+			  />
+	
+	<s:DropDownList id="questList" x="10" y="43" width="256" contentBackgroundColor="#ffffff" 
+					dataProvider="{this.questListDP}" change="loadNewQuest()"></s:DropDownList>
+	
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import grailgm.Quest;
+			import grailgm.QuestType;
+			
+			import mx.collections.ArrayCollection;
+			
+			import spark.events.*;
+			
+			[Bindable] public var questSetupListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var questIntentListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var questListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var questTagsListDP:ArrayCollection = new ArrayCollection();
+			
+			public var currentQuest:Quest = new Quest(); 
+			private var newSetupBool:Boolean = false;
+			private var newIntentBool:Boolean = false;
+			private var setupType:String = "new";
+			private var intentType:String = "new";
+			
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			
+			private var cif:CiFSingleton;
+			// Are these necessary?
+			private var questType:String = "new";
+			private var questID:Number = 0;
+			
+			
+			public function onCreationComplete(): void {
+				this.cif = CiFSingleton.getInstance();
+			}
+			
+			public function questChange(): void{
+				this.questEditor.selectedIndex = this.questOverview.selectedIndex;
+			}
+			
+			public function questEditorTabChange(): void {
+				this.questOverview.selectedIndex = this.questEditor.selectedIndex;
+			}
+			
+			public function questEditorCreated(): void {
+				for (var i:Number = 0; i< this.questEditor.length; i++)
+					this.questEditor.selectedIndex = i;
+				
+				this.questEditor.visible = false;
+				this.questEditor.selectedIndex = 0;
+				this.intentEditor.reset();
+			}
+			
+			public function questSetupListComplete(): void {
+				if (this.questListDP.length > 0)
+					questSetupList.selectedIndex = 0;
+			}
+			
+			public function questTagsListComplete(): void{
+				if(this.questListDP.length >0)
+					questTagsList.selectedIndex = 0;
+			}
+			
+			public function questIntentListComplete(): void {
+				if( this.questListDP.length > 0)
+					questIntentList.selectedIndex = 0;
+			}
+			
+			public function loadNewQuest(): void{
+			}
+			
+			public function createNewQuest(): void{
+				this.questName.text = "";
+				this.currentQuest = new Quest();
+				
+				this.questSetupListDP = new ArrayCollection();
+				this.questIntentListDP = new ArrayCollection();
+				this.questListDP = new ArrayCollection();
+				
+				this.questList.selectedIndex = -1;
+				
+				if (this.questEditor)
+					this.questEditor.visible = false;
+			}
+			
+			public function deleteSelectedQuest(): void{
+				if (this.questList.selectedIndex >= 0)
+				{
+				}
+			}
+			
+			public function updateQuestName(): void{
+				this.currentQuest.name = this.questName.text;
+			}
+			
+			public function checkCreated():void{
+				if(!newSetupBool){
+					this.createNewSetup();
+					this.newSetupBool = true;
+				}
+				if(!newIntentBool){
+					this.createNewIntent();
+					this.newIntentBool = true;
+				}
+			}
+			
+			public function createNewSetup():void {
+				this.questEditor.visible = true;
+				this.questEditor.selectedIndex = this.questOverview.selectedIndex;
+//				if (this.setupEditor)
+//					this.setupEditor.reset();
+				this.setupType = "new";
+			}
+			
+			public function createNewIntent():void {
+				this.questEditor.visible = true;
+				this.questEditor.selectedIndex = this.questOverview.selectedIndex;
+				if (this.intentEditor)
+					this.intentEditor.reset();
+				this.intentType = "new";
+			}
+			
+			public function saveSetup():void
+			{
+/*				var curQuest:Quest = new Quest();
+//				curQuest.name = setupEditor.description.text;
+				curQuest.id = questID++;
+//				curQuest.type = setupEditor.setupType.selectedIndex;
+				
+//				if (this.setupEditor.itemRequired.selectedValue.toString().toLowerCase() == "yes")
+					curQuest.itemRequired = true;
+//				else
+//					curQuest.itemRequired = false;
+				
+//				var setupString:String = curQuest.name + ": " +"item required(" + this.setupEditor.itemRequired.selectedValue+") ";
+				setupString += grailgm.QuestType.getNameByNumber(curQuest.type)+"\n";
+				
+				if(this.questSetupListDP.length == 0){
+					this.questSetupListDP.addItem(setupString);
+					this.questSetupList.selectedIndex = this.questSetupListDP.length;
+				}
+				
+//				else{
+					var numSetup:Number = this.questSetupList.selectedIndex;
+					this.questSetupListDP.removeItemAt(numSetup);
+					this.questSetupListDP.addItemAt(setupString, numSetup);
+					
+					this.questSetupList.selectedIndex = numSetup;
+//				}
+				
+				this.questEditor.visible = false;
+	*/		}
+
+		]]>
+	</fx:Script>
+
+		
+</s:Group>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:Tool="tool.*"
+		 width="610" height="300" creationComplete="onCreationComplete()">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="network"/>
+		<s:State name="knowledge"/>
+		<s:State name="trait"/>
+		<s:State name="status"/>
+		<s:State name="SFDBLabel"/>
+		<s:State name="CKB"/>
+	</s:states>
+	
+	<s:TextInput id="description" x="156" y="27" width="446" contentBackgroundColor="#FFFFFF"
+				 enabled="true" prompt="Author Notes"/>
+	<s:List id="defTypeList" x="10" y="81" width="130" height="200"
+			contentBackgroundColor="#FFFFFF" 
+			></s:List>
+	<s:Label x="10" y="61" color="#522E34" fontSize="20"
+			 text="Predicates"/>
+	<s:Label x="10" y="8" color="#522E34" fontSize="12" text="Note: A microtheory can only have ONE definition.  Saving a new definition will override the old."/>
+	<s:Label x="10" y="319" color="#522E34" fontSize="20"
+			 text="Details"
+			 />
+	<s:Button x="156" y="81" label="Add"
+			  click="addDef(defTypeList.selectedIndex)"/>
+	<s:Button x="156" y="110" label="Remove"
+			  click="removeDef(predicateEditor.selectedIndex)"/>
+	<s:Scroller>
+		<s:Group>
+	<s:List id="predicateEditor" x="234" y="81" width="368" height="200"
+			click="clickOnPredicateEditor(predicateEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF" dataProvider="{this.definitions}" enabled="false"
+			selectedIndex="0" x.default="230" y.default="79"></s:List>
+			
+		</s:Group>
+	</s:Scroller>
+	<s:DropDownList id="knowledgeList" includeIn="knowledge" x="110"
+					y="349" width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.knowledgeTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor()"></s:DropDownList>
+	<s:DropDownList id="statusList" includeIn="status" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.statusTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor()"></s:DropDownList>
+	<s:DropDownList id="networkList" includeIn="network" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.networkTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor()"></s:DropDownList>
+	<s:DropDownList id="firstRole" includeIn="knowledge,network,status,trait,SFDBLabel" x="110" y="378"
+					width="175" change="updatePredicateEditor()"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="secondRole" includeIn="network,status,SFDBLabel" x="428" y="378" width="175"
+					change="updatePredicateEditor()"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="sfdbLabelList" includeIn="SFDBLabel" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.sfdbLabelTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor()"></s:DropDownList>
+	<s:Label includeIn="network,status,SFDBLabel" x="328" y="381" width="96" height="21" fontSize="14"
+			 text="Second Role" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="knowledge,network,status,trait,SFDBLabel" x="10" y="381" width="96" height="21" fontSize="14"
+			 text="First Role" textAlign="right" verticalAlign="middle"/>
+	<s:DropDownList id="comparator" includeIn="network" x="110" y="407" width="175"
+					change="updatePredicateEditor()"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.compTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="network" x="328" y="410" width="96" height="21" fontSize="14"
+			  text="Weight" textAlign="right" verticalAlign="middle"/>
+	<s:NumericStepper id="networkWeight" includeIn="network" x="432" y="407"
+					  change="updatePredicateEditor()"
+					  contentBackgroundColor="#FFFFFF" maximum="100" minimum="0" stepSize="1"/>
+	<s:Label includeIn="network" x="10" y="410" width="96" height="21" fontSize="14"
+			  text="Comparator" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="status" x="10" y="352" width="96" height="21"
+			 fontSize="14"  text="Status"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="network" x="10" y="352" width="96" height="21"
+			 fontSize="14"  text="Network"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="knowledge" x="10" y="352" width="96" height="21"
+			 fontSize="14"  text="Knowledge"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="SFDBLabel" x="10" y="352" width="96" height="21"
+			 fontSize="14" text="SFDB Label"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="SFDBLabel" x="-4" y="410" width="428" height="21" fontSize="14"
+			 text="SFDB event must have occured within how many turns (0 is all time)" textAlign="right" verticalAlign="middle"/>
+	<s:NumericStepper id="sfdbLabelWindow" includeIn="SFDBLabel" x="428" y="407"
+					  change="updatePredicateEditor()"
+					  contentBackgroundColor="#FFFFFF" maximum="999" minimum="0" stepSize="1"/>
+	<mx:HRule x="10" y="292" width="592" height="10"
+			  />
+	<s:CheckBox id="notBox" includeIn="knowledge,network,status,trait,SFDBLabel" x="110" y="323" label="Not"
+				fontSize="14"  change="updatePredicateEditor()"/>
+	<s:DropDownList id="traitList" includeIn="trait" x="110" y="349" width="493"
+					change="updatePredicateEditor()"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.traitTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="trait" x="10" y="352" width="96" height="21" fontSize="14" 
+			 text="Trait" textAlign="right" verticalAlign="middle"/>
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+			[Bindable] public var definitions:ArrayCollection; 
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			public var workingDefs:Vector.<Predicate> = new Vector.<Predicate>();
+			
+			public function onCreationComplete():void {
+				this.definitions = new ArrayCollection();
+				// Length is 0, so the pred types aren't populated
+				trace(this.dte.predTypes.length);
+				for each (var test:String in this.dte.predTypes) 
+					trace(test);
+				this.defTypeList.dataProvider = this.dte.predTypes;
+				this.defTypeList.selectedIndex = 0;
+			}				
+			
+			// Changes the string in the predicate editor box based on futzing with the drop downs
+			// ItemSelected refers to the line currently active in the predicate editor
+			// Also updates the working Precondition list
+			public function updatePredicateEditor():void
+			{
+				var itemSelected:Number = this.predicateEditor.selectedIndex;
+				var workingPredicate:Predicate = this.workingDefs[itemSelected];
+				if (!workingPredicate)
+					trace("Crap, this isn't working. Bug Anne.");
+				// create the string of the type "Defdition - Romance down: Buddy"
+				var resultString:String = new String();
+				
+				workingDefs[itemSelected].type = this.defTypeList.selectedIndex;
+				workingDefs[itemSelected] = this.updatePredicateByState(workingPredicate);
+				resultString = this.workingDefs[this.predicateEditor.selectedIndex].toString();
+				definitions[itemSelected] = resultString;
+			}
+			
+			// Updates UI elements based on selecting a line in the predicate editor
+			public function clickOnPredicateEditor(itemSelected:Number):void {
+				var workingPredicate:Predicate = this.workingDefs[itemSelected];
+				
+				this.notBox.selected = workingPredicate.negated;
+				this.changeStateByType(workingPredicate.type);
+				this.updateDropDownValueByState(workingPredicate);
+			}			
+			
+			// Add a pre-condition predicate to the predicate editor box
+			// Enables the predicate editor box if it was currently disabled
+			// Adds a string to the window in mostly human readable form
+			// Changes the state of the UI based on the predicate chosen
+			// Adds a filled out predicate to the working precondition list
+			// Moves the selection in the predicate editor to the most recently added item
+			public function addDef(defType:Number):void {
+				var resultString:String = new String();
+				this.changeStateByType(defType);
+				
+				// Add this to the working predicates
+				var workingPredicate:Predicate = new Predicate();
+				workingPredicate.type = defType;
+				workingPredicate = this.updatePredicateByState(workingPredicate);
+				
+				resultString = workingPredicate.toString();
+				
+				this.workingDefs.push(workingPredicate);
+				this.definitions.addItem(resultString);
+				if (!this.predicateEditor.enabled)
+				{
+					this.predicateEditor.enabled = true;
+				}				
+				this.predicateEditor.selectedIndex = this.workingDefs.length-1;				
+			}
+			
+			// Removes the selected precondition from the predicate editor box and the working precondition list
+			// Disables the predicate editor box if there is nothing left in it
+			// Moves the selection to the first item
+			public function removeDef(selection:Number):void {
+				try {
+					this.definitions.removeItemAt(selection);
+					this.workingDefs.splice(selection, 1);
+				} catch (e:Error) {
+					return; // TODO: Create a popup error message that something must be selected to remove it?
+				}
+				if (this.definitions.length == 0)
+				{
+					this.predicateEditor.enabled = false;
+					this.setCurrentState("default");
+				}
+				else
+				{
+					this.predicateEditor.selectedIndex = 0;
+					this.changeStateByType(workingDefs[this.predicateEditor.selectedIndex].type);
+					this.updateDropDownValueByState(this.workingDefs[this.predicateEditor.selectedIndex]);
+				}
+			}
+			
+			// set everything to defaults, ready for new pre-condition to be created
+			public function reset(): void
+			{
+				this.definitions.removeAll();
+				this.predicateEditor.enabled = false;
+				this.defTypeList.selectedIndex = 0;
+				this.description.text = "";
+				setCurrentState("network");
+				this.networkList.selectedIndex = 0;
+				setCurrentState("knowledge");
+				this.knowledgeList.selectedIndex = 0;
+				setCurrentState("status");
+				this.statusList.selectedIndex = 0;
+				setCurrentState("trait");
+				this.traitList.selectedIndex = 0;
+				setCurrentState("SFDBLabel");
+				this.sfdbLabelList.selectedIndex = 0;
+				setCurrentState("default");
+				
+				this.workingDefs = new Vector.<Predicate>;
+			}
+			// Updates the appropriate drop down based on the state
+			// Sets it to the value stored in the chosen line in the predicate editor
+			public function updateDropDownValueByState(workingPredicate:Predicate):void
+			{
+				this.firstRole.selectedItem = workingPredicate.primary;
+				this.notBox.selected = workingPredicate.negated;
+				
+				switch (this.currentState)
+				{
+					case "network":
+						this.networkList.selectedIndex = workingPredicate.networkType;
+						this.secondRole.selectedItem = workingPredicate.secondary;
+						this.networkWeight.value = workingPredicate.networkValue;
+						this.comparator.selectedItem = workingPredicate.comparator;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					case "status":
+						this.statusList.selectedIndex = workingPredicate.status;
+						if (secondRole.enabled == false && getCurrentStatusDirected()){
+							secondRole.enabled = true;
+						} else if (secondRole.enabled == true && !getCurrentStatusDirected()) {
+							secondRole.enabled = false;
+						}
+						break;
+					case "knowledge":
+						this.knowledgeList.selectedIndex = workingPredicate.knowledge;
+						break;
+					case "trait":
+						this.traitList.selectedIndex = workingPredicate.trait;
+						if (secondRole.enabled == true) secondRole.enabled = false;
+						break;
+					case "SFDBLabel":
+						this.sfdbLabelList.selectedIndex = workingPredicate.sfdbLabel;
+						this.secondRole.selectedItem = workingPredicate.secondary;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						this.sfdbLabelWindow.value = workingPredicate.window;
+						break;
+					default:
+						"updateDropDownValueByState: State not found";
+						break;
+				}
+			}
+			
+			// Takes a predicate clones it, updates the appropriate field based on UI state
+			// returns the cloned predicate
+			public function updatePredicateByState(workingPredicate:Predicate):Predicate
+			{
+				var newPredicate:Predicate = workingPredicate.clone();
+				
+				newPredicate.first = this.firstRole.selectedItem;
+				newPredicate.negated = this.notBox.selected;
+				
+				switch (this.currentState)
+				{
+					case "network":
+						newPredicate.networkType = this.networkList.selectedIndex;
+						newPredicate.second = this.secondRole.selectedItem;
+						newPredicate.comparator = this.comparator.selectedItem;
+						newPredicate.networkValue = this.networkWeight.value;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					case "knowledge":
+						newPredicate.knowledge = this.knowledgeList.selectedIndex;
+						break;
+					case "status":
+						newPredicate.second = this.secondRole.selectedItem;
+						newPredicate.status = this.statusList.selectedIndex;
+						if (secondRole.enabled == false && getCurrentStatusDirected()){
+							secondRole.enabled = true;
+						} else if (secondRole.enabled == true && !getCurrentStatusDirected()) {
+							secondRole.enabled = false;
+						}
+						break;
+					case "trait":
+						newPredicate.trait = this.traitList.selectedIndex;
+						if (secondRole.enabled == true) secondRole.enabled = false;
+						break;
+					case "SFDBLabel":
+						newPredicate.sfdbLabel = this.sfdbLabelList.selectedIndex;
+						newPredicate.second = this.secondRole.selectedItem;
+						newPredicate.isSFDB = true;
+						newPredicate.window = this.sfdbLabelWindow.value;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					default:
+						trace ("state not found");
+				}
+				return newPredicate;
+				
+			}
+			
+			// Changes the UI state based on a given predicate type
+			public function changeStateByType(predType:Number):void {
+				setCurrentState(Predicate.getNameByType(predType));
+			}
+			
+			// Checks if the current status is directed or not
+			// Used to change output strings and to disable responder dropdowns
+			public function getCurrentStatusDirected():Boolean {
+				if (Status.getStatusNumberByName(statusList.selectedItem) >= Status.FIRST_DIRECTED_STATUS ||
+					Status.getStatusNumberByName(statusList.selectedItem) == Status.CAT_FEELING_BAD_ABOUT_SOMEONE ||
+					Status.getStatusNumberByName(statusList.selectedItem) == Status.CAT_FEELING_GOOD_ABOUT_SOMEONE)
+					return true;
+				else
+					return false;
+			}
+			
+		]]>
+	</fx:Script>
+</s:Group>

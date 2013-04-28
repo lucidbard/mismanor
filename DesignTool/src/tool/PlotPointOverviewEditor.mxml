@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:Tool="tool.*"
+		 width="610" height="520" creationComplete="onCreationComplete()">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:TextInput id="description" x="156" y="17" width="446" contentBackgroundColor="#FFFFFF"
+				 enabled="true" prompt="Author Notes"/>
+	<s:Label x="10" y="462" color="#522E34" fontSize="20"
+			 text="Add a Plot Point Precondition"/>
+	<s:Label x="11" y="290" color="#522E34" fontSize="20"
+			 text="Plot Point Preconditions"/>
+	<s:Button x="530" y="489" label="Add"
+			  click="addPreCon()"/>
+	<s:Label x="10" y="218" color="#522E34" fontSize="20"
+			 text="Add a Plot Point Trait"/>
+	<s:Label x="11" y="47" color="#522E34" fontSize="20"
+			 text="Plot Point Traits"/>
+	<s:Button x="529" y="246" label="Add"
+			  click="addPPTrait(plotPointTraits.selectedItem)"/>
+	<s:Button id="removeTrait" x="530" y="218" label="Remove"
+			  click="removePPTrait(traitsList.selectedItem)"/>
+	<s:List id="traitsList" x="10" y="75" width="590" height="135"
+			click="clickOnTraitsList(preConList.selectedIndex)"
+			contentBackgroundColor="#FFFFFF"
+			enabled="false"
+			dataProvider="{this.storyTraits}"
+			 selectedIndex="0"
+			
+			></s:List>
+	<s:DropDownList id="plotPointTraits" x="10" y="246" width="511"
+					contentBackgroundColor="#FFFFFF" 
+					selectedIndex="0"></s:DropDownList>
+	<s:Button x="530" y="461" label="Remove"
+			  click="removePreCon()"/>
+	<s:List id="preConList" x="10" y="318" width="590" height="126"
+			click="clickOnPreConList(preConList.selectedIndex)"
+			dataProvider="{this.storyPreCons}"
+			contentBackgroundColor="#FFFFFF"
+			enabled="false"
+			 selectedIndex="0"
+			
+			></s:List>
+	<s:DropDownList id="plotPointPrecons" x="10" y="489" width="512"
+					contentBackgroundColor="#FFFFFF" 
+					selectedIndex="0"></s:DropDownList>
+	
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import grailgm.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+			[Bindable] public var storyPreCons:ArrayCollection;
+			[Bindable] public var storyTraits:ArrayCollection;
+			[Bindable] public var preConListDP:ArrayCollection;
+			
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			private var cif:CiFSingleton;
+			private var ggm:GrailGM;
+			public var workingPP:PlotPoint;
+			
+			public function onCreationComplete():void {
+				this.cif = CiFSingleton.getInstance();
+				this.ggm = GrailGM.getInstance();
+				this.plotPointTraits.dataProvider = this.dte.knowledgeTraitTypes;
+				this.workingPP = new PlotPoint();
+				//trace("num knowledgeTypes: " + this.dte.knowledgeTypes.length);
+				//trace(this.dte.knowledgeTypes);
+				this.storyPreCons = new ArrayCollection();
+				this.storyTraits = new ArrayCollection();
+				
+				this.preConListDP = new ArrayCollection();
+				generatePreConList();
+				this.plotPointPrecons.dataProvider = this.preConListDP;
+				
+				this.plotPointPrecons.selectedIndex = -1;
+			}
+			
+			public function generatePreConList(): void
+			{
+				preConListDP.removeAll();
+				for each (var pp:PlotPoint in ggm.plotPointPool.plotPoints)
+				{
+					preConListDP.addItem(pp.name);
+				}
+			}
+			// plot point precondition has been selected and needs to be added
+			public function addPreCon(): void {
+				this.workingPP.storyPreConditions.push(ggm.getPlotPointByName(this.plotPointPrecons.selectedItem));
+				this.storyPreCons.addItem(this.plotPointPrecons.selectedItem);
+				this.preConList.enabled = true;
+			}
+			
+			// plot point precondition has been selected and needs to be removed
+			public function removePreCon(): void {
+				var selected:Number = this.preConList.selectedIndex;
+				this.storyPreCons.removeItemAt(selected);
+				this.workingPP.storyPreConditions.splice(selected, 1);
+				if (this.storyPreCons.length <= 0)
+					this.preConList.enabled = false;
+			}
+			
+			// plot point trait has been selected and needs to be added
+			public function addPPTrait(selected:String): void {
+				this.workingPP.cifKnowledge.traits.push(Trait.getNumberByName(selected));
+				this.storyTraits.addItem(selected);
+				this.traitsList.enabled = true;
+			}
+			
+			// plot point trait selected in list, and needs to be removed from list
+			public function removePPTrait(selected:String): void {
+				if (selected == "knowledge")
+				{
+					parentApplication.openPopUp("Error", "You cannot delete this trait.");
+					return;
+				}
+				for (var i:Number = 0; i < this.storyTraits.length; i++)
+				{
+					if (this.storyTraits.getItemAt(i).toLowerCase() == selected.toLowerCase())
+					{
+						this.storyTraits.removeItemAt(i);
+						this.workingPP.cifKnowledge.traits.splice(i, 1);
+						if (this.storyTraits.length <= 0)
+							this.traitsList.enabled = false;
+						return;
+					}
+				}
+			}
+			
+			public function clickOnPreConList(selectedIndex:Number): void {
+				
+			}
+			
+			public function clickOnTraitsList(selectedIndex:Number): void {
+				
+			}
+			// set everything to defaults, ready for new pre-condition to be created
+			// Including clearing out the current PP, setting all lists to select nothing
+			// and emptying the story precon list
+			public function reset(): void
+			{
+				this.workingPP = new PlotPoint();
+				
+				// reset author notes
+				this.description.text="";
+				
+				// reset traits
+				this.storyTraits.removeAll();
+				this.plotPointTraits.selectedIndex = -1;
+
+				// reset preconditions
+				this.storyPreCons.removeAll();
+				this.plotPointPrecons.selectedIndex = -1;
+			}
+		]]>
+	</fx:Script>
+</s:Group>

@@ -1,0 +1,366 @@
+<CiFState time="0">
+	<ItemList>
+		<Item name="Wine" networkID="4">
+			<Trait type="examinable"/>
+			<Trait type="pick_up_able"/>
+			<Trait type="useable"/>
+			<Status type="drinkable"/>
+			<Location room="dining room"/>
+			<img src="../lib/Wine2.png"/>
+		</Item>
+		<Item name="Book" networkID="5">
+			<Trait type="examinable"/>
+			<Trait type="pick_up_able"/>
+			<Trait type="hideable"/>
+			<Location room="gardens"/>
+			<img src="../lib/Book.png"/>
+		</Item>
+		<Item name="WhiteWhine" networkID="6">
+			<Trait type="examinable"/>
+			<Trait type="pick_up_able"/>
+			<Trait type="useable"/>
+			<Status type="drinkable"/>
+			<Location room="dining room"/>
+			<img src="../lib/Wine_2.png"/>
+		</Item>
+		<Item name="BlueBook" networkID="7">
+			<Trait type="examinable"/>
+			<Trait type="pick_up_able"/>
+			<Trait type="useable"/>
+			<Trait type="hideable"/>
+			<Location room="gardens"/>
+			<img src="../lib/Book_2.png"/>
+		</Item>
+		<Item name="CultStatue" networkID="8">
+			<Trait type="examineable"/>
+			<Trait type="pick_up_able"/>
+			<Trait type="hideable"/>
+			<Location room="gardens"/>
+			<img src="../lib/statue.png"/>
+		</Item>
+		<Item name="Gate" networkID="9">
+			<Trait type="examineable"/>
+			<Trait type="useable"/>
+			<Status type="open"/>
+			<Status type="unlocked"/>
+			<Location room="gardens"/>
+			<img src="../lib/gate.png"/>
+		</Item>
+	</ItemList>
+	<KnowledgeList>
+		<!-- <Knowledge name="Player was invited to party by Violet" networkID="">
+			<Trait type="backstory"/>
+			<Trait type="factual"/>
+			<Status type="true"/>
+			<Status type="active"/>
+		</Knowledge> -->
+		<Knowledge name="Colonel is distracted" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="colonel's line"/>
+			<Status type="true"/>
+			<Status type="active"/>
+		</Knowledge>
+		<Knowledge name="James is distracted" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="james's line"/>
+			<Status type="true"/>
+			<Status type="active"/>
+		</Knowledge>
+		<Knowledge name="Violet is busy" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="violet's line"/>
+			<Status type="true"/>
+			<Status type="active"/>
+		</Knowledge>
+		<Knowledge name="Violet and James are together a lot" networkID="">
+			<Trait type="factual"/>
+			<Trait type="james's line"/>
+			<Trait type="colonel's line"/>
+			<Trait type="violet's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="James is afraid of Violet" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="james's line"/>
+			<Trait type="personal"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="James is afraid of horses" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="james's line"/>
+			<Trait type="backstory"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Colonel doesn't know about some rooms in the manor" networkID="">
+			<Trait type="factual"/>
+			<Trait type="colonel's line"/>
+			<Trait type="cult line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Colonel doesn't like James being around his daughter" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="james's line"/>
+			<Trait type="colonel's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Colonel is leaving his family" networkID="">
+			<Trait type="factual"/>
+			<Trait type="personal"/>
+			<Trait type="colonel's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="James is obsessed with appeasing the Colonel" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="james's line"/>
+			<Trait type="colonel's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Violet has a scar on her wrist" networkID="">
+			<Trait type="factual"/>
+			<Trait type="cult line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Strange statue hidden in the stables" networkID="">
+			<Trait type="factual"/>
+			<Trait type="cult line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="James doesn't like talking about the manor" networkID="">
+			<Trait type="factual"/>
+			<Trait type="cult line"/>
+			<Trait type="james's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="The manor is the headquarters of a dark cult" networkID="">
+			<Trait type="factual"/>
+			<Trait type="cult line"/>
+			<Trait type="james's line"/>
+			<Trait type="violet's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Violet is a member of a cult" networkID="">
+			<Trait type="factual"/>
+			<Trait type="violet's line"/>
+			<Trait type="cult line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Violet ignores the Colonel" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="violet's line"/>
+			<Trait type="colonel's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Violet has been distant since the Colonel returned home" networkID="">
+			<Trait type="factual"/>
+			<Trait type="backstory"/>
+			<Trait type="violet's line"/>
+			<Trait type="colonel's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Violet resents the Colonel for leaving" networkID="">
+			<Trait type="emotional"/>
+			<Trait type="violet's line"/>
+			<Trait type="colonel's line"/>
+			<Trait type="personal"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="Violet's mother died while the Colonel was away" networkID="">
+			<Trait type="factual"/>
+			<Trait type="backstory"/>
+			<Trait type="violet's line"/>
+			<Trait type="colonel's line"/>
+			<Trait type="personal"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="James is a member of a cult" networkID="">
+			<Trait type="factual"/>
+			<Trait type="cult line"/>
+			<Trait type="james's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="James is not entirely brainwashed" networkID="">
+			<Trait type="factual"/>
+			<Trait type="james's line"/>
+			<Trait type="personal"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="There is a cult ritual tonight" networkID="">
+			<Trait type="factual"/>
+			<Trait type="cult line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="You are a virgin sacrifice for that ritual" networkID="">
+			<Trait type="factual"/>
+			<Trait type="cult line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="You can stop the ritual" networkID="">
+			<Trait type="endgame"/>
+			<Trait type="violet's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="You can escape" networkID="">
+			<Trait type="endgame"/>
+			<Trait type="james's line"/>
+			<Trait type="colonel's line"/>
+			<Status type="true"/>
+		</Knowledge>
+		<Knowledge name="You are screwed" networkID="">
+			<Trait type="endgame"/>
+			<Status type="true"/>
+		</Knowledge>
+	</KnowledgeList>
+  <Cast>
+	<Character name="Violet" networkID="0">
+		<Trait type="female"/>
+		<Trait type="charismatic"/>
+		<Trait type="independent"/>
+		<Trait type="observant"/>
+		<Trait type="confident"/>
+		<Trait type="persuasive"/>
+		<Trait type="outgoing"/>
+		<Trait type="irritable"/>
+		<Trait type="domineering"/>
+		<Trait type="vengeful"/>
+		<Trait type="dishonest"/>
+		<Trait type="hostile"/>
+		<Trait type="snide"/>
+		<Locution type="greeting">Why hello</Locution>
+		<Locution type="shocked">Oh my.</Locution>
+		<Locution type="positiveadj">lovely</Locution>
+		<Locution type="pejorative">idiot</Locution>
+		<Locution type="sweetie">Love</Locution>
+		<Status type="manipulating" from="Violet" to="Player"/>
+		<Status type="busy" from="Violet" to=""/>
+		<Status type="estranged from" from="Violet" to="Colonel"/>
+		<img src="../lib/violet.png"/>
+		<Location roomSide="right" yOffset="20" room="living room"/>
+		<Inventory>
+			<Item name="bluebook"/>
+			<Item name="whitewhine"/>
+		</Inventory>
+	</Character>	
+	<Character name="James" networkID="1">
+		<Trait type="male"/>
+		<Trait type="kind"/>
+		<Trait type="sympathetic"/>
+		<Trait type="humble"/>
+		<Trait type="forgiving"/>
+		<Trait type="loyal"/>
+		<Trait type="shy"/>
+		<Trait type="jealous"/>
+		<Trait type="honest"/>
+		<Trait type="indecisive"/>
+		<Locution type="greeting">Hullo</Locution>
+		<Locution type="shocked">Aghhhck!</Locution>
+		<Locution type="positiveadj">grand</Locution>
+		<Locution type="pejorative">bully</Locution>
+		<Locution type="sweetie">Lamby</Locution>
+		<Status type="afraid of" from="James" to="Violet"/>
+		<Status type="distracted" from="James" to=""/>
+		<Status type="guilty" from="James" to=""/>
+		<Status type="anxious" from="James" to=""/>
+		<img src="../lib/stableboy.png"/>
+		<Location roomSide="left" yOffset="0" room="gardens"/>
+	</Character>	
+	<Character name="Colonel" networkID="2">
+		<Trait type="male"/>
+		<Trait type="charismatic"/>
+		<Trait type="independant"/>
+		<Trait type="outgoing"/>
+		<Trait type="impulsive"/>
+		<Trait type="disapproving"/>
+		<Trait type="irritable"/>
+		<Trait type="arrogant"/>
+		<Trait type="oblivious"/>
+		<Trait type="unforgiving"/>
+		<Trait type="stubborn"/>
+		<Trait type="gabby"/>
+		<Locution type="greeting">My %gender(r,boy/lady)%</Locution>
+		<Locution type="shocked">Wot?</Locution>
+		<Locution type="positiveadj">excellent</Locution>
+		<Locution type="pejorative">%gender(r,scoundrel/strumpet)%</Locution>
+		<Locution type="sweetie">little apricot</Locution>
+		<Status type="hates" from="Colonel" to="James"/>
+		<Status type="distracted" from="Colonel" to=""/>
+		<Status type="estranged from" from="Colonel" to="Violet"/>
+		<Status type="anxious" from="Colonel" to=""/>
+		<img src="../lib/colonel.png"/>
+		<Location roomSide="left" yOffset="0" room="living room"/>
+	</Character>	
+	<Character name="Player" networkID="3">
+		<Locution type="greeting">Hello</Locution>
+		<Locution type="shocked">Heavens!</Locution>
+		<Locution type="positiveadj">wonderful</Locution>
+		<Locution type="pejorative">simpleton</Locution>
+		<Locution type="sweetie">dear</Locution>
+		<Location room="living room"/>
+	</Character>
+  </Cast>
+	<KnowledgeList>
+	</KnowledgeList>
+  <SFDB>
+    <StatusContext time="0">
+      <Predicate type="status" status="has crush" first="stableboy" second="violet" negated="false" isSFDB="true" window="0"/>
+    </StatusContext>
+    <SocialGameContext gameName="Reminisce" initiator="stableboy" responder="violet" other="" initiatorScore="80" responderScore="40" time="-5" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Insult" initiator="stableboy" responder="colonel" other="violet" initiatorScore="80" responderScore="40" time="-4" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Reminisce" initiator="violet" responder="colonel" other="" initiatorScore="80" responderScore="40" time="-3" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Insult" initiator="violet" responder="stableboy" other="colonel" initiatorScore="80" responderScore="40" time="-2" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Show Off" initiator="violet" responder="stableboy" other="colonel" initiatorScore="80" responderScore="40" time="-1" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Reminisce" initiator="violet" responder="stableboy" other="colonel" initiatorScore="80" responderScore="40" time="0" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+  </SFDB>
+  <CulturalKB>
+    <Proposition type="subjective" head="colonel" connection="likes" tail="pirates"/>
+    <Proposition type="subjective" head="violet" connection="dislikes" tail="flowers"/>
+    <Proposition type="subjective" head="colonel" connection="likes" tail="flowers"/>
+    <Proposition type="truth" head="pirates" connection="are" tail="mean"/>
+    <Proposition type="truth" head="flowers" connection="are" tail="pretty"/>
+  </CulturalKB>
+    <Network type="buddy" numChars="4">
+    <edge from="0" to="1" value="30"/>
+    <edge from="0" to="2" value="5"/>
+    <edge from="0" to="3" value="15"/>
+    <edge from="1" to="0" value="50"/>
+    <edge from="1" to="2" value="30"/>
+    <edge from="1" to="3" value="25"/>
+    <edge from="2" to="0" value="60"/>
+    <edge from="2" to="1" value="5"/>
+    <edge from="2" to="3" value="40"/>
+    <edge from="3" to="0" value="15"/>
+    <edge from="3" to="1" value="25"/>
+    <edge from="3" to="2" value="40"/>    
+  </Network>
+  <Network type="trust" numChars="4">
+    <edge from="0" to="1" value="20"/>
+    <edge from="0" to="2" value="5"/>
+    <edge from="0" to="3" value="5"/>
+    <edge from="1" to="0" value="70"/>
+    <edge from="1" to="2" value="30"/>
+	<edge from="1" to="3" value="20"/>
+    <edge from="2" to="0" value="65"/>
+    <edge from="2" to="1" value="15"/>
+    <edge from="2" to="3" value="10"/>
+    <edge from="3" to="0" value="5"/>
+	<edge from="3" to="1" value="20"/>
+    <edge from="3" to="2" value="10"/>
+  </Network>  <Network type="romance" numChars="4">
+    <edge from="0" to="1" value="50"/>
+    <edge from="0" to="2" value="5"/>
+	<edge from="0" to="3" value="15"/>
+    <edge from="1" to="0" value="70"/>
+    <edge from="1" to="2" value="5"/>
+	<edge from="1" to="3" value="25"/>
+    <edge from="2" to="0" value="5"/>
+    <edge from="2" to="1" value="10"/>
+    <edge from="2" to="3" value="15"/>
+	<edge from="3" to="0" value="15"/>
+    <edge from="3" to="1" value="25"/>
+    <edge from="3" to="2" value="15"/>
+  </Network>
+  <Network type="familybond" numChars="4">
+    <edge from="0" to="2" value="5"/>
+    <edge from="2" to="0" value="80"/>
+  </Network>
+
+</CiFState>

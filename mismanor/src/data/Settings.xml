@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Settings id="0">
+	<Identification>
+		<Name value="tests"/>
+	</Identification>
+	<Debug>
+		<HideCrashes value="false"/>
+	</Debug>
+	<Survey>
+		<ShowIntents value="true"/>
+		<AutoSave value="false"/>
+		<NumMoveOptions value="4"/>
+	</Survey>
+</Settings>

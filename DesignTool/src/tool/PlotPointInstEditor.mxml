@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:Tool="tool.*"
+		 width="610" height="300" creationComplete="onCreationComplete()">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Rect x="9" y="10" width="591" height="280">
+		<s:fill>
+			<s:SolidColor color="#ffffff" alpha="0.8"/>
+		</s:fill>
+	</s:Rect>
+	<s:Label x="39" y="228" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Feelin' Behind It"/>
+	<s:Label x="39" y="59" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Who's Sayin' It"/>
+	<s:Label x="39" y="103" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="What's Bein' Said"/>
+	<s:HGroup id="otherRoleTypeGroup" x="28" y="229" width="135" height="44" fontSize="14" fontWeight="bold" visible="false">
+		<s:RadioButton label="character" groupName="otherRoleType" selected="true"/>
+		<s:RadioButton label="item" groupName="otherRoleType"/>
+		<s:RadioButton label="knowledge" groupName="otherRoleType"/>
+	</s:HGroup>
+	<mx:HRule x="10" y="292" width="592" height="10"
+			  />
+	<s:DropDownList id="instSpeaker" x="202" y="58" width="367" contentBackgroundColor="#FFFFFF"
+					prompt="Choose Character" change="speakerChange()"></s:DropDownList>
+	<s:DropDownList id="instType" x="203" y="227" width="366" contentBackgroundColor="#FFFFFF"
+					prompt="Choose Emotion" change="typeChange()"></s:DropDownList>
+	<s:TextArea id="instText" x="202" y="103" width="367" height="100"
+				contentBackgroundColor="#FFFFFF"
+				prompt="Summary of what's being said during plot point dialogue"
+				change="textChange()" />
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import grailgm.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+			[Bindable] public var charList:ArrayCollection;
+			[Bindable] public var plotPointTypeList:ArrayCollection;
+			private var cif:CiFSingleton;
+			private var ggm:GrailGM;
+			public var workingInst:GrailInstantiation;
+			public var workingLoD:LineOfDialogue;
+
+			public function onCreationComplete():void {
+				charList = new ArrayCollection();
+				plotPointTypeList = new ArrayCollection();
+				this.cif = CiFSingleton.getInstance();
+				this.ggm = GrailGM.getInstance();
+				workingInst = new GrailInstantiation();
+				workingLoD = new LineOfDialogue();
+				workingInst.cifInstantiation.lines.push(workingLoD);
+				
+				generateCharList();
+				generatePlotPointTypeList();
+
+				this.instSpeaker.dataProvider = charList;
+				this.instType.dataProvider = plotPointTypeList;
+				
+			}
+			
+			public function generateCharList(): void {	
+				charList.removeAll();
+				
+				if (cif.cast.characters.length > 0)
+				{
+					for (var i:int = 0; i < cif.cast.characters.length ; ++i){
+						charList.addItem(cif.cast.getCharByID(i).name);
+					}
+				}
+				else
+					charList.addItem("Load a state file to get list of characters");
+				
+			}
+			
+			public function generatePlotPointTypeList(): void {
+				plotPointTypeList.removeAll();
+				for (var i:int = 0; i < GrailInstantiation.INSTANTIATION_TYPES; ++i){
+					plotPointTypeList.addItem(GrailInstantiation.getNameByID(i));
+				}
+			}
+			
+			private function speakerChange(): void {
+				workingInst.speaker = this.instSpeaker.selectedItem;
+			}
+			
+			private function textChange(): void {
+				// save the dialogue
+				workingInst.cifInstantiation.lines[0].initiatorLine = this.instText.text;
+			}
+			
+			private function typeChange(): void {
+				workingInst.instantiationType = GrailInstantiation.getIDByName(this.instType.selectedItem);
+			}
+			
+			// set everything to defaults, ready for new pre-condition to be created
+			public function reset(): void
+			{
+				workingInst = new GrailInstantiation();
+				workingLoD = new LineOfDialogue();
+				workingInst.cifInstantiation.lines.push(workingLoD);
+
+				generatePlotPointTypeList();
+				generateCharList();
+				this.instText.text = "";
+			}
+		]]>
+	</fx:Script>
+</s:Group>

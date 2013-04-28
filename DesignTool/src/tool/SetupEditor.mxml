@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:Tool="tool.*"
+		 width="610" height="300" creationComplete="onCreationComplete()">
+	<fx:Declarations>
+		<s:RadioButtonGroup id="itemRequired"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:TextInput id="description" x="200" y="10" width="355" contentBackgroundColor="#FFFFFF"
+				 enabled="true" fontWeight="bold" prompt="Name of setup"/>
+	<s:Label x="10" y="40" width="130" color="#000000" fontSize="14"
+			 fontWeight="bold" text="Type:" textAlign="left"/>
+	<s:DropDownList id="setupType" x="108" y="40" width="252" contentBackgroundColor="#FFFFFF" dataProvider="{this.setupTypes}" 
+					></s:DropDownList>
+	<s:Label x="10" y="70" width="130" color="#000000" fontSize="14" fontWeight="bold" text="Item Required:" textAlign="left"/>
+	<s:VGroup x="108" y="70" fontSize="14" fontWeight="bold" gap="1">
+		<s:RadioButton id="yesItem" label="yes" fontWeight="bold" value="yes" groupName="itemRequired"
+					   selected="true" />
+		<s:RadioButton id="noItem" label="no" fontWeight="bold" value="no" groupName="itemRequired"/>
+	</s:VGroup>
+	<s:DropDownList id="setupGiver" x="118" y="130" width="252" contentBackgroundColor="#FFFFFF" dataProvider="{this.setupGivers}"></s:DropDownList>
+	<s:Label x="10" y="130" width="130" color="#000000" fontSize="14" fontWeight="bold" text="Quest Giver:" textAlign="left"/>
+	<s:DropDownList id="setupCompleter" x="118" y="170" width="252" contentBackgroundColor="#FFFFFF" dataProvider="{this.setupCompleters}"></s:DropDownList>
+	<s:Label x="10" y="170" width="130" color="#000000" fontSize="14" fontWeight="bold" text="Quest Completer:" textAlign="left"/>
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			
+			[Bindable] public var setup:ArrayCollection; 
+			[Bindable] public var setupTypes:ArrayCollection;
+			[Bindable] public var setupGivers:ArrayCollection;
+			[Bindable] public var setupCompleters:ArrayCollection;
+			
+			public function onCreationComplete(): void {
+				this.setup = new ArrayCollection();
+				this.setupTypes = new ArrayCollection();
+			    this.setupGivers = new ArrayCollection();
+				this.setupCompleters = new ArrayCollection();
+				
+//  ask how to access these predetermined lists
+				this.setupType.dataProvider = dte.generateTypeListProvider();
+				this.setupType.selectedIndex = 0;
+//				this.setupGiver.dataProvider = this.dte.giver;
+				this.setupGiver.selectedIndex = 0;
+//				this.setupCompleter.dataProvider = this.dte.completer;
+				this.setupCompleter.selectedIndex = 0;
+			}
+			
+			public function reset():void{
+                this.description.text = "";
+				this.itemRequired.selectedValue = "yes";
+				this.setupType.selectedIndex = 0;
+				this.setupGiver.selectedIndex =0;
+				this.setupCompleter.selectedIndex = 0;
+			}
+
+			
+		]]>
+	</fx:Script>
+</s:Group>

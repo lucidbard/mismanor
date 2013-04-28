@@ -1,0 +1,765 @@
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="SocialgamesService">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">SocialgamesService</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services</item>
+      <item name="Endpoint">http://localhost/expressive.ai/designtool//gateway.php</item>
+      <item name="Destination">SocialgamesService</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">PHP</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="PHP_RELATIVE_LOCATION">flex/services/SocialgamesService.php</item>
+      <item name="PHP_SERVER_ROOT">C:\wamp\www\expressive.ai\designtool\</item>
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="PHP_SERVICES_FOLDER">C:\wamp\www\expressive.ai\designtool\services</item>
+      <item name="PHP_LOCATION">C:/wamp/www/expressive.ai/designtool/flex/services/SocialgamesService.php</item>
+      <item name="LINKED_FILE">SocialgamesService.php</item>
+      <item name="PHP_SERVER_ROOT_URL">http://localhost/expressive.ai/designtool/</item>
+      <item name="ABSOLUTE_ENDPOINT">http://localhost/expressive.ai/designtool//gateway.php</item>
+      <item name="PHP_CLASS_NAME">SocialgamesService</item>
+    </annotation>
+    <function name="getAllSocial_gamesNames" return-type="opaque[]">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getAllSocial_games" return-type="SocialGameVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">SocialGameVO</item>
+      </annotation>
+      <annotation name="ValidProperties">
+        <item name="propertySpecifier">id,gid,vid,game_name,lock,lockBy,lockDate,author,requiresOther,responderType,otherType,needsSecondOther,thirdPartyTalkAboutSomeone,thirdPartyGetSomeoneToDoSomethingForYou,lastupdated</item>
+      </annotation>
+    </function>
+    <function name="getSocial_gamesByID" return-type="SocialGameVO">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">SocialGameVO</item>
+      </annotation>
+      <annotation name="ValidProperties">
+        <item name="propertySpecifier">id,gid,vid,game_name,lock,lockBy,lockDate,author,requiresOther,responderType,otherType,needsSecondOther,thirdPartyTalkAboutSomeone,thirdPartyGetSomeoneToDoSomethingForYou,lastupdated</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="lockSocial_game" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="opaque"/>
+      <parameter name="author" type="opaque"/>
+    </function>
+    <function name="createSocial_game" return-type="opaque[]">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">SocialGameVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="SocialGameVO"/>
+    </function>
+    <function name="updateSocial_game" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">SocialGameVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="SocialGameVO"/>
+    </function>
+    <function name="deleteSocial_game" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="countSocialgames" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">integer</item>
+      </annotation>
+    </function>
+    <function name="getAllEffect" return-type="EffectVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">EffectVO</item>
+      </annotation>
+    </function>
+    <function name="getEffectsByGameID" return-type="EffectVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">EffectVO</item>
+      </annotation>
+      <parameter name="gameID" type="integer"/>
+    </function>
+    <function name="getEffectByID" return-type="EffectVO">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">EffectVO</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createEffect" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">EffectVO</item>
+        <item name="returnType">integer</item>
+      </annotation>
+      <parameter name="item" type="EffectVO"/>
+    </function>
+    <function name="updateEffect" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">EffectVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="EffectVO"/>
+    </function>
+    <function name="deleteEffect" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="countEffects" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">integer</item>
+      </annotation>
+    </function>
+    <function name="getRuleByID" return-type="RuleVO">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">RuleVO</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="getRulesByTypeAndGameID" return-type="RuleVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer,integer</item>
+        <item name="returnType">RuleVO</item>
+      </annotation>
+      <parameter name="gameID" type="integer"/>
+      <parameter name="ruleType" type="integer"/>
+    </function>
+    <function name="createRule" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">RuleVO</item>
+        <item name="returnType">integer</item>
+      </annotation>
+      <parameter name="item" type="RuleVO"/>
+    </function>
+    <function name="updateRule" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">RuleVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="RuleVO"/>
+    </function>
+    <function name="deleteRule" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="getPredicatesByRuleID" return-type="PredicateVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">PredicateVO</item>
+      </annotation>
+      <parameter name="RuleID" type="integer"/>
+    </function>
+    <function name="getPredicateByID" return-type="PredicateVO">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">PredicateVO</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createPredicate" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">PredicateVO</item>
+        <item name="returnType">integer</item>
+      </annotation>
+      <parameter name="item" type="PredicateVO"/>
+    </function>
+    <function name="updatePredicate" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">PredicateVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="PredicateVO"/>
+    </function>
+    <function name="getLinesOfDialogueByInstanceID" return-type="LineOfDialogueVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">LineOfDialogueVO</item>
+      </annotation>
+      <parameter name="instanceID" type="integer"/>
+    </function>
+    <function name="getAllLineofdialogue" return-type="LineOfDialogueVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">LineOfDialogueVO</item>
+      </annotation>
+    </function>
+    <function name="getLineofdialogueByID" return-type="LineOfDialogueVO">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">LineOfDialogueVO</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createLineofdialogue" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">LineOfDialogueVO</item>
+        <item name="returnType">integer</item>
+      </annotation>
+      <parameter name="item" type="LineOfDialogueVO"/>
+    </function>
+    <function name="updateLineofdialogue" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">LineOfDialogueVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="LineOfDialogueVO"/>
+    </function>
+    <function name="deleteLineofdialogue" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">LineOfDialogueVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="LineOfDialogueVO"/>
+    </function>
+    <function name="countLineOfDialogue" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">integer</item>
+      </annotation>
+    </function>
+    <function name="getInstantiationsByGameID" return-type="InstantiationVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">InstantiationVO</item>
+      </annotation>
+      <parameter name="gameID" type="integer"/>
+    </function>
+    <function name="getAllInstantiation" return-type="InstantiationVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">InstantiationVO</item>
+      </annotation>
+    </function>
+    <function name="getInstantiationByID" return-type="InstantiationVO">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">InstantiationVO</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createInstantiation" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">InstantiationVO</item>
+        <item name="returnType">integer</item>
+      </annotation>
+      <parameter name="item" type="InstantiationVO"/>
+    </function>
+    <function name="updateInstantiation" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">InstantiationVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="InstantiationVO"/>
+    </function>
+    <function name="deleteInstantiation" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">InstantiationVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="InstantiationVO"/>
+    </function>
+    <function name="countInstantiations" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">integer</item>
+      </annotation>
+    </function>
+    <function name="getAllMicrotheory" return-type="MicrotheoryVO[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">MicrotheoryVO</item>
+      </annotation>
+    </function>
+    <function name="getMicrotheoryByID" return-type="MicrotheoryVO">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">MicrotheoryVO</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createMicrotheory" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">MicrotheoryVO</item>
+        <item name="returnType">integer</item>
+      </annotation>
+      <parameter name="item" type="MicrotheoryVO"/>
+    </function>
+    <function name="updateMicrotheory" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">MicrotheoryVO</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="MicrotheoryVO"/>
+    </function>
+    <function name="deleteMicrotheory" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="countMicrotheory" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">integer</item>
+      </annotation>
+    </function>
+  </service>
+  <entity name="PredicateVO">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">PredicateVO</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="RemoteClass">PredicateVO</item>
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">SocialgamesService,SocialgamesServiceDummy</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer"/>
+    <property name="description" type="string"/>
+    <property name="type" type="integer"/>
+    <property name="trait" type="integer"/>
+    <property name="first" type="integer"/>
+    <property name="second" type="integer"/>
+    <property name="third" type="integer"/>
+    <property name="comparator" type="string"/>
+    <property name="operator" type="string"/>
+    <property name="knowledge" type="integer"/>
+    <property name="negated" type="boolean"/>
+    <property name="statusDuration" type="integer"/>
+    <property name="name" type="string"/>
+    <property name="intent" type="boolean"/>
+    <property name="intentType" type="integer"/>
+    <property name="isSFDB" type="boolean"/>
+    <property name="sfdbOrder" type="integer"/>
+    <property name="window" type="integer"/>
+    <property name="numTimesUniquelyTrueFlag" type="boolean"/>
+    <property name="numTimesUniquelyTrue" type="integer"/>
+    <property name="numTimesRoleSlot" type="string"/>
+    <property name="effectId" type="integer"/>
+    <property name="networkType" type="integer"/>
+    <property name="networkValue" type="integer"/>
+    <property name="status" type="integer"/>
+    <property name="firstSubjective" type="string"/>
+    <property name="secondSubjective" type="string"/>
+    <property name="sfdbLabel" type="integer"/>
+    <property name="ruleId" type="integer"/>
+  </entity>
+  <entity name="MicrotheoryVO">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">MicrotheoryVO</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="RemoteClass">MicrotheoryVO</item>
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">SocialgamesService,SocialgamesServiceDummy</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer"/>
+    <property name="vid" type="integer"/>
+    <property name="definition" type="RuleVO"/>
+    <property name="name" type="string"/>
+  </entity>
+  <entity name="InstantiationVO">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">InstantiationVO</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="RemoteClass">InstantiationVO</item>
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">SocialgamesService,SocialgamesServiceDummy</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer"/>
+    <property name="gameID" type="integer"/>
+    <property name="effectID" type="integer"/>
+    <property name="name" type="string"/>
+  </entity>
+  <entity name="LineOfDialogueVO">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">LineOfDialogueVO</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="RemoteClass">LineOfDialogueVO</item>
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">SocialgamesService,SocialgamesServiceDummy</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer"/>
+    <property name="instantiationID" type="integer"/>
+    <property name="lineNumber" type="integer"/>
+    <property name="initiatorLine" type="string"/>
+    <property name="responderLine" type="string"/>
+    <property name="otherLine" type="string"/>
+    <property name="primarySpeaker" type="string"/>
+    <property name="time" type="integer"/>
+    <property name="initiatorIsThought" type="boolean"/>
+    <property name="responderIsThought" type="boolean"/>
+    <property name="otherIsThought" type="boolean"/>
+    <property name="initiatorIsDelayed" type="boolean"/>
+    <property name="responderIsDelayed" type="boolean"/>
+    <property name="otherIsDelayed" type="boolean"/>
+    <property name="initiatorIsPicture" type="boolean"/>
+    <property name="responderIsPicture" type="boolean"/>
+    <property name="otherIsPicture" type="boolean"/>
+    <property name="initiatorAddressing" type="integer"/>
+    <property name="responderAddressing" type="integer"/>
+    <property name="otherAddressing" type="integer"/>
+    <property name="otherApproach" type="boolean"/>
+    <property name="otherExit" type="boolean"/>
+    <property name="isOtherChorus" type="boolean"/>
+  </entity>
+  <entity name="SocialGameVO">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">SocialGameVO</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="RemoteClass">SocialGameVO</item>
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">SocialgamesService,SocialgamesServiceDummy</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <annotation name="getAllSocial_games">
+      <item name="propertySpecifier">id,gid,vid,game_name,lock,lockBy,lockDate,author,requiresOther,responderType,otherType,needsSecondOther,thirdPartyTalkAboutSomeone,thirdPartyGetSomeoneToDoSomethingForYou,lastupdated</item>
+    </annotation>
+    <annotation name="getSocial_gamesByID">
+      <item name="propertySpecifier">id,gid,vid,game_name,lock,lockBy,lockDate,author,requiresOther,responderType,otherType,needsSecondOther,thirdPartyTalkAboutSomeone,thirdPartyGetSomeoneToDoSomethingForYou,lastupdated</item>
+    </annotation>
+    <property name="id" type="integer"/>
+    <property name="gid" type="integer"/>
+    <property name="vid" type="integer"/>
+    <property name="game_name" type="string"/>
+    <property name="lock" type="boolean"/>
+    <property name="lockBy" type="integer"/>
+    <property name="lockDate" type="string"/>
+    <property name="author" type="integer"/>
+    <property name="requiresOther" type="boolean"/>
+    <property name="responderType" type="integer"/>
+    <property name="otherType" type="integer"/>
+    <property name="needsSecondOther" type="boolean"/>
+    <property name="thirdPartyTalkAboutSomeone" type="boolean"/>
+    <property name="thirdPartyGetSomeoneToDoSomethingForYou" type="boolean"/>
+    <property name="lastupdated" type="integer"/>
+  </entity>
+  <entity name="RuleVO">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">RuleVO</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="RemoteClass">RuleVO</item>
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">SocialgamesService,SocialgamesServiceDummy</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer"/>
+    <property name="parent_id" type="integer"/>
+    <property name="microtheory" type="boolean"/>
+    <property name="type" type="integer"/>
+    <property name="name" type="string"/>
+    <property name="description" type="string"/>
+    <property name="weight" type="integer"/>
+  </entity>
+  <entity name="EffectVO">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">EffectVO</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="RemoteClass">EffectVO</item>
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">SocialgamesService,SocialgamesServiceDummy</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer"/>
+    <property name="gameID" type="integer"/>
+    <property name="referenceAsNaturalLanguage" type="string"/>
+    <property name="isAccept" type="boolean"/>
+    <property name="instantiationID" type="integer"/>
+    <property name="rejectID" type="integer"/>
+    <property name="conditionRuleID" type="integer"/>
+    <property name="changeRuleID" type="integer"/>
+  </entity>
+  <service name="UserService">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">UserService</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services</item>
+      <item name="Endpoint">http://localhost/expressive.ai/designtool//gateway.php</item>
+      <item name="Destination">UserService</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">PHP</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="PHP_RELATIVE_LOCATION">flex/services/UserService.php</item>
+      <item name="PHP_SERVER_ROOT">C:\wamp\www\expressive.ai\designtool\</item>
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="PHP_SERVICES_FOLDER">C:\wamp\www\expressive.ai\designtool\services</item>
+      <item name="PHP_LOCATION">C:/wamp/www/expressive.ai/designtool/flex/services/UserService.php</item>
+      <item name="LINKED_FILE">UserService.php</item>
+      <item name="PHP_SERVER_ROOT_URL">http://localhost/expressive.ai/designtool/</item>
+      <item name="ABSOLUTE_ENDPOINT">http://localhost/expressive.ai/designtool//gateway.php</item>
+      <item name="PHP_CLASS_NAME">UserService</item>
+    </annotation>
+    <function name="getAllUser" return-type="User[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">User</item>
+      </annotation>
+    </function>
+    <function name="getUserByID" return-type="User">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">User</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createUser" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">User</item>
+        <item name="returnType">integer</item>
+      </annotation>
+      <parameter name="item" type="User"/>
+    </function>
+    <function name="updateUser" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">User</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="User"/>
+    </function>
+    <function name="deleteUser" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="count" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">integer</item>
+      </annotation>
+    </function>
+    <function name="getUser_paged" return-type="User[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer,integer</item>
+        <item name="returnType">User</item>
+      </annotation>
+      <parameter name="startIndex" type="integer"/>
+      <parameter name="numItems" type="integer"/>
+    </function>
+  </service>
+  <entity name="User">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">User</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="RemoteClass">User</item>
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">UserService</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer"/>
+    <property name="username" type="string"/>
+    <property name="password" type="string"/>
+    <property name="email" type="string"/>
+  </entity>
+</model>

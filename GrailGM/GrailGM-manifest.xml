@@ -1,0 +1,5 @@
+﻿<?xml version="1.0"?>
+<componentPackage>
+	<component id="Quest" class="GrailGM.Quest"/>
+	<component id="QuestLib" class="GrailGM.QuestLib"/>
+</componentPackage>

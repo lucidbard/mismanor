@@ -1,0 +1,66 @@
+<CiFLibraries>
+  <SocialGameLibrary/>
+  <Microtheories>
+    <Microtheory>
+      <Name>Testamundario</Name>
+      <Definition>
+        <Rule name="" id="-1" description="">
+          <Predicate type="trait" trait="kind" first="initiator" negated="false" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Definition>
+      <InitiatorInfluenceRuleSet>
+        <InfluenceRule weight="0" name="" id="0">
+          <Predicate type="network" networkType="romance" first="initiator" second="initiator" comparator="+" value="0" negated="false" name="intent-network up: romance (initiator toward initiator)" intent="true" intentType="0" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="status" status="anxious" first="initiator" second="" negated="false" duration="-1" name="status(initiator, anxious, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="status" status="cat: feeling bad" first="initiator" second="" negated="false" duration="-1" name="status(initiator, cat: feeling bad, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="status" status="cat: feeling bad about someone" first="initiator" second="initiator" negated="false" duration="-1" name="status(initiator, initiator, cat: feeling bad about someone, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="status" status="cat: feeling good about someone" first="initiator" second="initiator" negated="false" duration="-1" name="status(initiator, initiator, cat: feeling good about someone, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="status" status="cat: reputation bad" first="initiator" second="" negated="false" duration="-1" name="status(initiator, cat: reputation bad, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="status" status="cat: reputation good" first="initiator" second="" negated="false" duration="-1" name="status(initiator, cat: reputation good, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="status" status="confused" first="initiator" second="" negated="false" duration="-1" name="status(initiator, confused, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="status" status="embarrassed" first="initiator" second="" negated="false" duration="-1" name="status(initiator, embarrassed, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="trait" trait="sympathetic" first="initiator" negated="false" name="trait(initiator, sympathetic)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="trait" trait="humble" first="initiator" negated="false" name="trait(initiator, humble)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="trait" trait="charming" first="initiator" negated="false" name="trait(initiator, charming)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </InitiatorInfluenceRuleSet>
+      <ResponderInfluenceRuleSet/>
+    </Microtheory>
+    <Microtheory>
+      <Name>Kind</Name>
+      <Definition>
+        <Rule name="I has trait Kind" id="0" description="">
+          <Predicate type="trait" trait="kind" first="initiator" negated="false" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Definition>
+      <InitiatorInfluenceRuleSet>
+        <InfluenceRule weight="1" name="I wants to be better friends with R" id="1">
+          <Predicate type="network" networkType="buddy" first="initiator" second="responder" comparator="+" value="0" negated="false" name="intent-network up: buddy (initiator toward responder)" intent="true" intentType="0" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="1" name="I wants R to be better friends with them" id="2">
+          <Predicate type="network" networkType="buddy" first="responder" second="initiator" comparator="+" value="0" negated="false" name="intent-network up: buddy (responder toward initiator)" intent="true" intentType="0" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="-1" name="I doesn't want R to be worse friends with them" id="3">
+          <Predicate type="network" networkType="buddy" first="responder" second="initiator" comparator="-" value="0" negated="false" name="intent-network down: buddy (responder toward initiator)" intent="true" intentType="1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="-1" name="I doesn't want to be worse friends R" id="4">
+          <Predicate type="network" networkType="buddy" first="initiator" second="responder" comparator="-" value="0" negated="false" name="intent-network down: buddy (initiator toward responder)" intent="true" intentType="1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="1" name="I wants to be cheerful" id="5">
+          <Predicate type="status" status="cheerful" first="initiator" second="responder" negated="false" name="intent-add status: initiator is cheerful" intent="true" intentType="2" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="1" name="I wants R and O to be better family" id="6">
+          <Predicate type="network" networkType="familybond" first="responder" second="other" comparator="+" value="0" negated="false" name="intent-network up: familybond (responder toward other)" intent="true" intentType="0" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="1" name="I wants O and R to be better family" id="7">
+          <Predicate type="network" networkType="familybond" first="other" second="responder" comparator="+" value="0" negated="false" name="intent-network up: familybond (other toward responder)" intent="true" intentType="0" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="3" name="I wants Kind R to feel good" id="8">
+          <Predicate type="status" status="cat: feeling good" first="responder" second="responder" negated="false" name="intent-add status: responder is cat: feeling good" intent="true" intentType="2" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="trait" trait="kind" first="responder" negated="false" name="trait(responder, kind)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </InitiatorInfluenceRuleSet>
+      <ResponderInfluenceRuleSet/>
+    </Microtheory>
+  </Microtheories>
+</CiFLibraries>

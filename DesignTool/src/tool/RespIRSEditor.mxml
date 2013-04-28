@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400" height="300" creationComplete="onCreationComplete()" currentState="default"
+		 width.CKB="612" height.CKB="488"
+		 width.default="610">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="network"/>
+		<s:State name="knowledge"/>
+		<s:State name="trait"/>
+		<s:State name="status"/>
+		<s:State name="SFDBLabel"/>
+		<s:State name="CKB"/>
+	</s:states>
+	
+	<s:TextInput id="description" x="156" y="27" width="446"
+				 contentBackgroundColor="#FFFFFF" enabled="true"
+				 fontWeight="bold" prompt="Author Notes" 
+				 />
+	<s:List id="respIRSTypeList" x="10" y="81" width="130" height="200"
+			contentBackgroundColor="#FFFFFF" 
+			></s:List>
+	<s:Label x="10" y="61" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Predicates"/>
+	<s:Label x="10" y="319" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Details"
+			 />
+	<s:Button x="156" y="81" label="Add"
+			  click="addRespIRS(respIRSTypeList.selectedIndex)"/>
+	<s:Button x="156" y="110" label="Remove"
+			  click="removeRespIRS(predicateEditor.selectedIndex)"/>
+	<s:List id="predicateEditor" x="234" y="81" width="368" height="200"
+			click="clickOnPredicateEditor(predicateEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF"
+			dataProvider="{this.respIRS}" enabled="false"
+			 selectedIndex="0"
+			
+			></s:List>
+	<s:DropDownList id="knowledgeList" includeIn="knowledge" x="110"
+					y="349" width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.knowledgeTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="statusList" includeIn="status" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.statusTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="networkList" includeIn="network" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.networkTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="sfdbLabelList" includeIn="SFDBLabel" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.sfdbLabelTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="ckbTruthList" includeIn="CKB" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.ckbTruthTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="firstRole" includeIn="knowledge,network,status,trait,SFDBLabel,CKB" x="110" y="378"
+					width="175" change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="secondRole" includeIn="network,status,SFDBLabel,CKB" x="428" y="378"
+					width="175" change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="firstCKBSubjective" includeIn="CKB" x="110" y="408"
+					width="175" change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.ckbSubjectiveTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="secondCKBSubjective" includeIn="CKB" x="428" y="408"
+					width="175" change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.ckbSubjectiveTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="network,status,SFDBLabel,CKB" x="328" y="381" width="96" height="21" fontSize="14"
+			 fontWeight="bold" text="Second Role" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="knowledge,network,status,trait,SFDBLabel,CKB" x="10" y="381" width="96" height="21" fontSize="14"
+			 fontWeight="bold" text="First Role" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="CKB" x="328" y="400" width="96" height="38" fontSize="14"
+			 fontWeight="bold" text="Second Subjective" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="CKB" x="10" y="401" width="96" height="36" fontSize="14"
+			 fontWeight="bold" text="First&#xd;Subjective" textAlign="right" verticalAlign="middle"/>
+	<s:DropDownList id="comparator" includeIn="network" x="110" y="407" width="175"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.compTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="network" x="328" y="410" width="96" height="21" fontSize="14"
+			 fontWeight="bold" text="Weight" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="network" x="10" y="410" width="96" height="21" fontSize="14"
+			 fontWeight="bold" text="Comparator" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="status" x="10" y="352" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="Status"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="network" x="10" y="352" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="Network"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="knowledge" x="10" y="352" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="Knowledge"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="SFDBLabel" x="10" y="352" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="SFDB Label"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="CKB" x="10" y="352" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="CKB Truth"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="SFDBLabel" x="-4" y="410" width="428" height="21" fontSize="14"
+			 fontWeight="bold" text="SFDB event must have occured within how many turns (0 is all time)" textAlign="right" verticalAlign="middle"/>
+	<s:NumericStepper id="sfdbLabelWindow" includeIn="SFDBLabel" x="428" y="407"
+					  change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="999" minimum="0" stepSize="1"/>
+	<mx:HRule x="10" y="292" width="592" height="10"
+			  />
+	<s:CheckBox id="notBox" includeIn="knowledge,network,status,trait,SFDBLabel,CKB" x="110" y="323" label="Not"
+				fontSize="14" fontWeight="bold" change="updatePredicateEditor(predicateEditor.selectedIndex)"/>
+	<s:NumericStepper id="networkWeight" includeIn="network" x="432" y="407"
+					  change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="100" minimum="0" stepSize="1"/>
+	<s:Label x="130" y="55" width="96" height="21"
+			 fontSize="14" fontWeight="bold" text="Rule Weight" textAlign="right"
+			 verticalAlign="middle" />
+	<s:NumericStepper id="ruleWeight" x="235" y="53"
+					  change="this.checkPreExists(), updatePredicateEditor(predicateEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="10" minimum="-10" stepSize="1"
+					  value="0" />
+	<s:DropDownList id="traitList" includeIn="trait" x="110" y="349" width="493"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.traitTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="trait" x="10" y="352" width="96" height="21" fontSize="14" fontWeight="bold"
+			 text="Trait" textAlign="right" verticalAlign="middle"/>
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			[Bindable] public var respIRS:ArrayCollection; 
+			public var workingRespIRS:Vector.<Predicate> = new Vector.<Predicate>();
+			public var preExists:Boolean = false;
+			
+			public function onCreationComplete():void {
+				this.respIRS = new ArrayCollection();
+				this.respIRSTypeList.dataProvider = this.dte.predTypes;
+				this.respIRSTypeList.selectedIndex = 0;
+			}				
+			
+			public function checkPreExists(): void{
+				if(this.workingRespIRS.length == 0){
+					this.preExists = false;
+				}
+				if(!preExists){
+					this.addRespIRS(respIRSTypeList.selectedIndex);
+					this.preExists = true;
+				}
+			}
+			
+			// Takes a predicate clones it, updates the appropriate field based on UI state
+			// returns the cloned predicate
+			public function updatePredicateByState(workingPredicate:Predicate):Predicate
+			{
+				var newPredicate:Predicate = workingPredicate.clone();
+
+				newPredicate.first = this.firstRole.selectedItem;
+				newPredicate.negated = this.notBox.selected;
+				
+				switch (this.currentState)
+				{
+					case "network":
+						newPredicate.networkType = this.networkList.selectedIndex;
+						newPredicate.second = this.secondRole.selectedItem;
+						newPredicate.comparator = this.comparator.selectedItem;
+						newPredicate.networkValue = this.networkWeight.value;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					case "knowledge":
+						newPredicate.knowledge = this.knowledgeList.selectedIndex;
+						break;
+					case "status":
+						newPredicate.status = this.statusList.selectedIndex;
+						newPredicate.second = this.secondRole.selectedItem;
+						if (secondRole.enabled == false && getCurrentStatusDirected()){
+							secondRole.enabled = true;
+						} else if (secondRole.enabled == true && !getCurrentStatusDirected()) {
+							secondRole.enabled = false;
+						}
+						break;
+					case "trait":
+						newPredicate.trait = this.traitList.selectedIndex;
+						if (secondRole.enabled == true) secondRole.enabled = false;
+						break;
+					case "SFDBLabel":
+						newPredicate.sfdbLabel = this.sfdbLabelList.selectedIndex;
+						newPredicate.second = this.secondRole.selectedItem;
+						newPredicate.isSFDB = true;
+						newPredicate.window = this.sfdbLabelWindow.value;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					case "CKB":
+						newPredicate.truthLabel = this.ckbTruthList.selectedItem;
+						newPredicate.second = this.secondRole.selectedItem;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					default:
+						trace ("state not found");
+				}
+				return newPredicate;
+				
+			}
+			
+			// Changes the string in the predicate editor box based on futzing with the drop downs
+			// ItemSelected refers to the line currently active in the predicate editor
+			// Also updates the working Responder IRS list
+			public function updatePredicateEditor(itemSelected:Number):void
+			{
+				var workingPredicate:Predicate = this.workingRespIRS[itemSelected];
+				if (!workingPredicate)
+					trace("Crap, this isn't working. Bug Anne.");
+				var resultString:String = new String();
+				
+				workingRespIRS[itemSelected].type = this.respIRSTypeList.selectedIndex;
+				workingRespIRS[itemSelected] = updatePredicateByState(workingPredicate);
+				resultString = this.workingRespIRS[this.predicateEditor.selectedIndex].toString();
+				workingRespIRS[itemSelected].name = resultString;
+				respIRS[itemSelected] = resultString;
+			}
+			
+			// Updates the appropriate drop down based on the state
+			// Sets it to the value stored in the chosen line in the predicate editor
+			public function updateDropDownValueByState():void
+			{
+				var workingPredicate:Predicate = this.workingRespIRS[this.predicateEditor.selectedIndex];
+
+				this.firstRole.selectedItem = workingPredicate.primary;
+				this.notBox.selected = workingPredicate.negated;
+				
+				switch (this.currentState)
+				{
+					case "network":
+						this.networkList.selectedIndex = workingPredicate.networkType;
+						this.secondRole.selectedItem = workingPredicate.secondary;
+						this.networkWeight.value = workingPredicate.networkValue;
+						this.comparator.selectedItem = workingPredicate.comparator;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					case "status":
+						this.statusList.selectedIndex = workingPredicate.status;
+						if (secondRole.enabled == false && getCurrentStatusDirected()){
+							secondRole.enabled = true;
+						} else if (secondRole.enabled == true && !getCurrentStatusDirected()) {
+							secondRole.enabled = false;
+						}
+						break;
+					case "knowledge":
+						this.knowledgeList.selectedIndex = workingPredicate.knowledge;
+						break;
+					case "trait":
+						this.traitList.selectedIndex = workingPredicate.trait;
+						if (secondRole.enabled == true) secondRole.enabled = false;
+						break;
+					case "SFDBLabel":
+						this.sfdbLabelList.selectedIndex = workingPredicate.sfdbLabel;
+						this.secondRole.selectedItem = workingPredicate.secondary;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						this.sfdbLabelWindow.value = workingPredicate.window;
+						break;
+					case "CKB":
+						//this.ckbTruthList.selectedIndex = 
+						this.secondRole.selectedItem = workingPredicate.secondary;
+						if (secondRole.enabled == false) secondRole.enabled = true;
+						break;
+					default:
+						"updateDropDownValueByState: State not found";
+						break;
+				}
+			}
+			
+			// Updates UI elements based on selecting a line in the predicate editor
+			public function clickOnPredicateEditor(itemSelected:Number):void {
+				var workingPredicate:Predicate = this.workingRespIRS[itemSelected];
+				
+				changeState(workingPredicate.type);
+				updateDropDownValueByState();
+			}			
+			
+			// Changes the UI state based on a given predicate type
+			public function changeState(predType:Number):void {
+				setCurrentState(Predicate.getNameByType(predType));
+			}
+						
+			// Add a responder IRS predicate to the predicate editor box
+			// Enables the predicate editor box if it was currently disabled
+			// Adds a string to the window in mostly human readable form
+			// Changes the state of the UI based on the predicate chosen
+			// Adds a filled out predicate to the working responder IRS list
+			// Moves the selection in the predicate editor to the most recently added item
+			public function addRespIRS(RespIRSType:Number):void {
+				var resultString:String = new String();
+				changeState(RespIRSType);
+
+				// Add this to the working predicates
+				var workingPredicate:Predicate = new Predicate();
+				workingPredicate.type = RespIRSType;
+				workingPredicate = updatePredicateByState(workingPredicate);
+
+				resultString = workingPredicate.toString();
+				workingPredicate.name = resultString;
+
+				this.workingRespIRS.push(workingPredicate);
+				this.respIRS.addItem(resultString);
+				if (!this.predicateEditor.enabled)
+				{
+					this.predicateEditor.enabled = true;
+				}
+				
+				this.predicateEditor.selectedIndex = this.workingRespIRS.length - 1;				
+			}
+			
+			// Removes the selected responder IRS from the predicate editor box and the working responder IRS list
+			// Disables the predicate editor box if there is nothing left in it
+			// Moves the selection to the first item
+			public function removeRespIRS(selection:Number):void {
+				try {
+					this.respIRS.removeItemAt(selection);
+					this.workingRespIRS.splice(selection, 1);
+				} catch (e:Error) {
+					return; // TODO: Create a popup error message that something must be selected to remove it?
+				}
+				if (this.respIRS.length == 0)
+				{
+					this.predicateEditor.enabled = false;
+					setCurrentState("default");
+				}
+				else
+				{
+					this.predicateEditor.selectedIndex = 0;
+					changeState(workingRespIRS[this.predicateEditor.selectedIndex].type);
+					updateDropDownValueByState();
+				}
+			}
+			
+			// set everything back to defaults, ready for new pre-condition to be created
+			public function reset(): void
+			{
+				this.respIRS.removeAll();
+				this.predicateEditor.enabled = false;
+				this.respIRSTypeList.selectedIndex = 0;
+				setCurrentState("network");
+				this.networkList.selectedIndex = 0;
+				setCurrentState("knowledge");
+				this.knowledgeList.selectedIndex = 0;
+				setCurrentState("status");
+				this.statusList.selectedIndex = 0;
+				setCurrentState("trait");
+				this.traitList.selectedIndex = 0;
+				setCurrentState("SFDBLabel");
+				this.sfdbLabelList.selectedIndex = 0;
+				setCurrentState("CKB");
+				this.ckbTruthList.selectedIndex = 0;
+				setCurrentState("default");
+				this.description.text = "";
+				
+				this.workingRespIRS = new Vector.<Predicate>;
+			}
+			
+			// Checks if the current status is directed or not
+			// Used to change output strings and to disable responder dropdowns
+			public function getCurrentStatusDirected():Boolean {
+				if (Status.getStatusNumberByName(statusList.selectedItem) >= Status.FIRST_DIRECTED_STATUS ||
+					Status.getStatusNumberByName(statusList.selectedItem) == Status.CAT_FEELING_BAD_ABOUT_SOMEONE ||
+					Status.getStatusNumberByName(statusList.selectedItem) == Status.CAT_FEELING_GOOD_ABOUT_SOMEONE)
+					return true;
+				else
+					return false;
+			}
+			
+	]]>
+	</fx:Script>
+</s:Group>

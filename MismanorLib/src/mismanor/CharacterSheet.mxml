@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx" width="1200" height="800"
+				   backgroundImage="@Embed(source='../img/dialogueback.png')" backgroundImageFillMode="repeat">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import CiF.Trait;
+			
+			import grailgm.GrailGM;
+			
+			import mismanor.CharacterSheet;
+			import mismanor.event.CharacterSheetEvent;
+			import mx.controls.CheckBox;
+			
+			[Embed(source = 'img/playerfemale.png')]
+			private var playerFemaleClass:Class;
+			[Embed(source = 'img/player.png')]
+			private var playerMaleClass:Class;
+			public var grailGM:GrailGM;
+			public var player:Player;
+			// Set amount of points the player has available to select traits with
+			public var playerPoints:Number = 25;
+			// Keep track of the sums of positive and negative totals
+			public var posPoints:Number = 0;
+			public var negPoints:Number = 0;
+			
+			public var traitCost:Array = new Array();
+			public var oppTrait:Array = new Array();
+			public function initTraits(plyr:Player,grGM:GrailGM,mainGraphics:DisplayObjectContainer):void {
+				player=plyr;
+				grailGM=grGM;
+				
+				// Set all the "costs" of each trait
+				
+				traitCost[Trait.KIND] 			= -15;
+				traitCost[Trait.SYMPATHETIC] 	= -10;
+				traitCost[Trait.HUMBLE] 		= -5;
+				traitCost[Trait.FORGIVING] 		= -10;
+				traitCost[Trait.LOYAL] 			= -15;
+				traitCost[Trait.HONEST] 		= -10;
+				traitCost[Trait.CONFIDENT]		= -20;
+				traitCost[Trait.OUTGOING]		= -15;
+				traitCost[Trait.CHARMING] 		= -15;
+				traitCost[Trait.CHARISMATIC]	= -5;
+				traitCost[Trait.TACTFUL] 		= -5;
+				traitCost[Trait.INDEPENDENT] 	= -10;
+				traitCost[Trait.OBSERVANT]		= -15;
+				traitCost[Trait.PERSUASIVE] 	= -25;
+				setPosTraits();
+				
+				// Negative Traits
+				traitCost[Trait.SHY] 			= 5;
+				traitCost[Trait.IMPULSIVE] 		= 10;
+				traitCost[Trait.IRRITABLE] 		= 15;
+				traitCost[Trait.DOMINEERING] 	= 10;
+				traitCost[Trait.ARROGANT] 		= 5;
+				traitCost[Trait.JEALOUS] 		= 10;
+				traitCost[Trait.OBLIVIOUS] 		= 15;
+				traitCost[Trait.VENGEFUL] 		= 5;
+				traitCost[Trait.STUBBORN] 		= 10;
+				traitCost[Trait.DISHONEST]		= 5;
+				traitCost[Trait.DISAPPROVING]	= 15;
+				traitCost[Trait.UNFORGIVING]	= 10;
+				traitCost[Trait.NAGGING]		= 5;
+				traitCost[Trait.SNIDE]			= 5;
+				traitCost[Trait.INDECISIVE]		= 5; 
+				traitCost[Trait.HOSTILE] 		= 10;
+				traitCost[Trait.GABBY]			= 5;
+				traitCost[Trait.PROMISCUOUS] 	= 5;
+				setNegTraits();
+				
+				maleChosen();
+				
+				oppTrait[Trait.HONEST] 		= Trait.DISHONEST;
+				oppTrait[Trait.DISHONEST] 	= Trait.HONEST;
+				oppTrait[Trait.SHY] 		= Trait.OUTGOING;
+				oppTrait[Trait.OUTGOING]	= Trait.SHY;
+				oppTrait[Trait.FORGIVING]	= Trait.UNFORGIVING;
+				oppTrait[Trait.UNFORGIVING] = Trait.FORGIVING;
+			}
+			
+			public function posTraitSelected(e:MouseEvent): void {
+				var checkBoxSelected:CheckBox = e.target as CheckBox;
+				var checkbox:CheckBox;
+				var negCheckbox:CheckBox;
+				var traitID:Number = Trait.getNumberByName(checkBoxSelected.id);
+				var pointsUsed:Number = traitCost[traitID];
+				
+				if (checkBoxSelected.selected)
+				{
+					// decrease the total number of points
+					playerPoints += pointsUsed;
+					player.addTrait(traitID);
+				}
+				else
+				{
+					playerPoints -= pointsUsed;
+					player.removeTrait(traitID);
+				}
+				
+				// disable all the boxes that cost more than the total points left
+				for each (checkbox in posTraits.getChildren())
+				{
+					if (!checkbox.selected && Math.abs(traitCost[Trait.getNumberByName(checkbox.id)]) > playerPoints)
+						checkbox.enabled = false;
+					else
+						checkbox.enabled = true;
+				}
+				
+				// update the total points left
+				pointTotal.text = playerPoints.toString();
+				// disable the opposite checkbox if there is one
+				for each (checkbox in posTraits.getChildren())
+				{
+					var oppositeID:Number = oppTrait[Trait.getNumberByName(checkbox.id)];
+					if (oppositeID > -1)
+					{
+						for each (negCheckbox in negTraits.getChildren())
+						{
+							var oppositeLabel:String = Trait.getNameByNumber(oppositeID);
+							if (negCheckbox.id == oppositeLabel)
+							{
+								if (checkbox.selected)
+									negCheckbox.enabled = false;
+								else
+									negCheckbox.enabled = true;
+								if (negCheckbox.selected)
+									checkbox.enabled = false;
+								else
+									checkbox.enabled = true;
+							}
+						}
+					}
+				}
+				if(playerPoints < 0)
+					saveCharacter.enabled=false;
+				else
+					saveCharacter.enabled=true;
+			}
+
+			
+			public function setPosTraits(): void {
+				var cb:CheckBox;
+				var label:String;
+				var curTraitCost:Number = 0;
+				
+				for each (label in grailGM.getPosTraits())
+				{
+					cb = new CheckBox();
+					cb.id = label;
+					cb.addEventListener(MouseEvent.CLICK, posTraitSelected);
+					curTraitCost = Trait.getNumberByName(label);
+					curTraitCost = traitCost[curTraitCost];
+					cb.label = label + " (" + Math.abs(curTraitCost)+" points)";
+					cb.setStyle("fontFamily", "bodoni");
+					cb.setStyle("fontSize", "18");
+					posTraits.addChild(cb);
+				}
+			}
+			
+			public function setNegTraits(): void {
+				var cb:CheckBox;
+				var label:String;
+				var curTraitCost:Number = 0;
+				
+				for each (label in grailGM.getNegTraits())
+				{
+					cb = new CheckBox();
+					cb.id = label;
+					
+					cb.addEventListener(MouseEvent.CLICK, negTraitSelected);
+					curTraitCost = Trait.getNumberByName(label);
+					curTraitCost = traitCost[curTraitCost];
+					cb.label = label + " (" + Math.abs(curTraitCost) + " points)";
+					cb.setStyle("fontFamily", "bodoni");
+					cb.setStyle("fontSize", "18");
+					
+					negTraits.addChild(cb);
+				}
+			}
+			
+			public function negTraitSelected(e:MouseEvent): void {
+				var checkBoxSelected:CheckBox = e.target as CheckBox;
+				var checkbox:CheckBox;
+				var posCheckbox:CheckBox;
+				var traitID:Number = Trait.getNumberByName(checkBoxSelected.id);
+				var pointsUsed:Number = traitCost[traitID];
+				
+				if (checkBoxSelected.selected)
+				{
+					// increase the total number of points
+					playerPoints += pointsUsed;
+					player.addTrait(traitID);
+				}
+				else
+				{
+					playerPoints -= pointsUsed;
+					player.removeTrait(traitID);
+				}
+				
+				// disable all the boxes that cost more than the total points left
+				for each (checkbox in negTraits.getChildren())
+				{
+					if (!checkbox.selected && Math.abs(traitCost[Trait.getNumberByName(checkbox.id)]) > playerPoints)
+						checkbox.enabled = false;
+					else
+						checkbox.enabled = true;
+				}
+				
+				// update the total points left
+				pointTotal.text = playerPoints.toString();
+				
+				// disable the opposite checkboxes if there are any
+				for each (checkbox in negTraits.getChildren())
+				{
+					var oppositeID:Number = oppTrait[Trait.getNumberByName(checkbox.id)];
+					if (oppositeID > -1)
+					{
+						for each (posCheckbox in posTraits.getChildren())
+						{
+							var oppositeLabel:String = Trait.getNameByNumber(oppositeID);
+							if (posCheckbox.id == oppositeLabel)
+							{
+								if (checkbox.selected)
+									posCheckbox.enabled = false;
+								else
+									posCheckbox.enabled = true;
+								if (posCheckbox.selected)
+									checkbox.enabled = false;
+								else
+									checkbox.enabled = true;
+							}
+						}
+					}
+				}
+				
+				if(playerPoints < 0)
+					saveCharacter.enabled=false;
+				else
+					saveCharacter.enabled=true;
+			}
+			
+			
+			public function femaleChosen(): void {
+				playerName.text = "Elizabeth";
+				playerPortrait.source = playerFemaleClass;
+				player.addTrait(Trait.FEMALE);
+				player.removeTrait(Trait.MALE);
+			}
+			
+			public function maleChosen(): void {
+				playerName.text = "Darcy";
+				playerPortrait.source = playerMaleClass;
+				player.addTrait(Trait.MALE);
+				player.removeTrait(Trait.FEMALE);
+			}
+		]]>
+	</fx:Script>
+		<s:VGroup width="350" left="0" height="100%" y="0" id="strengthsGroup" horizontalAlign="center" gap="11" paddingTop="20" paddingBottom="20">
+			<s:Label x="49" y="124" width="250" fontFamily="bodoni" fontSize="32" fontWeight="bold" text="Strengths" textAlign="center" />
+			<mx:VBox id="posTraits" x="49" y="154" width="80%" height="90%" backgroundColor="0x867e6c" backgroundAlpha="0.25" borderColor="0x383226" borderStyle="solid" paddingLeft="10" paddingTop="5" paddingBottom="5"></mx:VBox>
+		</s:VGroup>
+			<s:VGroup id="genderNameGroup" height="90%" verticalAlign="middle" gap="40" verticalCenter="0" horizontalAlign="center" left="350" right="350" paddingTop="10" paddingBottom="10">
+				<s:BorderContainer 
+					backgroundColor="#FFFFFF" cornerRadius="15"
+					borderStyle="inset" borderWeight="5"  width="100%" height="100%" dropShadowVisible="false">
+				<s:Image id="playerPortrait" backgroundColor="0xFFFFFF" chromeColor="0x000000" width="100%" height="100%" verticalAlign="bottom"/>
+				</s:BorderContainer>
+				<s:HGroup fontFamily="bodoni" fontSize="22" fontWeight="bold" textAlign="center" verticalAlign="middle" gap="60" paddingLeft="0" requestedColumnCount="2">
+																																										
+					<s:RadioButton label="Female" groupName="gender" id="femaleRadio" click="femaleChosen()" />
+					<s:RadioButton label="Male" groupName="gender" selected="true" id="maleRadio" click="maleChosen()"/>
+				</s:HGroup>
+				<s:HGroup verticalAlign="middle">
+					<s:Label fontFamily="bodoni" fontSize="22" fontWeight="bold" text="Name:"/>
+					<s:TextInput id="playerName" height="28" contentBackgroundColor="#EEE5DD"
+								 fontFamily="Bodoni" fontSize="22" text="Darcy" />
+				</s:HGroup>
+				<s:Label x="450" y="554" width="300" textAlign="center" fontFamily="bodoni" fontSize="24" text="Remaining Points" />
+				<s:Label x="450" y="600" width="300" textAlign="center" fontFamily="bodoni" fontWeight="bold" fontSize="32" id="pointTotal" text="25" />
+				<s:Button label="Save Character" click="dispatchEvent(new CharacterSheetEvent(CharacterSheetEvent.CREATE_SHEET,this));" x="905" y="40" height="50" width="250" fontFamily="bodoni" fontSize="24" chromeColor="0xddd5c8" id="saveCharacter"/>
+			</s:VGroup>
+			<s:VGroup width="350" height="100%" horizontalAlign="center" paddingTop="20" paddingBottom="20" id="flawsGroup" right="0">
+				<s:Label x="905" y="124" width="250" fontFamily="bodoni" fontSize="32" fontWeight="bold" text="Flaws" textAlign="center" />
+				<mx:VBox id="negTraits" x="905" y="154" width="80%" height="90%" backgroundColor="0x867e6c" backgroundAlpha="0.25" borderColor="0x383226" borderStyle="solid" paddingLeft="10" paddingTop="5" paddingBottom="5">
+				</mx:VBox>		
+			</s:VGroup>
+</s:BorderContainer>

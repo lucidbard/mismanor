@@ -1,0 +1,526 @@
+<CiFLibraries>
+  <SocialGameLibrary>
+    <SocialGame name="Use" requiresOther="false" type="1" othertype="0">
+      <PatsyRule>
+        <Rule name="Anonymous Rule" id="-1" description=""/>
+      </PatsyRule>
+      <Intents>
+        <Rule name="intent-add status: initiator is wearing responder" id="0" description="This intent is for the initiator to use (open/close, lock/unlock, wear/take off, drink, eat) an item.">
+          <Predicate type="status" status="is wearing" first="initiator" second="responder" negated="false" name="intent-add status: initiator is wearing responder" intent="true" intentType="2" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Intents>
+      <Preconditions>
+        <Rule name="A precondition is that the item is a usable item." id="4" description="">
+          <Predicate type="status" status="cat: usable item" first="responder" second="initiator" negated="false" duration="-1" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Preconditions>
+      <InitiatorInfluenceRuleSet>
+        <InfluenceRule weight="1" name="" id="21">
+          <Predicate type="status" status="cat: usable item" first="initiator" second="initiator" negated="false" duration="-1" name="status(initiator, cat: usable item, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="-1" name="" id="22">
+          <Predicate type="status" status="cat: usable item" first="initiator" second="initiator" negated="false" duration="-1" name="status(initiator, cat: usable item, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="1" name="" id="23">
+          <Predicate type="trait" trait="usable" first="initiator" negated="false" name="trait(initiator, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="-1" name="" id="24">
+          <Predicate type="trait" trait="usable" first="initiator" negated="true" name="~trait(initiator, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </InitiatorInfluenceRuleSet>
+      <ResponderInfluenceRuleSet>
+        <InfluenceRule weight="1" name="" id="25">
+          <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="-1" name="" id="26">
+          <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </ResponderInfluenceRuleSet>
+      <Effects>
+        <Effect id="0" accept="true" instantiationID="0" rejectID="-1">
+          <PerformanceRealization>Open an item</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="closed" first="responder" second="" negated="false" duration="-1" name="status(responder, closed, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="status" status="open" first="responder" second="" negated="false" duration="60" name="status(responder, open, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="1" accept="true" instantiationID="1" rejectID="-1">
+          <PerformanceRealization>Close an item</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="open" first="responder" second="" negated="false" duration="-1" name="status(responder, open, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule/>
+        </Effect>
+        <Effect id="2" accept="true" instantiationID="2" rejectID="-1">
+          <PerformanceRealization>Lock an item</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="unlocked" first="responder" second="" negated="false" duration="-1" name="status(responder, unlocked, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="status" status="locked" first="responder" second="" negated="false" duration="60" name="status(responder, locked, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="4" accept="true" instantiationID="3" rejectID="-1">
+          <PerformanceRealization>Unlock an item</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="locked" first="responder" second="" negated="false" duration="-1" name="status(responder, locked, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="status" status="unlocked" first="responder" second="" negated="false" duration="60" name="status(responder, unlocked, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="5" accept="true" instantiationID="4" rejectID="-1">
+          <PerformanceRealization>Wear clothing</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="is wearing" first="initiator" second="responder" negated="true" duration="-1" name="~status(initiator, responder, is wearing, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="status" status="wearable" first="responder" second="" negated="false" duration="-1" name="status(responder, wearable, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="status" status="is wearing" first="initiator" second="responder" negated="false" duration="60" name="status(initiator, responder, is wearing, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="status" status="worn by" first="responder" second="initiator" negated="false" duration="60" name="status(responder, initiator, worn by, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="6" accept="true" instantiationID="5" rejectID="-1">
+          <PerformanceRealization>Take off clothing</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="is wearing" first="initiator" second="responder" negated="false" duration="-1" name="status(initiator, responder, is wearing, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="status" status="wearable" first="responder" second="" negated="false" duration="-1" name="status(responder, wearable, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="status" status="worn by" first="responder" second="initiator" negated="false" duration="-1" name="status(responder, initiator, worn by, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="status" status="is wearing" first="initiator" second="responder" negated="false" duration="60" name="status(initiator, responder, is wearing, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="status" status="worn by" first="responder" second="initiator" negated="false" duration="60" name="status(responder, initiator, worn by, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="7" accept="true" instantiationID="6" rejectID="-1">
+          <PerformanceRealization>Drink (tipsy)</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="drinkable" first="responder" second="" negated="false" duration="-1" name="status(responder, drinkable, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="status" status="tipsy" first="initiator" second="" negated="false" duration="10" name="status(initiator, tipsy, 10)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="8" accept="true" instantiationID="6" rejectID="-1">
+          <PerformanceRealization>Drink (drunk)</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="drinkable" first="responder" second="" negated="false" duration="-1" name="status(responder, drinkable, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="status" status="tipsy" first="initiator" second="" negated="false" duration="-1" name="status(initiator, tipsy, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="status" status="drunk" first="initiator" second="" negated="false" duration="10" name="status(initiator, drunk, 10)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="10" accept="true" instantiationID="7" rejectID="-1">
+          <PerformanceRealization>Eat</PerformanceRealization>
+          <ConditionRule>
+            <Predicate type="status" status="eatable" first="responder" second="" negated="false" duration="-1" name="status(responder, eatable, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="status" status="is holding" first="initiator" second="responder" negated="false" duration="-1" name="status(initiator, responder, is holding, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="trait" trait="usable" first="responder" negated="false" name="trait(responder, usable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="status" status="held by" first="responder" second="initiator" negated="true" duration="10" name="~status(responder, initiator, held by, 10)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="11" accept="false" instantiationID="7" rejectID="-1">
+          <PerformanceRealization>Default reject</PerformanceRealization>
+          <ConditionRule/>
+          <ChangeRule>
+            <Predicate type="status" status="confused" first="initiator" second="" negated="false" duration="4" name="status(initiator, confused, 4)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+      </Effects>
+      <Instantiations>
+        <Instantiation id="0" name="Open an item">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% opens the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="1" name="Close an item">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% closes the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="2" name="Lock an item">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% locks the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="3" name="Unlock an item">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% unlocks the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="4" name="Wear clothing">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% puts on the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="5" name="Take off clothing">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% takes off the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="6" name="Drink">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% drinks the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="7" name="Eat">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% eats the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="8" name="Default reject">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% couldn't use %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+      </Instantiations>
+    </SocialGame>
+    <SocialGame name="Hide" requiresOther="false" type="1" othertype="0">
+      <PatsyRule>
+        <Rule name="Anonymous Rule" id="-1" description=""/>
+      </PatsyRule>
+      <Intents>
+        <Rule name="intent-add status: responder is hidden" id="1" description="The intent of this move is to have the initiator hide an item.">
+          <Predicate type="status" status="hidden" first="responder" second="responder" negated="false" name="intent-add status: responder is hidden" intent="true" intentType="2" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Intents>
+      <Preconditions>
+        <Rule name="One precondition of this move is that the initiator (the item) must be hideable." id="1" description="">
+          <Predicate type="trait" trait="hideable" first="responder" negated="false" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Preconditions>
+      <InitiatorInfluenceRuleSet>
+        <InfluenceRule weight="-1" name="" id="25">
+          <Predicate type="trait" trait="hideable" first="responder" negated="true" name="~trait(responder, hideable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="1" name="" id="26">
+          <Predicate type="trait" trait="hideable" first="responder" negated="true" name="~trait(responder, hideable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </InitiatorInfluenceRuleSet>
+      <ResponderInfluenceRuleSet>
+        <InfluenceRule weight="1" name="" id="27">
+          <Predicate type="trait" trait="hideable" first="responder" negated="false" name="trait(responder, hideable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="-1" name="" id="28">
+          <Predicate type="trait" trait="hideable" first="responder" negated="true" name="~trait(responder, hideable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </ResponderInfluenceRuleSet>
+      <Effects>
+        <Effect id="15" accept="true" instantiationID="9" rejectID="-1">
+          <PerformanceRealization>Default accept</PerformanceRealization>
+          <ConditionRule/>
+          <ChangeRule>
+            <Predicate type="status" status="hidden" first="responder" second="" negated="false" duration="60" name="status(responder, hidden, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="16" accept="false" instantiationID="10" rejectID="-1">
+          <PerformanceRealization>Default reject</PerformanceRealization>
+          <ConditionRule/>
+          <ChangeRule>
+            <Predicate type="status" status="confused" first="initiator" second="" negated="false" duration="4" name="status(initiator, confused, 4)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+      </Effects>
+      <Instantiations>
+        <Instantiation id="9" name="Default accept">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% hides the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="10" name="Default reject">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% couldn't hide the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+      </Instantiations>
+    </SocialGame>
+    <SocialGame name="Pick Up" requiresOther="false" type="1" othertype="0">
+      <PatsyRule>
+        <Rule name="Anonymous Rule" id="-1" description=""/>
+      </PatsyRule>
+      <Intents>
+        <Rule name="intent-add status: initiator is holding responder" id="3" description="The intent of this move is to have the initiator pick up the item, that is for the initiator to gain the status is holding item.">
+          <Predicate type="status" status="is holding" first="initiator" second="responder" negated="false" name="intent-add status: initiator is holding responder" intent="true" intentType="2" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Intents>
+      <Preconditions>
+        <Rule name="One precondition is that the responder must be an item." id="15" description="">
+          <Predicate type="trait" trait="item" first="responder" negated="false" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+        <Rule name="Another precondition is that the responder (the item) must be holdable." id="16" description="">
+          <Predicate type="trait" trait="holdable" first="responder" negated="false" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+        <Rule name="A third precondition is that the item cannot be held by the initiator already." id="17" description="">
+          <Predicate type="status" status="held by" first="responder" second="initiator" negated="true" duration="-1" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Preconditions>
+      <InitiatorInfluenceRuleSet>
+        <InfluenceRule weight="-1" name="" id="25">
+          <Predicate type="trait" trait="holdable" first="responder" negated="true" name="~trait(responder, holdable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="1" name="" id="26">
+          <Predicate type="trait" trait="holdable" first="responder" negated="false" name="trait(responder, holdable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </InitiatorInfluenceRuleSet>
+      <ResponderInfluenceRuleSet>
+        <InfluenceRule weight="-1" name="" id="27">
+          <Predicate type="trait" trait="holdable" first="responder" negated="true" name="~trait(responder, holdable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="1" name="" id="28">
+          <Predicate type="trait" trait="holdable" first="responder" negated="false" name="trait(responder, holdable)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </ResponderInfluenceRuleSet>
+      <Effects>
+        <Effect id="5" accept="true" instantiationID="6" rejectID="-1">
+          <PerformanceRealization>Default accept</PerformanceRealization>
+          <ConditionRule/>
+          <ChangeRule>
+            <Predicate type="status" status="is holding" first="initiator" second="responder" negated="false" duration="60" name="status(initiator, responder, is holding, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="6" accept="false" instantiationID="7" rejectID="-1">
+          <PerformanceRealization>Default reject</PerformanceRealization>
+          <ConditionRule/>
+          <ChangeRule>
+            <Predicate type="status" status="is holding" first="initiator" second="responder" negated="true" duration="60" name="~status(initiator, responder, is holding, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+      </Effects>
+      <Instantiations>
+        <Instantiation id="6" name="Default pick up (accept)">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% picks up the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="7" name="Default pick up (reject)">
+          <LineOfDialogue lineNumber="0" initiatorLine="Oops! %i% fumbles the %r% and fails to pick it up." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+      </Instantiations>
+    </SocialGame>
+    <SocialGame name="Put Down" requiresOther="false" type="1" othertype="0">
+      <PatsyRule>
+        <Rule name="Anonymous Rule" id="-1" description=""/>
+      </PatsyRule>
+      <Intents>
+        <Rule name="intent-remove status: initiator is holding responder" id="4" description="The intent of this move is to have the initiator put down the item, that is to remove the status is holding item.">
+          <Predicate type="status" status="is holding" first="initiator" second="responder" negated="true" name="intent-remove status: initiator is holding responder" intent="true" intentType="3" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Intents>
+      <Preconditions>
+        <Rule name="One precondition of this move is that the initiator must be holding the item (the responder)." id="18" description="">
+          <Predicate type="status" status="is holding" first="initiator" second="responder" negated="false" duration="-1" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+        <Rule name="Another precondition is that the responder (the item) must be held by the initiator." id="19" description="">
+          <Predicate type="status" status="held by" first="responder" second="initiator" negated="false" duration="-1" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+        <Rule name="Yet another precondition for this move is that the responder must be an item." id="20" description="">
+          <Predicate type="trait" trait="item" first="responder" negated="false" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Preconditions>
+      <InitiatorInfluenceRuleSet>
+        <InfluenceRule weight="1" name="" id="27">
+          <Predicate type="status" status="is holding" first="initiator" second="responder" negated="false" duration="-1" name="status(initiator, responder, is holding, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="-1" name="" id="28">
+          <Predicate type="status" status="is holding" first="initiator" second="responder" negated="true" duration="-1" name="~status(initiator, responder, is holding, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </InitiatorInfluenceRuleSet>
+      <ResponderInfluenceRuleSet>
+        <InfluenceRule weight="1" name="" id="29">
+          <Predicate type="status" status="is holding" first="responder" second="initiator" negated="false" duration="-1" name="status(responder, initiator, is holding, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+        <InfluenceRule weight="-1" name="" id="30">
+          <Predicate type="status" status="is holding" first="responder" second="initiator" negated="true" duration="-1" name="~status(responder, initiator, is holding, -1)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </ResponderInfluenceRuleSet>
+      <Effects>
+        <Effect id="8" accept="true" instantiationID="8" rejectID="-1">
+          <PerformanceRealization>Default accept</PerformanceRealization>
+          <ConditionRule/>
+          <ChangeRule>
+            <Predicate type="status" status="held by" first="responder" second="initiator" negated="true" duration="60" name="~status(responder, initiator, held by, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="status" status="is holding" first="initiator" second="responder" negated="true" duration="60" name="~status(initiator, responder, is holding, 60)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+        <Effect id="9" accept="false" instantiationID="9" rejectID="-1">
+          <PerformanceRealization>Default reject</PerformanceRealization>
+          <ConditionRule/>
+          <ChangeRule>
+            <Predicate type="status" status="confused" first="initiator" second="" negated="false" duration="2" name="status(initiator, confused, 2)" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+      </Effects>
+      <Instantiations>
+        <Instantiation id="8" name="Default put down (accept)">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% puts down the %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="1" initiatorLine="" responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+        <Instantiation id="9" name="Default put down (reject)">
+          <LineOfDialogue lineNumber="0" initiatorLine="%i% thinks %gender(i,he'll,she'll)% hold on to that %r%." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+      </Instantiations>
+    </SocialGame>
+  </SocialGameLibrary>
+  <Microtheories/>
+</CiFLibraries>

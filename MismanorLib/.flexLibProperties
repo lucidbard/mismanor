@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="mismanor.CharacterSheet"/>
+    <classEntry path="mismanor.DialogueSystemOld"/>
+    <classEntry path="mismanor.GUITab"/>
+    <classEntry path="mismanor.GameCharacter"/>
+    <classEntry path="mismanor.GameItem"/>
+    <classEntry path="mismanor.GameState"/>
+    <classEntry path="mismanor.InventoryUI"/>
+    <classEntry path="mismanor.Map"/>
+    <classEntry path="mismanor.Player"/>
+    <classEntry path="mismanor.Room"/>
+    <classEntry path="mismanor.XMLIO"/>
+    <classEntry path="mismanor.event.CharacterSheetEvent"/>
+    <classEntry path="MisManor"/>
+    <classEntry path="mismanor.event.DialogueEvent"/>
+    <classEntry path="mismanor.OpeningScreen"/>
+    <classEntry path="mismanor.DialogueSystem"/>
+  </includeClasses>
+  <includeResources>
+    <resourceEntry destPath="img/Book.png" sourcePath="img/Book.png"/>
+    <resourceEntry destPath="img/playerfemale.png" sourcePath="img/playerfemale.png"/>
+    <resourceEntry destPath="img/gardens.jpg" sourcePath="img/gardens.jpg"/>
+    <resourceEntry destPath="font/BOD_R.TTF" sourcePath="font/BOD_R.TTF"/>
+    <resourceEntry destPath="img/Book_2.png" sourcePath="img/Book_2.png"/>
+    <resourceEntry destPath="img/Wine_2.png" sourcePath="img/Wine_2.png"/>
+    <resourceEntry destPath="img/player.png" sourcePath="img/player.png"/>
+    <resourceEntry destPath="img/colonel.png" sourcePath="img/colonel.png"/>
+    <resourceEntry destPath="img/drawingroom.jpg" sourcePath="img/drawingroom.jpg"/>
+    <resourceEntry destPath="img/triangle.png" sourcePath="img/triangle.png"/>
+    <resourceEntry destPath="img/tab.png" sourcePath="img/tab.png"/>
+    <resourceEntry destPath="img/stableboy.png" sourcePath="img/stableboy.png"/>
+    <resourceEntry destPath="img/violet.png" sourcePath="img/violet.png"/>
+    <resourceEntry destPath="img/MismanorCharUI1.png" sourcePath="img/MismanorCharUI1.png"/>
+    <resourceEntry destPath="img/topleft.png" sourcePath="img/topleft.png"/>
+    <resourceEntry destPath="img/playermarker.png" sourcePath="img/playermarker.png"/>
+    <resourceEntry destPath="img/topright.png" sourcePath="img/topright.png"/>
+    <resourceEntry destPath="img/statue.png" sourcePath="img/statue.png"/>
+    <resourceEntry destPath="img/stableboy2.png" sourcePath="img/stableboy2.png"/>
+    <resourceEntry destPath="img/dialogueback.png" sourcePath="img/dialogueback.png"/>
+    <resourceEntry destPath="img/kita.png" sourcePath="img/kita.png"/>
+    <resourceEntry destPath="font/BOD_B.TTF" sourcePath="font/BOD_B.TTF"/>
+    <resourceEntry destPath="img/gate.png" sourcePath="img/gate.png"/>
+    <resourceEntry destPath="img/Wine2.png" sourcePath="img/Wine2.png"/>
+    <resourceEntry destPath="img/brother.png" sourcePath="img/brother.png"/>
+    <resourceEntry destPath="img/MismanorOpening0.png" sourcePath="img/MismanorOpening0.png"/>
+    <resourceEntry destPath="img/outside.jpg" sourcePath="img/outside.jpg"/>
+    <resourceEntry destPath="img/colonel2.png" sourcePath="img/colonel2.png"/>
+    <resourceEntry destPath="img/bottomright.png" sourcePath="img/bottomright.png"/>
+  </includeResources>
+  <namespaceManifests/>
+</flexLibProperties>

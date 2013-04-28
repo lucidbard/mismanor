@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:Tool="tool.*"
+		 creationComplete="onCreationComplete()"
+		 width="1012" height="614">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<!-- (April) this was copy-pasted and modified from PlotPtplotPt Editor. -->
+	
+	<mx:TabNavigator left="379" top="10" bottom="0" width="614" minWidth="0"
+					 backgroundAlpha="0.7" borderVisible="true" creationPolicy="all"
+					 dropShadowVisible="false" id="plotPointEditor" selectedIndex="5" change="plotPointEditorTabChange()" creationComplete="plotPointEditorCreated()">
+		<s:NavigatorContent width="100%" height="100%" label="Overview">
+			<mx:VBox label="Overview Editor" width="100%" height="100%">
+				<Tool:PlotPointOverviewEditor id="overviewEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addOverviewToPlotPoint" x="10" y="17" width="130"
+					  label="Save Overview to PP" click="saveOverview()" />
+		</s:NavigatorContent>
+		
+		<s:NavigatorContent width="100%" height="100%" label="Dialogue">
+			<mx:VBox label="PP Inst Editor" width="100%" height="100%">
+				<Tool:PlotPointInstEditor id="ppInstEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addInstToPlotPoint" x="10" y="28" width="130"
+					  label="Save Inst to PlotPt" click="saveInst()" />
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+	<mx:Accordion id="plotPointOverview" x="10" y="102" width="350" height="497" 
+				  contentBackgroundAlpha=".7" contentBackgroundColor="#ffffff" change="plotPointChange()">							
+		<s:NavigatorContent width="100%" height="100%" label="Overview" fontWeight="normal">
+			<s:List id="plotPtOverviewList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.plotPtOverviewListDP}" creationComplete="plotPtOverviewListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="updateOverview" x="270" y="9" label="Update" enabled="true" click="updateSelectedOverview()" creationComplete="updateOverviewComplete()"/>
+		</s:NavigatorContent>
+
+		<s:NavigatorContent width="100%" height="100%" label="Plot Point Instantiations">
+			<s:List id="instList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.plotPtInstListDP}" creationComplete="instListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newInst" x="270" y="10" label="New" click="createNewInst()"/>
+			<s:Button id="updateInst" x="270" y="39" label="Update" enabled="false" click="updateSelectedInst()" creationComplete="updateInstComplete()"/>
+			<s:Button id="deleteInst" x="270" y="68" label="Delete" enabled="false" click="deleteSelectedInst()" creationComplete="deleteInstComplete()"/>
+		</s:NavigatorContent>
+	</mx:Accordion>
+	<s:Label x="10" y="16" color="#F5E9EB" fontSize="20"
+			 text="Plot Point Overview"
+			 />
+	<s:TextInput id="plotPointName" x="10" y="72" width="350"
+				 contentBackgroundColor="#FFFFFF" enabled="true"
+				 prompt="Plot Point Name" change="updatePlotPointName()"
+				 />
+	<s:Button id="newPlotPoint" x="274" y="16" width="83" label="Create New" click="createNewPlotPoint()"
+			  />
+	<s:Button id="deletePlotPoint" x="274" y="43" width="83" label="Delete" click="deleteSelectedPlotPoint()"
+			  />
+	<mx:VRule x="366" y="55" width="8" height="525"
+			  />
+	<s:DropDownList id="plotPointList" x="10" y="43" width="256" contentBackgroundColor="#ffffff" 
+					dataProvider="{this.plotPointListDP}" change="loadNewPlotPoint()"></s:DropDownList>
+	
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import grailgm.*;
+			
+			import mx.collections.ArrayCollection;
+			import mx.core.UIComponent;
+			import mx.events.CloseEvent;
+			import mx.graphics.IFill;
+			import mx.graphics.SolidColor;
+			import mx.managers.PopUpManager;
+			
+			import spark.components.TitleWindow;
+			import spark.events.*;
+			import spark.primitives.Rect;
+			
+			[Bindable] public var plotPtOverviewListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var plotPtInstListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var plotPointListDP:ArrayCollection = new ArrayCollection();
+			
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			
+			public var currentPlotPt:PlotPoint = new PlotPoint();
+			private var cif:CiFSingleton;
+			private var ggm:GrailGM;
+			// Are these necessary?
+			private var overviewType:String = "new";
+			private var instType:String = "new";
+			private var overviewID:Number = 0;
+			private var instID:Number = 0;
+			
+			private static var DEF:Number = 0;
+			private static var INST:Number = 1;
+			
+			public function onCreationComplete(): void {
+				this.cif = CiFSingleton.getInstance();
+				this.ggm = GrailGM.getInstance();
+				//createNewPlotPoint();
+			}
+			
+			public function plotPointEditorTabChange(): void {
+				this.plotPointOverview.selectedIndex = this.plotPointEditor.selectedIndex;
+			}
+			
+			public function plotPointChange(): void {
+				this.plotPointEditor.selectedIndex = this.plotPointOverview.selectedIndex;
+			}
+			
+			public function plotPointEditorCreated(): void {
+				for (var i:Number = 0; i< this.plotPointEditor.length; i++)
+					this.plotPointEditor.selectedIndex = i;
+				
+				this.plotPointEditor.visible = false;
+				this.plotPointEditor.selectedIndex = 0;
+			}
+			
+			public function createNewPlotPoint(): void {
+				
+				this.plotPointName.text = "New Plot Point";
+				this.currentPlotPt = new PlotPoint();
+				this.currentPlotPt.setPlotPointName(this.plotPointName.text);
+				this.currentPlotPt.id = this.ggm.plotPointPool.plotPoints.length;
+
+				var resultStr:String = new String();
+				resultStr += currentPlotPt.name + ":\n";
+				resultStr += "Trait: knowledge\n";
+				resultStr += "Req: None\n";
+
+				this.plotPtOverviewListDP = new ArrayCollection();
+				this.plotPtInstListDP = new ArrayCollection();
+
+				this.plotPtOverviewListDP.addItem(resultStr);
+				this.overviewID = currentPlotPt.id + 1;
+				
+				//this.dte.instantiationListDP = new ArrayCollection(); What is this for? (April)
+				this.plotPointList.selectedIndex = -1;
+				
+				if (this.updateInst)
+					this.updateInst.enabled = false;
+				if (this.deleteInst)
+					this.deleteInst.enabled = false;
+				
+				if (this.plotPointEditor)
+					this.plotPointEditor.visible = false;
+			}
+			
+			public function updatePlotPointName(): void {
+				this.currentPlotPt.setPlotPointName(this.plotPointName.text);
+			}
+			
+			public function deleteSelectedPlotPoint():void {
+				
+				if (this.plotPointList.selectedIndex >= 0)
+				{
+					this.ggm.plotPointPool.plotPoints.splice(this.plotPointList.selectedIndex, 1);
+					this.plotPointListDP.removeItemAt(this.plotPointList.selectedIndex);
+					if (this.plotPointListDP.length > 0)
+						this.plotPointList.selectedIndex = 0;
+					this.plotPointList.dispatchEvent(new IndexChangeEvent(IndexChangeEvent.CHANGE) );
+				}
+			}
+			
+			public function loadNewPlotPoint(): void {
+				var resultStr:String;
+				var pred:Predicate;
+				var ir:InfluenceRule;
+				if (this.plotPointList.selectedIndex >= 0)
+					this.currentPlotPt = this.ggm.plotPointPool.plotPoints[this.plotPointList.selectedIndex].clone();
+				else
+					this.currentPlotPt = new PlotPoint();
+				// load information into the accordion
+				this.plotPointName.text = currentPlotPt.name;
+				this.plotPtOverviewListDP.removeAll();
+				this.plotPtInstListDP.removeAll();
+				//this.dte.instantiationListDP.removeAll();
+				
+				resultStr = new String();
+				resultStr += currentPlotPt.name + ":\n";
+				for each (var curTrait:Number in currentPlotPt.cifKnowledge.traits) {
+					resultStr += "Trait: " + Trait.getNameByNumber(curTrait) + "\n";
+				}
+				for each (var preCon:PlotPoint in currentPlotPt.storyPreConditions){
+					resultStr += "Req: " + preCon.name + "\n";
+				}
+				this.plotPtOverviewListDP.addItem(resultStr);
+				this.overviewID = currentPlotPt.id + 1;
+				
+				for each (var inst:GrailInstantiation in currentPlotPt.instantiations)
+				{
+					resultStr = new String();
+					resultStr = "[" + GrailInstantiation.getNameByID(inst.instantiationType) + "] " + 
+						inst.speaker + ": " + 
+						inst.cifInstantiation.lines[0].initiatorLine;
+					
+					//this.dte.instantiationListDP.addItem(inst.id + ": " + inst.name);
+					this.plotPtInstListDP.addItem(resultStr);
+					this.instID = inst.cifInstantiation.id + 1; // make sure the next effect has a unique id
+				}
+				
+				// if it hasn't been loaded yet, this logic is taken care of in the oncompletion calls for that
+				// particular UI element. This is ugly and hacky and I hate it, but I'm not sure how else to 
+				// get around the fact that flex dynamically loads things so we never know if it's been loaded
+				// yet or not
+				if (this.plotPtOverviewListDP.length > 0)
+				{
+					if (this.plotPtOverviewList)
+						this.plotPtOverviewList.selectedIndex = 0;
+					
+					if (this.updateOverview)
+						this.updateOverview.enabled = true;
+					
+				}
+
+				if (this.plotPtInstListDP.length > 0)
+				{
+					if (this.instList)
+						this.instList.selectedIndex = 0;
+					
+					if (this.updateInst)
+						this.updateInst.enabled = true;
+					
+					if (this.deleteInst)
+						this.deleteInst.enabled = true;
+				}	
+				
+			}
+			
+			/********************************************************
+			 * Create new plotPoint component utility functions
+			 ********************************************************/
+			// TO DO: Restore the if parts once the tabs are formed
+			public function createNewOverview():void {
+				this.plotPointEditor.visible = true;
+				this.plotPointEditor.selectedIndex = this.plotPointOverview.selectedIndex;
+				if (this.overviewEditor)
+					this.overviewEditor.reset();
+				this.overviewType = "new";
+			}
+			
+			public function createNewInst():void {
+				this.plotPointEditor.visible = true;
+				this.plotPointEditor.selectedIndex = this.plotPointOverview.selectedIndex;
+				if (this.ppInstEditor)
+					this.ppInstEditor.reset();
+				this.instType = "new";
+			}
+			
+			/********************************************************
+			 * Delete selected plotPoint component utility functions
+			 ********************************************************/
+			
+			public function deleteSelectedInst(): void {
+				var selectedInst:Number = this.instList.selectedIndex;
+				
+				this.plotPtInstListDP.removeItemAt(selectedInst);
+				//this.currentPlotPt.timingIRS.influenceRules.splice(selectedInst, 1);
+				this.plotPointEditor.visible = false;
+				
+				if (this.plotPtInstListDP.length == 0)
+				{
+					this.deleteInst.enabled = false;
+					this.updateInst.enabled = false;
+				}
+				else
+					this.instList.selectedIndex = 0;
+				
+				// delete instantiation from plot point
+				this.currentPlotPt.instantiations.splice(selectedInst, 1);
+			}
+			
+			/********************************************************
+			 * Update selected plotPoint component utility functions
+			 ********************************************************/
+			public function updateSelectedOverview(): void {
+				// only one so something is always selected
+				this.overviewEditor.reset();
+				
+				// setup author notes
+				this.overviewEditor.description.text = this.currentPlotPt.cifKnowledge.description;
+				
+				// load traits
+				this.overviewEditor.workingPP.setPlotPointName(this.currentPlotPt.name);
+				this.overviewEditor.workingPP.id = this.currentPlotPt.id;
+				
+				for each (var curTrait:Number in this.currentPlotPt.cifKnowledge.traits)
+				{
+					if (curTrait != Trait.KNOWLEDGE)
+					{
+						this.overviewEditor.workingPP.cifKnowledge.traits.push(curTrait);
+					}
+					this.overviewEditor.storyTraits.addItem(Trait.getNameByNumber(curTrait));
+				}
+				for each (var curPreCon:PlotPoint in this.currentPlotPt.storyPreConditions)
+				{
+					this.overviewEditor.storyPreCons.addItem(curPreCon.name);
+					this.overviewEditor.workingPP.storyPreConditions.push(curPreCon);
+				}
+					// set the tab on the plotPoint editor to be the same tab as the social plotPoint overview UI
+					this.plotPointEditor.selectedIndex = this.plotPointOverview.selectedIndex;
+					// add each of the Overview predicates for this rule into the predicate list box
+				// we are in the update state
+				this.overviewType = "update";
+				this.plotPointEditor.visible = true;	
+			}
+
+			public function updateSelectedInst(): void {
+				
+				if (this.instList.selectedIndex >= 0)
+				{
+					var selected:Number = this.instList.selectedIndex;
+					
+					// reset the UI
+					this.ppInstEditor.reset();
+					// set up workingInst
+					this.ppInstEditor.workingInst = this.currentPlotPt.instantiations[selected].clone();
+					// set the tab on the plotPoint editor to be teh same tab as the social plotPoint Instantiation UI
+					this.plotPointEditor.selectedIndex = this.plotPointOverview.selectedIndex;
+					// load who is saying something
+					this.ppInstEditor.instSpeaker.selectedItem = this.ppInstEditor.workingInst.speaker;
+					// load what they are saying
+					this.ppInstEditor.instText.text = this.ppInstEditor.workingInst.cifInstantiation.lines[0].initiatorLine;
+					// load how they are saying it
+					this.ppInstEditor.instType.selectedIndex = this.ppInstEditor.workingInst.instantiationType;
+					// we are in the update state
+					this.instType = "update";
+					this.plotPointEditor.visible = true;	
+				}						
+				
+			}
+			
+			/********************************************************
+			 * Save selected social plotPoint component utility functions
+			 ********************************************************/
+			
+			/** (April)
+			 * Grabs the data that's been updated to the overview's workingPP and 
+			 * saves it into the editor's master currentPlotPt
+			 */
+			public function saveOverview():void
+			{
+				// Update the current social game
+				// Make sure there's something to save
+				if (overviewEditor.workingPP /*&& overviewEditor.workingPP.primaryKnowledge.name != ""*/)
+				{
+					// Saving name and unique ID
+					/*
+					if (overviewEditor.description.text != "") {
+						this.currentPlotPt.name = overviewEditor.description.text;
+					} else {
+						this.currentPlotPt.name = overviewEditor.primaryKnowledge.name;
+					}
+					this.currentPlotPt.id = overviewID++;
+					
+					this.currentPlotPt.primaryKnowledge = overviewEditor.workingPP.primaryKnowledge;*/
+					
+					var pp:PlotPoint;
+					currentPlotPt.storyPreConditions = new Vector.<PlotPoint>();
+					for each (pp in overviewEditor.workingPP.storyPreConditions){
+						currentPlotPt.storyPreConditions.push(pp);
+					}
+
+					var curTrait:Number;
+					currentPlotPt.cifKnowledge.traits = new Vector.<Number>();
+					
+					for each (curTrait in overviewEditor.workingPP.cifKnowledge.traits) {
+						currentPlotPt.setKnowledgeTrait(curTrait);
+					}
+					// Update the overview text
+					//this.plotPtInstListDP.removeAll();
+					
+					// we are updating an Overview
+					var resultStr:String = new String();
+					resultStr += currentPlotPt.name + ":\n";
+					if (currentPlotPt.cifKnowledge.traits.length)
+					{
+						for each (curTrait in currentPlotPt.cifKnowledge.traits) {
+							resultStr += "Trait: " + Trait.getNameByNumber(curTrait) + "\n";
+						}
+					}
+					else
+						resultStr += "Trait: None\n";
+					
+					if (currentPlotPt.storyPreConditions.length)
+					{
+						for each (pp in currentPlotPt.storyPreConditions){
+							resultStr += "Req: " + pp.name + "\n";
+						
+						}
+					}
+					else
+						resultStr += "Req: None\n";
+					this.plotPtOverviewListDP.removeAll();
+					this.plotPtOverviewListDP.addItem(resultStr);
+					
+
+					this.plotPointEditor.visible = false;
+				} //else if (overviewEditor.workingPP.primaryKnowledge.name != ""){
+					//openPopUp("Save Plot Point Failed", "Name/primary knowledge not selected.");
+				//}
+			}
+			
+			public function saveInst():void
+			{
+				var selectedItem:Number;
+				var resultStr:String = new String();
+				// will need to keep track of which item we're modifying in the future for updating
+				if (this.instType == "update")
+				{
+					currentPlotPt.instantiations[this.instList.selectedIndex] = ppInstEditor.workingInst;
+					selectedItem = this.instList.selectedIndex;
+					resultStr += "[" + GrailInstantiation.getNameByID(currentPlotPt.instantiations[selectedItem].instantiationType) + "] " + 
+						currentPlotPt.instantiations[selectedItem].speaker + ": " + 
+						currentPlotPt.instantiations[selectedItem].cifInstantiation.lines[0].initiatorLine;
+					
+					this.plotPtInstListDP[selectedItem] = resultStr;
+					
+				}
+				else
+				{
+					currentPlotPt.instantiations.push(ppInstEditor.workingInst);
+					
+					selectedItem = currentPlotPt.instantiations.length-1;
+					resultStr += "[" + GrailInstantiation.getNameByID(currentPlotPt.instantiations[selectedItem].instantiationType) + "] " + 
+						currentPlotPt.instantiations[selectedItem].speaker + ": " + 
+						currentPlotPt.instantiations[selectedItem].cifInstantiation.lines[0].initiatorLine;
+					
+					this.plotPtInstListDP.addItem(resultStr);
+				}				
+
+				this.plotPointEditor.visible = false;
+				
+				// more than one instantiation, can enable the update and delete buttons
+				this.updateInst.enabled = true;
+				this.deleteInst.enabled = true;
+			}
+			
+			/***********************************************
+			 * Utility for usability
+			 * *********************************************/
+			// Error PopUp window handler for all our error pop up needs
+			public function openPopUp(title:String, dialog:String):void {
+				// create and configure the TitleWindow
+				var tw:TitleWindow = new TitleWindow();
+				tw.title = title;
+				tw.width = 350;
+				tw.height = 240;
+				
+				// callback for hitting the little X in the corner
+				tw.addEventListener(Event.CLOSE, closePopUp);
+				
+				// set up the look and feel of the pop up
+				var back:Rect = new Rect();
+				var solid:SolidColor = new SolidColor();
+				solid.color = 0x9c4849;
+				back.percentWidth = 100;
+				back.percentHeight = 100;
+				back.fill = solid;
+				tw.addElement(back);
+				
+				var label:Label = new Label();
+				label.x = 10;
+				label.y = 10;
+				label.width = 330;
+				label.height = 147;
+				label.text = dialog;
+				
+				label.setStyle("backgroundAlpha", 0.7);
+				label.setStyle("backgroundColor", 0xFFFFFF);
+				label.setStyle("fontSize", 18);
+				label.setStyle("font-family", "Calibri");
+				label.setStyle("paddingLeft", 20);
+				label.setStyle("paddingRight", 20);
+				label.setStyle("verticalAlign", "middle");
+				tw.addElement(label);
+				
+				// add close button to the Title Window
+				var button:Button = new Button();
+				button.label = "OK";
+				button.addEventListener(MouseEvent.CLICK, closePopUpMouse);
+				button.x=139;
+				button.y=175;
+				tw.addElement(button);
+				
+				// open the TitleWindow as a modal popup window
+				PopUpManager.addPopUp(tw, this, true);
+				PopUpManager.centerPopUp(tw);
+			}
+			
+			// Close the pop up windows via hitting the little X in the corner
+			private function closePopUp(evt:CloseEvent):void {
+				PopUpManager.removePopUp(evt.target as TitleWindow);
+			}
+			
+			// Close the pop up windows via hitting the button
+			private function closePopUpMouse(evt:MouseEvent):void {
+				var but:Button = evt.target as Button;
+				var tw:TitleWindow = but.owner as TitleWindow;
+				PopUpManager.removePopUp(tw);
+			}
+			
+			/***********************************************
+			 * Utility functions for setting up the UI
+			 * in the PlotPoint Overview accordion
+			 * *********************************************/
+			
+			/* DEF */
+			public function plotPtOverviewListComplete(): void {
+				if (this.plotPtOverviewListDP.length > 0)
+					plotPtOverviewList.selectedIndex = 0;
+			}
+			
+			public function updateOverviewComplete(): void {
+					updateOverview.enabled = true;
+			}
+			
+			/* INSTANTIATIONS */
+			public function instListComplete(): void {
+				if (this.plotPtInstListDP.length > 0)
+					instList.selectedIndex = 0;
+			}
+			
+			public function deleteInstComplete(): void {
+				if (this.plotPtInstListDP.length > 0)
+					deleteInst.enabled = true;
+				else
+					deleteInst.enabled = false;
+			}
+			
+			public function updateInstComplete(): void {
+				if (this.plotPtInstListDP.length > 0)
+					updateInst.enabled = true;
+				else
+					updateInst.enabled = false;
+			}
+			
+		]]>
+	</fx:Script>
+
+</s:Group>

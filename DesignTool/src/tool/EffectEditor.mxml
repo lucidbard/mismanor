@@ -1,0 +1,1424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="610" height="592" creationComplete="onCreationComplete()"
+		 >
+	<fx:Declarations>
+		<s:RadioButtonGroup id="acceptRejectEffect"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:TextInput id="description" x="154" y="0" width="446" contentBackgroundColor="#FFFFFF"
+				 enabled="true" fontWeight="bold" prompt="Log Entry - e.g. %i% insulted %r%"/>
+	<s:List id="ifTypeList" x="10" y="71" width="130" height="159"
+			contentBackgroundColor="#FFFFFF"></s:List>
+	<s:Label x="174" y="43" color="#522E34" fontSize="20" fontWeight="bold" text="If this is true..."/>
+	<s:Label x="10" y="272" width="130" color="#000000" fontSize="14"
+			 fontWeight="bold" text="Instantiation" textAlign="right"/>
+	<s:Label x="312" y="43" color="#522E34" fontSize="20" fontWeight="bold"
+			 text="...then this happens"/>
+	<s:Label x="10" y="324" color="#522E34" fontSize="20" fontWeight="bold" text="If Details"/>
+	<s:Label x="312" y="324" color="#522E34" fontSize="20" fontWeight="bold"
+			 text="Then Details"/>
+	<s:Button x="10" y="237" label="Add" click="addIfEffect(ifTypeList.selectedIndex)"
+			  width="60"/>
+	<s:Button x="80" y="237" label="Remove" click="removeIfEffect(ifPredEditor.selectedIndex)"
+			  width="60"/>
+	<s:List id="thenTypeList" x="470" y="71" width="130" height="158"
+			contentBackgroundColor="#FFFFFF"></s:List>
+	<s:Button x="470" y="237" width="60" label="Add"
+			  click="addThenEffect(thenTypeList.selectedIndex)"/>
+	<s:Button x="540" y="237" width="60" label="Remove"
+			  click="removeThenEffect(thenPredEditor.selectedIndex)"/>
+	<s:Scroller x="148" y="71" width="146" height="190">
+		<s:Group>
+	<s:List id="ifPredEditor" width="100%" height="100%"
+			click="clickOnIfPredicateEditor(ifPredEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF" dataProvider="{this.ifEffects}" enabled="false" selectedIndex="0"></s:List>
+			
+		</s:Group>
+	</s:Scroller>
+	<s:Scroller x="312" y="71" width="150" height="191">
+		<s:Group>
+	<s:List id="thenPredEditor" width="100%" height="100%" 
+			click="clickOnThenPredicateEditor(thenPredEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF" dataProvider="{this.thenEffects}" enabled="false"
+			selectedIndex="0"></s:List>
+		</s:Group>
+	</s:Scroller>
+	<s:Label id="ifStatusLabel" x="10" y="349" width="80" height="21"
+			 fontSize="14" fontWeight="bold" text="Status"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label id="ifNetworkLabel" x="10" y="349" width="80" height="21"
+			 fontSize="14" fontWeight="bold" text="Network"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label id="ifKnowledgeLabel" x="10" y="349" width="80" height="21"
+			 fontSize="14" fontWeight="bold" text="Knowledge"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label id="ifTraitLabel" x="10" y="349" width="80" height="21" fontSize="14" fontWeight="bold"
+			 text="Trait" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="ifSFDBLabelLabel" x="10" y="349" width="80" height="21" fontSize="14" fontWeight="bold"
+			 text="SFDB Label" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="ifSFDBLabelWindowLabel" x="10" y="436" width="179" height="61" fontSize="14"
+			 fontWeight="bold" text="SFDB event must have occured within how many turns (0 is all time)" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="ifToCLabel1" x="10" y="436" width="284" height="21" fontSize="14"
+			 fontWeight="bold" text="Topic of Conversation Magic!" textAlign="center" verticalAlign="middle"/>
+	<s:Label id="ifToCLabel2" x="10" y="457" width="284" height="28" fontSize="12"
+			 fontWeight="normal" text="If the current predicate can be referenced as a ToC, copy-paste the following into dialogue to reference it" textAlign="center" verticalAlign="middle"/>
+	<s:TextInput id="ifToCField" x="19" y="490" width="270" contentBackgroundColor="#FFFFFF"/>
+	<s:NumericStepper id="ifSFDBLabelWindow" x="212" y="453"
+					  change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="999" minimum="0" stepSize="1"/>
+	<s:Label id="ifCKBLabel" x="10" y="349" width="80" height="21" fontSize="14" fontWeight="bold"
+			 text="CKB Truth" textAlign="right" verticalAlign="middle"/>
+	<s:DropDownList id="ifTraitList" x="98" y="349" width="191"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.traitTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="ifKnowledgeList" x="98"
+					y="349" width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.knowledgeTypes}"
+					selectedIndex="0"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="ifStatusList" x="98" y="349"
+					width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.statusTypes}"
+					selectedIndex="0"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="ifNetworkList" x="98" y="349"
+					width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.networkTypes}"
+					selectedIndex="0"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="ifSFDBLabelList" x="98" y="349"
+					width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.sfdbLabelTypes}"
+					selectedIndex="0"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="ifCKBList" x="98" y="349"
+					width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.ckbTruthTypes}"
+					selectedIndex="0"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="ifFirstRole" x="98" y="378" width="191"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="ifSecondRole" x="98" y="407" width="191"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label id="ifSecondRoleLabel" x="10" y="407" width="80" height="21" fontSize="14" fontWeight="bold"
+			 text="Second Role" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="ifFirstRoleLabel" x="10" y="378" width="80" height="21" fontSize="14"
+			 fontWeight="bold" text="First Role" textAlign="right" verticalAlign="middle"/>
+	<s:DropDownList id="ifComparator" x="98" y="436" width="191"
+					change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.compTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label id="ifComparatorLabel" x="10" y="436" width="80" height="21" fontSize="14"
+			 fontWeight="bold" text="Comparator" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="thenNetworkLabel" x="321" y="349" width="80" height="21" fontSize="14"
+			 fontWeight="bold" text="Network" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="thenStatusLabel" x="321" y="349" width="80" height="21"
+			 fontSize="14" fontWeight="bold" text="Status"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label id="thenKnowledgeLabel" x="321" y="349" width="80" height="21"
+			 fontSize="14" fontWeight="bold" text="Knowledge"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label id="thenTraitLabel" x="321" y="349" width="80" height="21" fontSize="14" fontWeight="bold"
+			 text="Trait" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="thenSFDBLabelLabel" x="321" y="349" width="80" height="21" fontSize="14" fontWeight="bold"
+			 text="SFDB Label" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="thenSFDBLabelWindowLabel" x="321" y="436" width="179" height="61" fontSize="14"
+			 fontWeight="bold" text="SFDB event must have occured within how many turns (0 is all time)" textAlign="right" verticalAlign="middle"/>
+	<s:NumericStepper id="thenSFDBLabelWindow" x="523" y="453"
+					  change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="999" minimum="0" stepSize="1"/>
+	<s:Label id="thenCKBLabel" x="321" y="349" width="80" height="21" fontSize="14" fontWeight="bold"
+			 text="CKB Truth" textAlign="right" verticalAlign="middle"/>
+	<s:DropDownList id="thenNetworkList" x="409" y="349" width="191"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.networkTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="thenTraitList" x="409" y="349" width="191"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.traitTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="thenKnowledgeList" x="409"
+					y="349" width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.knowledgeTypes}"
+					selectedIndex="0"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="thenStatusList" x="409" y="349"
+					width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.statusTypes}"
+					selectedIndex="0"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="thenSFDBLabelList" x="409" y="349"
+					width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.sfdbLabelTypes}"
+					selectedIndex="0"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="thenCKBList" x="409" y="349"
+					width="191" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.ckbTruthTypes}"
+					selectedIndex="0"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="thenFirstRole" x="409" y="378" width="191"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="thenSecondRole" x="409" y="407" width="191"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	
+	<s:Label id="thenToCLabel1" x="312" y="465" width="289" height="21" fontSize="14"
+			 fontWeight="bold" text="Topic of Conversation Magic!" textAlign="center" verticalAlign="middle"/>
+	<s:Label id="thenToCLabel2" x="312" y="486" width="288" height="28" fontSize="12"
+			 fontWeight="normal" text="If the current predicate can be referenced as a ToC, copy-paste the following into dialogue to reference it" textAlign="center" verticalAlign="middle"/>
+	<s:TextInput id="thenToCField" x="322" y="519" width="270" contentBackgroundColor="#FFFFFF"/>
+	<s:Label id="thenSecondRoleLabel" x="321" y="407" width="80" height="21" fontSize="14"
+			 fontWeight="bold" text="Second Role" textAlign="right" verticalAlign="middle"/>
+	<s:Label id="thenFirstRoleLabel" x="321" y="378" width="80" height="21" fontSize="14"
+			 fontWeight="bold" text="First Role" textAlign="right" verticalAlign="middle"/>
+	<s:DropDownList id="thenOperator" x="409" y="436" width="191"
+					change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.networkOpTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label id="thenOperatorLabel" x="321" y="436" width="80" height="21" fontSize="14"
+			 fontWeight="bold" text="Operator" textAlign="right" verticalAlign="middle"/>
+	<s:CheckBox id="thenNotBox" x="448" y="323" label="Not"
+				change="updateThenPredicateEditor(thenPredEditor.selectedIndex)" fontSize="14"
+				fontWeight="bold"/>
+	<s:Label id="thenNetworkWeightLabel" x="305" y="468" width="96" height="21" fontSize="14"
+			 fontWeight="bold" text="Weight" textAlign="right" verticalAlign="middle"/>
+	<s:NumericStepper id="thenNetworkWeight" x="409" y="466"
+					  change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="100" minimum="0" stepSize="1"/>
+	<s:Label id="thenStatusDuration" x="305" y="436" width="96" height="21" fontSize="14"
+			 fontWeight="bold" text="Duration" textAlign="right" verticalAlign="middle"/>
+	<s:NumericStepper id="thenStatusDurationTime" x="409" y="436"
+					  change="updateThenPredicateEditor(thenPredEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="100" minimum="0" stepSize="1"/>
+	<mx:HRule x="10" y="292" width="592" height="10"
+			  />
+	<s:CheckBox id="ifNotBox" x="110" y="323" label="Not"
+				fontSize="14" fontWeight="bold" change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"/>
+	<mx:VRule x="302" y="43" height="207"/>
+	<mx:VRule x="302" y="316" height="266"/>
+	<s:HGroup x="10" y="1" width="130" height="22">
+		<s:RadioButton id="acceptRadio" label="Accept" groupName="acceptRejectEffect"
+					   selected="true"/>
+		<s:RadioButton id="rejectRadio" label="Reject" groupName="acceptRejectEffect"/>
+	</s:HGroup>
+	<s:DropDownList id="instList" x="148" y="269" width="452" contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.instantiationListDP}"></s:DropDownList>
+	<s:Label id="ifNetworkWeightLabel" x="-6" y="468" width="96" height="21" fontSize="14" fontWeight="bold"
+			 text="Weight" textAlign="right" verticalAlign="middle"/>
+	<s:NumericStepper id="ifNetworkWeight" x="98" y="466"
+					  change="updateIfPredicateEditor(ifPredEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="100" minimum="0" stepSize="1"/>
+	
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+		    [Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			[Bindable] public var ifEffects:ArrayCollection; 
+			[Bindable] public var thenEffects:ArrayCollection;
+
+			public var workingEffect:Effect = new Effect();
+			public var workingIf:Vector.<Predicate> = new Vector.<Predicate>();
+			public var workingThen:Vector.<Predicate> = new Vector.<Predicate>();
+			private var ifState:String = "default";
+			private var thenState:String = "default";
+			
+			public function onCreationComplete():void {
+				dte.initializeDataProviders();
+				this.ifEffects = new ArrayCollection();
+				this.thenEffects = new ArrayCollection();
+				// data providers are apparently kinda buggy? It's ignoring data providers in the mxml,
+				// but resetting them here causes them to load correctly. No effing clue.
+				this.ifTypeList.dataProvider = this.dte.predTypes;
+				this.thenTypeList.dataProvider = this.dte.predTypes;
+				this.ifTraitList.dataProvider = this.dte.traitTypes;
+				this.ifTraitList.selectedIndex = 0;
+				this.thenTraitList.dataProvider = this.dte.traitTypes;
+				this.thenTraitList.selectedIndex = 0;
+				this.ifFirstRole.dataProvider = this.dte.roleTypes;
+				this.ifFirstRole.selectedIndex = 0;
+				this.thenFirstRole.dataProvider = this.dte.roleTypes;
+				this.thenFirstRole.selectedIndex = 0;
+				this.ifSecondRole.dataProvider = this.dte.roleTypes;
+				this.ifSecondRole.selectedIndex = 1;
+				this.thenSecondRole.dataProvider = this.dte.roleTypes;
+				this.thenSecondRole.selectedIndex = 1;
+				this.ifStatusList.dataProvider = this.dte.statusTypes;
+				this.ifStatusList.selectedIndex = 0;
+				this.thenStatusList.dataProvider = this.dte.statusTypes;
+				this.thenStatusList.selectedIndex = 0;
+				this.ifKnowledgeList.dataProvider = this.dte.knowledgeTypes;
+				this.ifKnowledgeList.selectedIndex = 0;
+				this.thenKnowledgeList.dataProvider = this.dte.knowledgeTypes;
+				this.thenKnowledgeList.selectedIndex = 0;
+				this.ifNetworkList.dataProvider = this.dte.networkTypes;
+				this.ifNetworkList.selectedIndex = 0;
+				this.thenNetworkList.dataProvider = this.dte.networkTypes;
+				this.thenNetworkList.selectedIndex = 0;
+				this.ifComparator.dataProvider = this.dte.compTypes;
+				this.ifComparator.selectedIndex = 0;
+				this.thenOperator.dataProvider = this.dte.networkOpTypes;
+				this.thenOperator.selectedIndex = 0;
+				this.ifSFDBLabelList.dataProvider = this.dte.sfdbLabelTypes;
+				this.ifSFDBLabelList.selectedIndex = 0;
+				this.thenSFDBLabelList.dataProvider = this.dte.sfdbLabelTypes;
+				this.thenSFDBLabelList.selectedIndex = 0;
+				this.ifCKBList.dataProvider = this.dte.ckbTruthTypes;
+				this.ifCKBList.selectedIndex = 0;
+				this.thenCKBList.dataProvider = this.dte.ckbTruthTypes;
+				this.thenCKBList.selectedIndex = 0;
+				
+				
+				this.ifTypeList.selectedIndex = 0;
+				this.thenTypeList.selectedIndex = 0;
+				this.changeIfState(-1);
+				this.changeThenState(-1);
+			}				
+			
+			// Takes a predicate clones it, updates the appropriate field based on UI state
+			// returns the cloned predicate
+			public function updateIfPredicateByState(workingPredicate:Predicate):Predicate
+			{
+				var newPredicate:Predicate = workingPredicate.clone();
+
+				newPredicate.first = this.ifFirstRole.selectedItem;
+				newPredicate.negated = this.ifNotBox.selected;
+				
+				switch (this.ifState)
+				{
+					case "network":
+						newPredicate.networkType = this.ifNetworkList.selectedIndex;
+						newPredicate.second = this.ifSecondRole.selectedItem;
+						newPredicate.comparator = this.ifComparator.selectedItem;
+						newPredicate.networkValue = this.ifNetworkWeight.value;
+						if (ifSecondRole.enabled == false) ifSecondRole.enabled = true;
+						break;
+					case "knowledge":
+						newPredicate.knowledge = this.ifKnowledgeList.selectedIndex;
+						break;
+					case "status":
+						newPredicate.second = this.ifSecondRole.selectedItem;
+						newPredicate.status = this.ifStatusList.selectedIndex;
+						if (ifSecondRole.enabled == false && getIfCurrentStatusDirected()){
+							ifSecondRole.enabled = true;
+						} else if (ifSecondRole.enabled == true && !getIfCurrentStatusDirected()) {
+							ifSecondRole.enabled = false;
+						}
+						break;
+					case "trait":
+						newPredicate.trait = this.ifTraitList.selectedIndex;
+						if (ifSecondRole.enabled == true) ifSecondRole.enabled = false;
+						break;
+					case "SFDBLabel":
+						newPredicate.sfdbLabel = this.ifSFDBLabelList.selectedIndex;
+						newPredicate.second = this.ifSecondRole.selectedItem;
+						newPredicate.isSFDB = true;
+						newPredicate.window = this.ifSFDBLabelWindow.value;
+						if (ifSecondRole.enabled == false) ifSecondRole.enabled = true;
+						break;
+					case "CKB":
+						//newPredicate.
+						if (ifSecondRole.enabled == false) ifSecondRole.enabled = true;
+						break;
+					default:
+						trace ("state not found");
+				}
+				return newPredicate;
+				
+			}
+			
+			// Takes a predicate clones it, updates the appropriate field based on UI state
+			// returns the cloned predicate
+			public function updateThenPredicateByState(workingPredicate:Predicate):Predicate
+			{
+				var newPredicate:Predicate = workingPredicate.clone();
+				
+				newPredicate.first = this.thenFirstRole.selectedItem;
+				newPredicate.negated = this.thenNotBox.selected;
+				
+				switch (this.thenState)
+				{
+					case "network":
+						newPredicate.networkType = this.thenNetworkList.selectedIndex;
+						newPredicate.comparator = this.thenOperator.selectedItem;
+						newPredicate.second = this.thenSecondRole.selectedItem;
+						newPredicate.networkValue = this.thenNetworkWeight.value;
+						if (thenSecondRole.enabled == false) thenSecondRole.enabled = true;
+						break;
+					case "knowledge":
+						newPredicate.knowledge = this.thenKnowledgeList.selectedIndex;
+						break;
+					case "status":
+						newPredicate.second = this.thenSecondRole.selectedItem;
+						newPredicate.status = this.thenStatusList.selectedIndex;
+						newPredicate.statusDuration = this.thenStatusDurationTime.value;
+						if (thenSecondRole.enabled == false && getThenCurrentStatusDirected()){
+							thenSecondRole.enabled = true;
+						} else if (thenSecondRole.enabled == true && !getThenCurrentStatusDirected()) {
+							thenSecondRole.enabled = false;
+						}
+						break;
+					case "trait":
+						newPredicate.trait = this.thenTraitList.selectedIndex;
+						if (thenSecondRole.enabled == true) thenSecondRole.enabled = false;
+						break;
+					case "SFDBLabel":
+						newPredicate.sfdbLabel = this.thenSFDBLabelList.selectedIndex;
+						newPredicate.second = this.thenSecondRole.selectedItem;
+						newPredicate.isSFDB = true;
+						newPredicate.window = this.ifSFDBLabelWindow.value;
+						if (thenSecondRole.enabled == false) thenSecondRole.enabled = true;
+						break;
+					case "CKB":
+						//newPredicate.
+						if (thenSecondRole.enabled == false) thenSecondRole.enabled = true;
+						break;
+					default:
+						trace ("state not found");
+				}
+				return newPredicate;
+				
+			}
+			
+			// (April)
+			// Changes the string in the ToC text box based on the current state
+			// as well as if the current predicate is worthy as a ToC (defined by Prom peeps)
+			public function handleIfLocutionByState():void{
+				var firstRole:String = "";
+				var secondRole:String = "";
+				var translatedLocution:String = "";
+				switch (this.ifState)
+				{
+					case "status":
+						translatedLocution = "Only Categories have ToC Translations";
+						var statusName:String = "";
+						statusName = this.ifStatusList.selectedItem;
+						if (Status.getStatusNumberByName(statusName) <= Status.LAST_CATEGORY_COUNT) {
+							if (this.ifFirstRole.selectedItem == "initiator") firstRole = "i";
+							else if (this.ifFirstRole.selectedItem == "responder") firstRole = "r";
+							else if (this.ifFirstRole.selectedItem == "other") firstRole = "o";
+							
+							//Need to check if it is a directed Catagory!
+							// (April) HACK! Don't hard-code names like this in!
+							if(statusName == "cat: feeling bad about someone" || statusName == "cat: feeling good about someone"){
+								if (this.ifSecondRole.selectedItem == "initiator") secondRole = "i";
+								else if (this.ifSecondRole.selectedItem == "responder") secondRole = "r";
+								else if (this.ifSecondRole.selectedItem == "other") secondRole = "o";
+							}
+							
+							statusName = statusName.slice(5);
+							if(secondRole == "") { // It was an undirected Catagory -- so we don't need a responder
+								translatedLocution = "%cat(" + firstRole + "," + statusName + ")%";		
+							}
+							else {
+								translatedLocution = "%cat(" + firstRole + "," + statusName + "," + secondRole + ")%";	
+							}
+						}
+						break;
+					// (April) Traits were technically a viable option, then turned out not to work, so they were removed
+					case "SFDBLabel":
+						var SFDBLabel:String = "";
+						var window:int = -1;
+						
+						firstRole = this.ifFirstRole.selectedItem;
+						secondRole = this.ifSecondRole.selectedItem;
+						SFDBLabel = this.ifSFDBLabelList.selectedItem;
+						window = this.ifSFDBLabelWindow.value;
+						
+						var labelID:int = SocialFactsDB.getLabelByName(SFDBLabel);
+						if(labelID <= SocialFactsDB.LAST_CATEGORY_COUNT && labelID >= 0){
+							SFDBLabel = SFDBLabel.slice(5); // Cuts off the category bit at the beginning
+						}	
+						else
+						{
+							SFDBLabel += ""; // it was perfect the way it was!
+						}
+						
+						if (firstRole == "initiator") firstRole = "i";
+						else if (firstRole == "responder") firstRole = "r";
+						else if (firstRole == "other") firstRole = "o";
+						
+						if (secondRole == "initiator") secondRole = "i";
+						else if (secondRole == "responder") secondRole = "r";
+						else if (secondRole == "other") secondRole = "o";
+						else secondRole = "";
+						
+						translatedLocution = "%SFDB_(";
+						translatedLocution += SFDBLabel;
+						translatedLocution += "," + firstRole + ",";
+						translatedLocution += secondRole
+						translatedLocution += "," + window + ")%";
+
+						break;
+					case "CKB":
+						/*
+						var firstSubjective:String = "";
+						var secondSubjective:String = "";
+						var objectiveTruth:String = "";
+						var ckbLocutionTranslation:String = "";
+						conditionEditor.locutionTranslation.text = "Dealing with CKB...";
+						
+						firstRole = conditionEditor.firstRole.selectedItem;
+						firstSubjective = conditionEditor.firstRoleSubjective.selectedItem;
+						secondRole = conditionEditor.secondRole.selectedItem;
+						secondSubjective = conditionEditor.secondRoleSubjective.selectedItem;
+						objectiveTruth = conditionEditor.ckbValue.selectedItem;
+						
+						if (firstRole == "initiator") firstRole = "i";
+						else if (firstRole == "responder") firstRole = "r";
+						else if (firstRole == "other") firstRole = "o";
+						
+						if (secondRole == "initiator") secondRole = "i";
+						else if (secondRole == "responder") secondRole = "r";
+						else if (secondRole == "other") secondRole = "o";
+						
+						ckbLocutionTranslation = "%CKB_((";
+						ckbLocutionTranslation += firstRole;
+						
+						ckbLocutionTranslation += ",";
+						if (!conditionEditor.useFirstRoleSubjective.selected) {
+						ckbLocutionTranslation += firstSubjective;
+						}
+						ckbLocutionTranslation += "),(";
+						if (!conditionEditor.useSecondRole.selected) {
+						ckbLocutionTranslation += secondRole;
+						}
+						ckbLocutionTranslation += ",";
+						if (!conditionEditor.useSecondRoleSubjective.selected) {
+						ckbLocutionTranslation += secondSubjective;
+						}
+						ckbLocutionTranslation += "),(";
+						if (!conditionEditor.useCKBTruthValue.selected) {
+						ckbLocutionTranslation += objectiveTruth;
+						}
+						ckbLocutionTranslation += "))%";
+						*/
+						break;
+					default:
+						trace ("no locution for current state");
+				}
+				this.ifToCField.text = translatedLocution;
+			}
+			
+			// Changes the string in the predicate editor box based on futzing with the drop downs
+			// ItemSelected refers to the line currently active in the predicate editor
+			// Also updates the working Precondition list
+			public function updateIfPredicateEditor(itemSelected:Number):void
+			{
+				var workingPredicate:Predicate = this.workingIf[itemSelected];
+				if (!workingPredicate)
+					trace("Crap, this isn't working. Bug Anne.");
+				// create the string of the type "PreCondition - Romance down: Buddy"
+				var resultString:String = new String();
+				
+				workingIf[itemSelected].type = this.ifTypeList.selectedIndex;
+				workingIf[itemSelected] = updateIfPredicateByState(workingPredicate);
+				resultString = this.workingIf[this.ifPredEditor.selectedIndex].toString();
+				workingIf[itemSelected].name = resultString;
+				ifEffects[itemSelected] = resultString;
+				handleIfLocutionByState();
+			}
+			
+			// Updates the appropriate drop down based on the state
+			// Sets it to the value stored in the chosen line in the predicate editor
+			public function updateIfDropDownValueByState():void
+			{
+				var workingPredicate:Predicate = this.workingIf[this.ifPredEditor.selectedIndex];
+
+				this.ifFirstRole.selectedItem = workingPredicate.primary;
+				this.ifNotBox.selected = workingPredicate.negated;
+				
+				switch (this.ifState)
+				{
+					case "network":
+						this.ifNetworkList.selectedIndex = workingPredicate.networkType;
+						this.ifSecondRole.selectedItem = workingPredicate.secondary;
+						this.ifNetworkWeight.value = workingPredicate.networkValue;
+						this.ifComparator.selectedItem = workingPredicate.comparator;
+						if (ifSecondRole.enabled == false) ifSecondRole.enabled = true;
+						break;
+					case "status":
+						this.ifStatusList.selectedIndex = workingPredicate.status;
+						if (ifSecondRole.enabled == false && getIfCurrentStatusDirected()){
+							ifSecondRole.enabled = true;
+						} else if (ifSecondRole.enabled == true && !getIfCurrentStatusDirected()) {
+							ifSecondRole.enabled = false;
+						}
+						break;
+					case "knowledge":
+						this.ifKnowledgeList.selectedIndex = workingPredicate.knowledge;
+						break;
+					case "trait":
+						this.ifTraitList.selectedIndex = workingPredicate.trait;
+						if (ifSecondRole.enabled == true) ifSecondRole.enabled = false;
+						break;
+					case "SFDBLabel":
+						this.ifSFDBLabelList.selectedIndex = workingPredicate.sfdbLabel;
+						this.ifSecondRole.selectedItem = workingPredicate.secondary;
+						if (ifSecondRole.enabled == false) ifSecondRole.enabled = true;
+						this.ifSFDBLabelWindow.value = workingPredicate.window;
+						break;
+					case "CKB":
+						//this.ckbTruthList.selectedIndex = 
+						this.ifSecondRole.selectedItem = workingPredicate.secondary;
+						if (ifSecondRole.enabled == false) ifSecondRole.enabled = true;
+						break;
+					default:
+						"updateIfDropDownValueByState: State not found";
+						break;
+				}
+			}
+			
+			// (April)
+			// Changes the string in the ToC text box based on the current state
+			// as well as if the current predicate is worthy as a ToC (defined by Prom peeps)
+			public function handleThenLocutionByState():void{
+				var firstRole:String = "";
+				var secondRole:String = "";
+				var translatedLocution:String = "";
+				switch (this.thenState)
+				{
+					case "status":
+						translatedLocution = "Only Categories have ToC Translations";
+						var statusName:String = "";
+						statusName = this.thenStatusList.selectedItem;
+						if (Status.getStatusNumberByName(statusName) <= Status.LAST_CATEGORY_COUNT) {
+							if (this.thenFirstRole.selectedItem == "initiator") firstRole = "i";
+							else if (this.thenFirstRole.selectedItem == "responder") firstRole = "r";
+							else if (this.thenFirstRole.selectedItem == "other") firstRole = "o";
+							
+							//Need to check if it is a directed Catagory!
+							// (April) HACK! Don't hard-code names like this in!
+							if(statusName == "cat: feeling bad about someone" || statusName == "cat: feeling good about someone"){
+								if (this.thenSecondRole.selectedItem == "initiator") secondRole = "i";
+								else if (this.thenSecondRole.selectedItem == "responder") secondRole = "r";
+								else if (this.thenSecondRole.selectedItem == "other") secondRole = "o";
+							}
+							
+							statusName = statusName.slice(5);
+							if(secondRole == "") { // It was an undirected Catagory -- so we don't need a responder
+								translatedLocution = "%cat(" + firstRole + "," + statusName + ")%";		
+							}
+							else {
+								translatedLocution = "%cat(" + firstRole + "," + statusName + "," + secondRole + ")%";	
+							}
+						}
+						break;
+					// (April) Traits were technically a viable option, then turned out not to work, so they were removed
+					case "SFDBLabel":
+						var SFDBLabel:String = "";
+						var window:int = -1;
+						
+						firstRole = this.thenFirstRole.selectedItem;
+						secondRole = this.thenSecondRole.selectedItem;
+						SFDBLabel = this.thenSFDBLabelList.selectedItem;
+						window = this.thenSFDBLabelWindow.value;
+						
+						var labelID:int = SocialFactsDB.getLabelByName(SFDBLabel);
+						if(labelID <= SocialFactsDB.LAST_CATEGORY_COUNT && labelID >= 0){
+							SFDBLabel = SFDBLabel.slice(5); // Cuts off the category bit at the beginning
+						}	
+						else
+						{
+							SFDBLabel += ""; // it was perfect the way it was!
+						}
+						
+						if (firstRole == "initiator") firstRole = "i";
+						else if (firstRole == "responder") firstRole = "r";
+						else if (firstRole == "other") firstRole = "o";
+						
+						if (secondRole == "initiator") secondRole = "i";
+						else if (secondRole == "responder") secondRole = "r";
+						else if (secondRole == "other") secondRole = "o";
+						else secondRole = "";
+						
+						translatedLocution = "%SFDB_(";
+						translatedLocution += SFDBLabel;
+						translatedLocution += "," + firstRole + ",";
+						translatedLocution += secondRole
+						translatedLocution += "," + window + ")%";
+						
+						break;
+					case "CKB":
+						/*
+						var firstSubjective:String = "";
+						var secondSubjective:String = "";
+						var objectiveTruth:String = "";
+						var ckbLocutionTranslation:String = "";
+						conditionEditor.locutionTranslation.text = "Dealing with CKB...";
+						
+						firstRole = conditionEditor.firstRole.selectedItem;
+						firstSubjective = conditionEditor.firstRoleSubjective.selectedItem;
+						secondRole = conditionEditor.secondRole.selectedItem;
+						secondSubjective = conditionEditor.secondRoleSubjective.selectedItem;
+						objectiveTruth = conditionEditor.ckbValue.selectedItem;
+						
+						if (firstRole == "initiator") firstRole = "i";
+						else if (firstRole == "responder") firstRole = "r";
+						else if (firstRole == "other") firstRole = "o";
+						
+						if (secondRole == "initiator") secondRole = "i";
+						else if (secondRole == "responder") secondRole = "r";
+						else if (secondRole == "other") secondRole = "o";
+						
+						ckbLocutionTranslation = "%CKB_((";
+						ckbLocutionTranslation += firstRole;
+						
+						ckbLocutionTranslation += ",";
+						if (!conditionEditor.useFirstRoleSubjective.selected) {
+						ckbLocutionTranslation += firstSubjective;
+						}
+						ckbLocutionTranslation += "),(";
+						if (!conditionEditor.useSecondRole.selected) {
+						ckbLocutionTranslation += secondRole;
+						}
+						ckbLocutionTranslation += ",";
+						if (!conditionEditor.useSecondRoleSubjective.selected) {
+						ckbLocutionTranslation += secondSubjective;
+						}
+						ckbLocutionTranslation += "),(";
+						if (!conditionEditor.useCKBTruthValue.selected) {
+						ckbLocutionTranslation += objectiveTruth;
+						}
+						ckbLocutionTranslation += "))%";
+						*/
+						break;
+					default:
+						trace ("no locution for current state");
+				}
+				this.thenToCField.text = translatedLocution;
+			}
+			
+			// Changes the string in the predicate editor box based on futzing with the drop downs
+			// ItemSelected refers to the line currently active in the predicate editor
+			// Also updates the working Precondition list
+			public function updateThenPredicateEditor(itemSelected:Number):void
+			{
+				var workingPredicate:Predicate = this.workingThen[itemSelected];
+				if (!workingPredicate)
+					trace("Crap, this isn't working. Bug Anne.");
+				// create the string of the type "PreCondition - Romance down: Buddy"
+				var resultString:String = new String();
+				
+				workingThen[itemSelected].type = this.thenTypeList.selectedIndex;
+				workingThen[itemSelected] = updateThenPredicateByState(workingPredicate);
+				resultString = this.workingThen[this.thenPredEditor.selectedIndex].toString();
+				workingThen[itemSelected].name = resultString;
+				thenEffects[itemSelected] = resultString;
+				handleThenLocutionByState();
+			}
+			
+			// Updates the appropriate drop down based on the state
+			// Sets it to the value stored in the chosen line in the predicate editor
+			public function updateThenDropDownValueByState():void
+			{
+				var workingPredicate:Predicate = this.workingThen[this.thenPredEditor.selectedIndex];
+
+				this.thenFirstRole.selectedItem = workingPredicate.primary;
+				this.thenNotBox.selected = workingPredicate.negated;
+				
+				switch (this.thenState)
+				{
+					case "network":
+						this.thenNetworkList.selectedIndex = workingPredicate.networkType;
+						this.thenSecondRole.selectedItem = workingPredicate.secondary;
+						this.thenNetworkWeight.value = workingPredicate.networkValue;
+						this.thenOperator.selectedItem = workingPredicate.comparator;
+						if (thenSecondRole.enabled == false) thenSecondRole.enabled = true;
+						break;
+					case "status":
+						this.thenStatusList.selectedIndex = workingPredicate.status;
+						this.thenStatusDurationTime.value = workingPredicate.statusDuration;
+						if (getThenCurrentStatusDirected()){
+							thenSecondRole.enabled = true;
+							thenSecondRole.selectedItem = workingPredicate.secondary;
+						} else if (thenSecondRole.enabled == true && !getThenCurrentStatusDirected()) {
+							thenSecondRole.enabled = false;
+						}
+						break;
+					case "knowledge":
+						this.thenKnowledgeList.selectedIndex = workingPredicate.knowledge;
+						break;
+					case "trait":
+						this.thenTraitList.selectedIndex = workingPredicate.trait;
+						if (thenSecondRole.enabled == true) thenSecondRole.enabled = false;
+						break;
+					case "SFDBLabel":
+						this.thenSFDBLabelList.selectedIndex = workingPredicate.sfdbLabel;
+						this.thenSecondRole.selectedItem = workingPredicate.secondary;
+						if (thenSecondRole.enabled == false) thenSecondRole.enabled = true;
+						break;
+					case "CKB":
+						//this.ckbTruthList.selectedIndex = 
+						this.thenSecondRole.selectedItem = workingPredicate.secondary;
+						if (thenSecondRole.enabled == false) thenSecondRole.enabled = true;
+						break;
+					default:
+						"updateThenDropDownValueByState: State not found";
+						break;
+				}
+			}
+			
+			// Updates UI elements based on selecting a line in the predicate editor
+			public function clickOnIfPredicateEditor(itemSelected:Number):void {
+				var workingPredicate:Predicate = this.workingIf[itemSelected];
+				
+				changeIfState(workingPredicate.type);
+				updateIfDropDownValueByState();
+				handleIfLocutionByState();
+			}			
+			
+			// Updates UI elements based on selecting a line in the predicate editor
+			public function clickOnThenPredicateEditor(itemSelected:Number):void {
+				var workingPredicate:Predicate = this.workingThen[itemSelected];
+				
+				changeThenState(workingPredicate.type);
+				updateThenDropDownValueByState();
+				handleThenLocutionByState();
+			}			
+			
+			// Changes the UI state based on a given predicate type
+			// WARNING: UGLY HACK AHEAD
+			public function changeThenState(predType:Number):void {
+				switch (predType)
+				{
+					case Predicate.NETWORK:
+						this.thenState = "network";
+						this.thenTypeList.selectedItem = "network";
+						// turn off everything that isn't network stuff
+						this.thenKnowledgeList.visible = false;
+						this.thenKnowledgeLabel.visible = false;
+						this.thenStatusList.visible = false;
+						this.thenStatusLabel.visible = false;
+						this.thenTraitList.visible = false;
+						this.thenTraitLabel.visible = false;
+						this.thenStatusDuration.visible = false;
+						this.thenStatusDurationTime.visible = false;
+						this.thenSFDBLabelLabel.visible = false;
+						this.thenSFDBLabelList.visible = false;
+						this.thenSFDBLabelWindow.visible = false;
+						this.thenSFDBLabelWindowLabel.visible = false;
+						this.thenCKBLabel.visible = false;
+						this.thenCKBList.visible = false;
+						this.thenToCLabel1.visible = false;
+						this.thenToCLabel2.visible = false;
+						this.thenToCField.visible = false;
+						
+						// turn on network stuff
+						this.thenNetworkList.visible = true;
+						this.thenNetworkLabel.visible = true;
+						this.thenFirstRole.visible = true;
+						this.thenFirstRoleLabel.visible = true;
+						this.thenSecondRole.visible = true;
+						this.thenSecondRoleLabel.visible = true;
+						this.thenOperator.visible = true;
+						this.thenOperatorLabel.visible = true;
+						this.thenNetworkWeight.visible = true;
+						this.thenNetworkWeightLabel.visible = true;
+						this.thenNotBox.visible = true;
+						break;
+					case Predicate.STATUS:
+						this.thenState = "status";
+						this.thenTypeList.selectedItem="status";
+						// turn off everything that isn't status stuff
+						this.thenKnowledgeList.visible = false;
+						this.thenKnowledgeLabel.visible = false;
+						this.thenNetworkList.visible = false;
+						this.thenNetworkLabel.visible = false;
+						this.thenTraitList.visible = false;
+						this.thenTraitLabel.visible = false;
+						this.thenOperator.visible = false;
+						this.thenOperatorLabel.visible = false;
+						this.thenNetworkWeight.visible = false;
+						this.thenNetworkWeightLabel.visible = false;
+						this.thenSFDBLabelLabel.visible = false;
+						this.thenSFDBLabelList.visible = false;
+						this.thenSFDBLabelWindow.visible = false;
+						this.thenSFDBLabelWindowLabel.visible = false;
+						this.thenCKBLabel.visible = false;
+						this.thenCKBList.visible = false;
+						
+						// turn on status stuff
+						this.thenStatusList.visible = true;
+						this.thenStatusLabel.visible = true;
+						this.thenFirstRole.visible = true;
+						this.thenFirstRoleLabel.visible = true;
+						this.thenSecondRole.visible = true;
+						this.thenSecondRoleLabel.visible = true;
+						this.thenNotBox.visible = true;
+						this.thenStatusDuration.visible = true;
+						this.thenStatusDurationTime.visible = true;
+						this.thenToCLabel1.visible = true;
+						this.thenToCLabel1.y = 465;
+						this.thenToCLabel2.visible = true;
+						this.thenToCLabel2.y = 486;
+						this.thenToCField.visible = true;
+						this.thenToCField.y = 519;
+						break;
+					case Predicate.TRAIT:
+						this.thenState = "trait";
+						this.thenTypeList.selectedItem = "trait";
+						// turn off everything that isn't trait stuff
+						this.thenKnowledgeList.visible = false;
+						this.thenKnowledgeLabel.visible = false;
+						this.thenNetworkList.visible = false;
+						this.thenNetworkLabel.visible = false;
+						this.thenStatusList.visible = false;
+						this.thenStatusLabel.visible = false;
+						this.thenOperator.visible = false;
+						this.thenOperatorLabel.visible = false;
+						this.thenNetworkWeight.visible = false;
+						this.thenNetworkWeightLabel.visible = false;
+						this.thenSecondRole.visible = false;
+						this.thenSecondRoleLabel.visible = false;
+						this.thenStatusDuration.visible = false;
+						this.thenStatusDurationTime.visible = false;
+						this.thenSFDBLabelLabel.visible = false;
+						this.thenSFDBLabelList.visible = false;
+						this.thenSFDBLabelWindow.visible = false;
+						this.thenSFDBLabelWindowLabel.visible = false;
+						this.thenCKBLabel.visible = false;
+						this.thenCKBList.visible = false;
+						this.thenToCLabel1.visible = false;
+						this.thenToCLabel2.visible = false;
+						this.thenToCField.visible = false;
+						
+						// turn on trait stuff
+						this.thenTraitList.visible = true;
+						this.thenTraitLabel.visible = true;
+						this.thenFirstRole.visible = true;
+						this.thenFirstRoleLabel.visible = true;
+						this.thenNotBox.visible = true;
+						break;
+					/*
+					case Predicate.KNOWLEDGE:
+						this.thenState = "knowledge";
+						// turn off everything that isn't knowledge stuff
+						this.thenTraitList.visible = false;
+						this.thenTraitLabel.visible = false;
+						this.thenNetworkList.visible = false;
+						this.thenNetworkLabel.visible = false;
+						this.thenStatusList.visible = false;
+						this.thenStatusLabel.visible = false;
+						this.thenOperator.visible = false;
+						this.thenOperatorLabel.visible = false;
+						this.thenNetworkWeight.visible = false;
+						this.thenNetworkWeightLabel.visible = false;
+						this.thenSecondRole.visible = false;
+						this.thenSecondRoleLabel.visible = false;
+						this.thenStatusDuration.visible = false;
+						this.thenStatusDurationTime.visible = false;
+						
+						// turn on trait stuff
+						this.thenKnowledgeList.visible = true;
+						this.thenKnowledgeLabel.visible = true;
+						this.thenFirstRole.visible = true;
+						this.thenFirstRoleLabel.visible = true;
+						this.thenNotBox.visible = true;
+						break;*/
+					case Predicate.SFDBLABEL:
+						this.thenState = "SFDBLabel";
+						this.thenTypeList.selectedItem = "SFDBLabel";
+						
+						// Clap OFF
+						this.thenKnowledgeList.visible = false;
+						this.thenKnowledgeLabel.visible = false;
+						this.thenNetworkList.visible = false;
+						this.thenNetworkLabel.visible = false;
+						this.thenStatusList.visible = false;
+						this.thenStatusLabel.visible = false;
+						this.thenOperator.visible = false;
+						this.thenOperatorLabel.visible = false;
+						this.thenNetworkWeight.visible = false;
+						this.thenNetworkWeightLabel.visible = false;
+						this.thenStatusDuration.visible = false;
+						this.thenStatusDurationTime.visible = false;
+						this.thenTraitList.visible = false;
+						this.thenTraitLabel.visible = false;
+						this.thenCKBLabel.visible = false;
+						this.thenCKBList.visible = false;
+						
+						// Clap ON
+						this.thenSFDBLabelLabel.visible = true;
+						this.thenSFDBLabelList.visible = true;
+						this.thenSFDBLabelWindow.visible = true;
+						this.thenSFDBLabelWindowLabel.visible = true;
+						this.thenFirstRole.visible = true;
+						this.thenFirstRoleLabel.visible = true;
+						this.thenSecondRole.visible = true;
+						this.thenSecondRoleLabel.visible = true;
+						this.thenNotBox.visible = true;
+						this.thenToCLabel1.visible = true;
+						this.thenToCLabel1.y = 501;
+						this.thenToCLabel2.visible = true;
+						this.thenToCLabel2.y = 522;
+						this.thenToCField.visible = true;
+						this.thenToCField.y = 555;
+						break;
+					case Predicate.CKBENTRY:
+						this.thenState = "CKB";
+						this.thenTypeList.selectedItem = "CKB";
+						// Clap OFF
+						this.thenKnowledgeList.visible = false;
+						this.thenKnowledgeLabel.visible = false;
+						this.thenNetworkList.visible = false;
+						this.thenNetworkLabel.visible = false;
+						this.thenStatusList.visible = false;
+						this.thenStatusLabel.visible = false;
+						this.thenOperator.visible = false;
+						this.thenOperatorLabel.visible = false;
+						this.thenNetworkWeight.visible = false;
+						this.thenNetworkWeightLabel.visible = false;
+						this.thenStatusDuration.visible = false;
+						this.thenStatusDurationTime.visible = false;
+						this.thenTraitList.visible = false;
+						this.thenTraitLabel.visible = false;
+						this.thenSFDBLabelLabel.visible = false;
+						this.thenSFDBLabelList.visible = false;
+						this.thenSFDBLabelWindow.visible = false;
+						this.thenSFDBLabelWindowLabel.visible = false;
+						
+						// Clap ON
+						this.thenCKBLabel.visible = true;
+						this.thenCKBList.visible = true;
+						this.thenFirstRole.visible = true;
+						this.thenFirstRoleLabel.visible = true;
+						this.thenSecondRole.visible = true;
+						this.thenSecondRoleLabel.visible = true;
+						this.thenNotBox.visible = true;
+					default:
+						this.thenState = "default";
+						this.thenTypeList.selectedIndex = 0;
+						// turn off everything
+						this.thenKnowledgeList.visible = false;
+						this.thenKnowledgeLabel.visible = false;
+						this.thenNetworkList.visible = false;
+						this.thenNetworkLabel.visible = false;
+						this.thenStatusList.visible = false;
+						this.thenStatusLabel.visible = false;
+						this.thenOperator.visible = false;
+						this.thenOperatorLabel.visible = false;
+						this.thenNetworkWeight.visible = false;
+						this.thenNetworkWeightLabel.visible = false;
+						this.thenSecondRole.visible = false;
+						this.thenSecondRoleLabel.visible = false;
+						this.thenTraitList.visible = false;
+						this.thenTraitLabel.visible = false;
+						this.thenFirstRole.visible = false;
+						this.thenFirstRoleLabel.visible = false;
+						this.thenNotBox.visible = false;
+						this.thenStatusDuration.visible = false;
+						this.thenStatusDurationTime.visible = false;
+						this.thenSFDBLabelLabel.visible = false;
+						this.thenSFDBLabelList.visible = false;
+						this.thenSFDBLabelWindow.visible = false;
+						this.thenSFDBLabelWindowLabel.visible = false;
+						this.thenCKBLabel.visible = false;
+						this.thenCKBList.visible = false;
+						this.thenToCLabel1.visible = false;
+						this.thenToCLabel2.visible = false;
+						this.thenToCField.visible = false;
+						break;
+				}
+			}
+						
+			// Changes the UI state based on a given predicate type
+			public function changeIfState(predType:Number):void {
+				switch (predType)
+				{
+					case Predicate.NETWORK:
+						this.ifState = "network";
+						// turn off everything that isn't network stuff
+						this.ifKnowledgeList.visible = false;
+						this.ifKnowledgeLabel.visible = false;
+						this.ifStatusList.visible = false;
+						this.ifStatusLabel.visible = false;
+						this.ifTraitList.visible = false;
+						this.ifTraitLabel.visible = false;
+						this.ifSFDBLabelLabel.visible = false;
+						this.ifSFDBLabelList.visible = false;
+						this.ifSFDBLabelWindow.visible = false;
+						this.ifSFDBLabelWindowLabel.visible = false;
+						this.ifCKBLabel.visible = false;
+						this.ifCKBList.visible = false;
+						this.ifToCLabel1.visible = false;
+						this.ifToCLabel2.visible = false;
+						this.ifToCField.visible = false;
+						
+						// turn on network stuff
+						this.ifNetworkList.visible = true;
+						this.ifNetworkLabel.visible = true;
+						this.ifFirstRole.visible = true;
+						this.ifFirstRoleLabel.visible = true;
+						this.ifSecondRole.visible = true;
+						this.ifSecondRoleLabel.visible = true;
+						this.ifComparator.visible = true;
+						this.ifComparatorLabel.visible = true;
+						this.ifNetworkWeight.visible = true;
+						this.ifNetworkWeightLabel.visible = true;
+						this.ifNotBox.visible = true;
+						break;
+					case Predicate.STATUS:
+						this.ifState = "status";
+						// turn off everything that isn't status stuff
+						this.ifKnowledgeList.visible = false;
+						this.ifKnowledgeLabel.visible = false;
+						this.ifNetworkList.visible = false;
+						this.ifNetworkLabel.visible = false;
+						this.ifTraitList.visible = false;
+						this.ifTraitLabel.visible = false;
+						this.ifComparator.visible = false;
+						this.ifComparatorLabel.visible = false;
+						this.ifNetworkWeight.visible = false;
+						this.ifNetworkWeightLabel.visible = false;
+						this.ifSFDBLabelLabel.visible = false;
+						this.ifSFDBLabelList.visible = false;
+						this.ifSFDBLabelWindow.visible = false;
+						this.ifSFDBLabelWindowLabel.visible = false;
+						this.ifCKBLabel.visible = false;
+						this.ifCKBList.visible = false;
+						
+						// turn on status stuff
+						this.ifStatusList.visible = true;
+						this.ifStatusLabel.visible = true;
+						this.ifFirstRole.visible = true;
+						this.ifFirstRoleLabel.visible = true;
+						this.ifSecondRole.visible = true;
+						this.ifSecondRoleLabel.visible = true;
+						this.ifNotBox.visible = true;
+						this.ifToCLabel1.visible = true;
+						this.ifToCLabel1.y = 436;
+						this.ifToCLabel2.visible = true;
+						this.ifToCLabel2.y = 457;
+						this.ifToCField.visible = true;
+						this.ifToCField.y = 490;
+						break;
+					case Predicate.TRAIT:
+						this.ifState = "trait";
+						// turn off everything that isn't trait stuff
+						this.ifKnowledgeList.visible = false;
+						this.ifKnowledgeLabel.visible = false;
+						this.ifNetworkList.visible = false;
+						this.ifNetworkLabel.visible = false;
+						this.ifStatusList.visible = false;
+						this.ifStatusLabel.visible = false;
+						this.ifComparator.visible = false;
+						this.ifComparatorLabel.visible = false;
+						this.ifNetworkWeight.visible = false;
+						this.ifNetworkWeightLabel.visible = false;
+						this.ifSecondRole.visible = false;
+						this.ifSecondRoleLabel.visible = false;
+						this.ifSFDBLabelLabel.visible = false;
+						this.ifSFDBLabelList.visible = false;
+						this.ifSFDBLabelWindow.visible = false;
+						this.ifSFDBLabelWindowLabel.visible = false;
+						this.ifCKBLabel.visible = false;
+						this.ifCKBList.visible = false;
+						this.ifToCLabel1.visible = false;
+						this.ifToCLabel2.visible = false;
+						this.ifToCField.visible = false;
+						
+						// turn on trait stuff
+						this.ifTraitList.visible = true;
+						this.ifTraitLabel.visible = true;
+						this.ifFirstRole.visible = true;
+						this.ifFirstRoleLabel.visible = true;
+						this.ifNotBox.visible = true;
+						break;
+					/*case Predicate.KNOWLEDGE:
+						this.ifState = "knowledge";
+						// turn off everything that isn't knowledge stuff
+						this.ifTraitList.visible = false;
+						this.ifTraitLabel.visible = false;
+						this.ifNetworkList.visible = false;
+						this.ifNetworkLabel.visible = false;
+						this.ifStatusList.visible = false;
+						this.ifStatusLabel.visible = false;
+						this.ifComparator.visible = false;
+						this.ifComparatorLabel.visible = false;
+						this.ifNetworkWeight.visible = false;
+						this.ifNetworkWeightLabel.visible = false;
+						this.ifSecondRole.visible = false;
+						this.ifSecondRoleLabel.visible = false;
+						
+						// turn on trait stuff
+						this.ifKnowledgeList.visible = true;
+						this.ifKnowledgeLabel.visible = true;
+						this.ifFirstRole.visible = true;
+						this.ifFirstRoleLabel.visible = true;
+						this.ifNotBox.visible = true;
+						break;*/
+					case Predicate.SFDBLABEL:
+						this.ifState = "SFDBLabel";
+						// Clap OFF
+						this.ifKnowledgeList.visible = false;
+						this.ifKnowledgeLabel.visible = false;
+						this.ifNetworkList.visible = false;
+						this.ifNetworkLabel.visible = false;
+						this.ifStatusList.visible = false;
+						this.ifStatusLabel.visible = false;
+						this.ifComparator.visible = false;
+						this.ifComparatorLabel.visible = false;
+						this.ifNetworkWeight.visible = false;
+						this.ifNetworkWeightLabel.visible = false;
+						this.ifSecondRole.visible = false;
+						this.ifSecondRoleLabel.visible = false;
+						this.ifTraitList.visible = false;
+						this.ifTraitLabel.visible = false;
+						this.ifCKBLabel.visible = false;
+						this.ifCKBList.visible = false;
+						
+						// Clap ON
+						this.ifSFDBLabelLabel.visible = true;
+						this.ifSFDBLabelList.visible = true;
+						this.ifSFDBLabelWindow.visible = true;
+						this.ifSFDBLabelWindowLabel.visible = true;
+						this.ifFirstRole.visible = true;
+						this.ifFirstRoleLabel.visible = true;
+						this.ifSecondRole.visible = true;
+						this.ifSecondRoleLabel.visible = true;
+						this.ifNotBox.visible = true;
+						this.ifToCLabel1.visible = true;
+						this.ifToCLabel1.y = 501;
+						this.ifToCLabel2.visible = true;
+						this.ifToCLabel2.y = 522;
+						this.ifToCField.visible = true;
+						this.ifToCField.y = 555;
+						break;
+					case Predicate.CKBENTRY:
+						this.ifState = "CKB";
+						// Clap OFF
+						this.ifKnowledgeList.visible = false;
+						this.ifKnowledgeLabel.visible = false;
+						this.ifNetworkList.visible = false;
+						this.ifNetworkLabel.visible = false;
+						this.ifStatusList.visible = false;
+						this.ifStatusLabel.visible = false;
+						this.ifComparator.visible = false;
+						this.ifComparatorLabel.visible = false;
+						this.ifNetworkWeight.visible = false;
+						this.ifNetworkWeightLabel.visible = false;
+						this.ifSecondRole.visible = false;
+						this.ifSecondRoleLabel.visible = false;
+						this.ifTraitList.visible = false;
+						this.ifTraitLabel.visible = false;
+						this.ifSFDBLabelLabel.visible = false;
+						this.ifSFDBLabelList.visible = false;
+						this.ifSFDBLabelWindow.visible = false;
+						this.ifSFDBLabelWindowLabel.visible = false;
+						
+						// Clap ON
+						this.ifCKBLabel.visible = true;
+						this.ifCKBList.visible = true;
+						this.ifFirstRole.visible = true;
+						this.ifFirstRoleLabel.visible = true;
+						this.ifSecondRole.visible = true;
+						this.ifSecondRoleLabel.visible = true;
+						this.ifNotBox.visible = true;
+					default:
+						this.ifState = "default";
+						// turn off everything
+						this.ifKnowledgeList.visible = false;
+						this.ifKnowledgeLabel.visible = false;
+						this.ifNetworkList.visible = false;
+						this.ifNetworkLabel.visible = false;
+						this.ifStatusList.visible = false;
+						this.ifStatusLabel.visible = false;
+						this.ifComparator.visible = false;
+						this.ifComparatorLabel.visible = false;
+						this.ifNetworkWeight.visible = false;
+						this.ifNetworkWeightLabel.visible = false;
+						this.ifSecondRole.visible = false;
+						this.ifSecondRoleLabel.visible = false;
+						this.ifTraitList.visible = false;
+						this.ifTraitLabel.visible = false;
+						this.ifFirstRole.visible = false;
+						this.ifFirstRoleLabel.visible = false;
+						this.ifNotBox.visible = false;
+						this.ifSFDBLabelLabel.visible = false;
+						this.ifSFDBLabelList.visible = false;
+						this.ifSFDBLabelWindow.visible = false;
+						this.ifSFDBLabelWindowLabel.visible = false;
+						this.ifCKBLabel.visible = false;
+						this.ifCKBList.visible = false;
+						this.ifToCLabel1.visible = false;
+						this.ifToCLabel2.visible = false;
+						this.ifToCField.visible = false;
+						break;
+				}
+			}
+			
+			// Add an pre-condition predicate to the predicate editor box
+			// Enables the predicate editor box if it was currently disabled
+			// Adds a string to the window in mostly human readable form
+			// Changes the state of the UI based on the predicate chosen
+			// Adds a filled out predicate to the working precondition list
+			// Moves the selection in the predicate editor to the most recently added item
+			public function addIfEffect(effectType:Number):void {
+				var resultString:String = new String();
+				changeIfState(effectType);
+
+				// Add this to the working predicates
+				var workingPredicate:Predicate = new Predicate();
+				workingPredicate.type = effectType;
+				workingPredicate = updateIfPredicateByState(workingPredicate);
+
+				resultString = workingPredicate.toString();
+				workingPredicate.name = resultString;
+
+				this.workingIf.push(workingPredicate);
+				this.ifEffects.addItem(resultString);
+				if (!this.ifPredEditor.enabled)
+				{
+					this.ifPredEditor.enabled = true;
+				}
+				
+				this.ifPredEditor.selectedIndex = this.workingIf.length - 1;	
+				handleIfLocutionByState();
+			}
+			
+			// Removes the selected precondition from the predicate editor box and the working precondition list
+			// Disables the predicate editor box if there is nothing left in it
+			// Moves the selection to the first item
+			public function removeIfEffect(selection:Number):void {
+				try {
+					this.ifEffects.removeItemAt(selection);
+					this.workingIf.splice(selection, 1);
+				} catch (e:Error) {
+					return; // TODO: Create a popup error message that something must be selected to remove it?
+				}
+				if (this.ifEffects.length == 0)
+				{
+					this.ifPredEditor.enabled = false;
+					changeIfState(-1);
+				}
+				else
+				{
+					this.ifPredEditor.selectedIndex = 0;
+					changeIfState(workingIf[this.ifPredEditor.selectedIndex].type);
+					updateIfDropDownValueByState();
+				}
+			}
+			
+			// Add an pre-condition predicate to the predicate editor box
+			// Enables the predicate editor box if it was currently disabled
+			// Adds a string to the window in mostly human readable form
+			// Changes the state of the UI based on the predicate chosen
+			// Adds a filled out predicate to the working precondition list
+			// Moves the selection in the predicate editor to the most recently added item
+			public function addThenEffect(effectType:Number):void {
+				var resultString:String = new String();
+				changeThenState(effectType);
+				
+				// Add this to the working predicates
+				var workingPredicate:Predicate = new Predicate();
+				workingPredicate.type = effectType;
+				workingPredicate = updateThenPredicateByState(workingPredicate);
+				
+				resultString = workingPredicate.toString();
+				workingPredicate.name = resultString;
+				
+				this.workingThen.push(workingPredicate);
+				this.thenEffects.addItem(resultString);
+				if (!this.thenPredEditor.enabled)
+				{
+					this.thenPredEditor.enabled = true;
+				}
+				
+				this.thenPredEditor.selectedIndex = this.workingThen.length - 1;	
+				handleThenLocutionByState();
+			}
+			
+			// Removes the selected precondition from the predicate editor box and the working precondition list
+			// Disables the predicate editor box if there is nothing left in it
+			// Moves the selection to the first item
+			public function removeThenEffect(selection:Number):void {
+				try {
+					this.thenEffects.removeItemAt(selection);
+					this.workingThen.splice(selection, 1);
+				} catch (e:Error) {
+					return; // TODO: Create a popup error message that something must be selected to remove it?
+				}
+				if (this.thenEffects.length == 0)
+				{
+					this.thenPredEditor.enabled = false;
+					changeThenState(-1);
+				}
+				else
+				{
+					this.thenPredEditor.selectedIndex = 0;
+					changeThenState(workingThen[this.thenPredEditor.selectedIndex].type);
+					updateThenDropDownValueByState();
+				}
+			}
+			
+			// set everything back to defaults, ready for new pre-condition to be created
+			public function reset(): void
+			{
+				this.ifEffects.removeAll();
+				this.thenEffects.removeAll();
+				this.ifPredEditor.enabled = false;
+				this.thenPredEditor.enabled = false;
+				this.ifTypeList.selectedIndex = 0;
+				this.thenTypeList.selectedIndex = 0;
+				this.ifNetworkList.selectedIndex = 0;
+				this.thenNetworkList.selectedIndex = 0;
+				this.ifKnowledgeList.selectedIndex = 0;
+				this.thenKnowledgeList.selectedIndex = 0;
+				this.ifStatusList.selectedIndex = 0;
+				this.thenStatusList.selectedIndex = 0;
+				this.ifTraitList.selectedIndex = 0;
+				this.thenTraitList.selectedIndex = 0;
+				this.ifSFDBLabelList.selectedIndex = 0;
+				this.thenSFDBLabelList.selectedIndex = 0;
+				this.ifCKBList.selectedIndex = 0;
+				this.thenCKBList.selectedIndex = 0;
+				this.description.text = "";
+				this.changeIfState(-1);
+				this.changeThenState(-1);
+				this.acceptRejectEffect.selectedValue = "Accept";
+				
+				this.workingIf = new Vector.<Predicate>;
+				this.workingThen = new Vector.<Predicate>;
+			}
+			
+			// Checks if the current status is directed or not
+			// Used to change output strings and to disable responder dropdowns
+			public function getIfCurrentStatusDirected():Boolean {
+				if (Status.getStatusNumberByName(ifStatusList.selectedItem) >= Status.FIRST_DIRECTED_STATUS ||
+					Status.getStatusNumberByName(ifStatusList.selectedItem) == Status.CAT_FEELING_BAD_ABOUT_SOMEONE ||
+					Status.getStatusNumberByName(ifStatusList.selectedItem) == Status.CAT_FEELING_GOOD_ABOUT_SOMEONE)
+					return true;
+				else
+					return false;
+			}
+			
+			// Checks if the current status is directed or not
+			// Used to change output strings and to disable responder dropdowns
+			public function getThenCurrentStatusDirected():Boolean {
+				if (Status.getStatusNumberByName(thenStatusList.selectedItem) >= Status.FIRST_DIRECTED_STATUS ||
+					Status.getStatusNumberByName(thenStatusList.selectedItem) == Status.CAT_FEELING_BAD_ABOUT_SOMEONE ||
+					Status.getStatusNumberByName(thenStatusList.selectedItem) == Status.CAT_FEELING_GOOD_ABOUT_SOMEONE)
+					return true;
+				else
+					return false;
+			}
+			
+	]]>
+	</fx:Script>
+</s:Group>

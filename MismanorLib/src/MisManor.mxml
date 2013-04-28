@@ -1,0 +1,1818 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:Mismanor="mismanor.*"
+					   creationComplete="onLoadComplete()">
+	<s:states>
+		<s:State name="State1"/>
+		<s:State name="dialogState"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import CiF.LineOfDialogue;
+			import CiF.Predicate;
+			import CiF.Rule;
+			import CiF.SocialNetwork;
+			import CiF.Status;
+			import CiF.Trait;
+			
+			import adobe.utils.CustomActions;
+			
+			import flash.display.Bitmap;
+			import flash.display.BitmapData;
+			import flash.display.DisplayObject;
+			import flash.display.Loader;
+			import flash.display.SimpleButton;
+			import flash.display.SpreadMethod;
+			import flash.display.Sprite;
+			import flash.events.ErrorEvent;
+			import flash.events.Event;
+			import flash.events.EventDispatcher;
+			import flash.events.KeyboardEvent;
+			import flash.events.MouseEvent;
+			import flash.events.SecurityErrorEvent;
+			import flash.events.TextEvent;
+			import flash.geom.Point;
+			import flash.net.URLLoader;
+			import flash.net.URLRequest;
+			import flash.sampler.NewObjectSample;
+			import flash.text.TextField;
+			import flash.text.TextFormat;
+			import flash.utils.Dictionary;
+			import flash.utils.getDefinitionByName;
+			
+			import flashx.textLayout.conversion.TextConverter;
+			import flashx.textLayout.elements.Configuration;
+			import flashx.textLayout.elements.FlowElement;
+			import flashx.textLayout.elements.FlowGroupElement;
+			import flashx.textLayout.elements.LinkElement;
+			import flashx.textLayout.elements.TextFlow;
+			import flashx.textLayout.events.FlowElementMouseEvent;
+			import flashx.textLayout.formats.Float;
+			import flashx.textLayout.formats.TextDecoration;
+			import flashx.textLayout.formats.TextLayoutFormat;
+			
+			import grailgm.*;
+			
+			import mismanor.CharacterSheet;
+			import mismanor.DialogueSystemOld;
+			import mismanor.GUITab;
+			import mismanor.GameCharacter;
+			import mismanor.GameItem;
+			import mismanor.GameState;
+			import mismanor.Map;
+			import mismanor.OpeningScreen;
+			import mismanor.Player;
+			import mismanor.Room;
+			import mismanor.XMLIO;
+			import mismanor.event.CharacterSheetEvent;
+			import mismanor.event.DialogueEvent;
+			
+			import mx.collections.ArrayList;
+			import mx.containers.HBox;
+			import mx.controls.Alert;
+			import mx.controls.CheckBox;
+			import mx.events.FlexEvent;
+			import mx.events.Request;
+			import mx.events.ResizeEvent;
+			
+			import org.osmf.utils.URL;
+			
+			import spark.components.Label;
+			import spark.components.TextArea;
+			import spark.primitives.Line;
+
+				
+				// rooms
+			[Embed(source='img/drawingroom.jpg')]
+			private var room1BackgroundClass:Class;
+			[Embed(source = 'img/gardens.jpg')]
+			private var room2BackgroundClass:Class;
+			[Embed(source='img/outside.jpg')]
+			private var room3BackgroundClass:Class;
+			
+			// character graphics
+			[Embed(source = 'img/playerfemale.png')]
+			private var playerFemaleClass:Class;
+			[Embed(source = 'img/player.png')]
+			private var playerMaleClass:Class;
+			[Embed(source = 'img/violet.png')]
+			private var violetClass:Class;
+			[Embed(source = 'img/stableboy2.png')]
+			private var jamesClass:Class;
+			[Embed(source = 'img/colonel2.png')]
+			private var colonelClass:Class;
+			
+			// items
+			[Embed(source = 'img/Book.png')]
+			private var bookClass:Class;
+			[Embed(source = 'img/Book_2.png')]
+			private var blueBookClass:Class;
+			[Embed(source = 'img/gate.png')]
+			private var gateClass:Class;
+			[Embed(source = 'img/statue.png')]
+			private var statueClass:Class;
+			[Embed(source = 'img/Wine_2.png')]
+			private var whiteWineClass:Class;
+			[Embed(source = 'img/Wine2.png')]
+			private var wineClass:Class;
+			
+			// font
+			[Embed(source = 'font/BOD_R.TTF', fontFamily='bodoni', fontWeight='normal', embedAsCFF='false', mimeType='application/x-font')]
+			private var bodoniClass:Class;
+			[Embed(source = 'font/BOD_B.TTF', fontFamily='bodoni', fontWeight='bold', embedAsCFF='false', mimeType='application/x-font')]
+			private var bodoniBoldClass:Class;
+			[Embed(source = 'font/BOD_R.TTF', fontFamily='bodoni', fontWeight='normal', embedAsCFF='true', mimeType='application/x-font')]
+			private var bodoniCFFClass:Class;
+			[Embed(source = 'font/BOD_B.TTF', fontFamily='bodoni', fontWeight='bold', embedAsCFF='true', mimeType='application/x-font')]
+			private var bodoniBoldCFFClass:Class;
+			
+			// UI elements
+			private var questTab:GUITab = new GUITab();
+			private var inventoryTab:GUITab = new GUITab();
+			private var statsTab:GUITab = new GUITab();
+			private var tabFade:Number = 0.5;
+		
+			//Map element on the HUD
+			protected var gameMap:Map = new Map();
+			
+		
+			// inventory box
+			private var inventoryBox:TextField = new TextField();
+			// quest journal
+			private var questJournal:TextField = new TextField();
+			// stats box
+			private var statsBox:TextField = new TextField();
+			
+			// status info
+			private var statusInfo:TextField = new TextField();
+			private var statusSpr:Sprite = new Sprite();
+			
+			// UI element after clicking character
+			private var charMenuText:TextField = new TextField();
+			private var charMenuInvButton:SimpleButton = new SimpleButton();
+			private var charMenuStatButton:SimpleButton = new SimpleButton();
+			private var charMenuStatText:TextField = new TextField();
+			private var charMenuItemBG:TextField = new TextField();
+			private var charMenuItemCurr:GameItem = new GameItem();
+			private var itemCM:int = -1;
+			private var charMenuX:Number = 0;
+			private var charMenuY:Number = 0;
+			
+			// text formatting for UI elements
+			private var defaultTextFormat:TextFormat = new TextFormat();
+			
+			private var statusDefaultTextFormat:TextFormat = new TextFormat();
+			
+			// keep track of who the current responder is
+			private var responderName:String;
+			//quest helper variables
+			private var questList:Array = new Array(); // text for quest journal
+			
+			//game variables
+			private var grailGM:GrailGM = GrailGM.getInstance();
+			private var gameStateXML:String = "finalstate.xml";
+			private var gameLibraryXML:String = "finallibrary.xml";
+			private var settingsXML:String = "Settings.xml";
+			protected var gameState:GameState = GameState.getInstance();
+			private var player:Player;
+			private var currentOther:String; // Used when figuring out possible effects
+			protected var stateLoaded:Boolean = false;
+			protected var libLoaded:Boolean = false;
+			
+			// Opening Screen
+			private var openingScreen:OpeningScreen;
+			// Character selection variables
+			private var charCreationScreen:CharacterSheet;
+			
+			// Settings Variables
+			private var hideCrashes:Boolean;
+			private var showIntents:Boolean;
+			private var autoSave:Boolean;
+			private var numOptionsToShowPlayer:Number = 5;
+			
+			// Diagnostic Variables
+			private var userName:String;
+			private var userNumber:Number;
+			
+			private var dialogList:ArrayList;// = new ArrayList();
+			private var dialogi:int = 1;
+			private var dialogText:TextField = new TextField();
+			
+			// TODO: This is a hack for the demo. This should be removed! 
+			// knowledge traits
+			public static const KNOWLEDGE:Number = 38;
+			public static const BACKSTORY:Number = 39;
+			public static const PERSONAL:Number = 40;
+			public static const FACTUAL:Number = 41;
+			public static const EMOTIONAL:Number = 42;
+			public static const ENDGAME:Number = 43;
+			public static const JAMES_LINE:Number = 44;
+			public static const COLONEL_LINE:Number = 45;
+			public static const VIOLET_LINE:Number = 46;
+			public static const CULT_LINE:Number = 47;
+			//knowledge statuses
+			public static const FIRST_KNOWLEDGE_STATUS:int = 31;
+			public static const ACTIVE:int = 31;
+			public static const TRUE:int = 32;
+			public static const FALSE:int = 33;
+			
+			//type of dialog
+			
+			public static const OFFER_OTHERS:String = "Offer Others";
+			public static const OTHER_CHOSEN:String = "Other Chosen";
+			public static const EFFECT_CHOSEN:String = "Effect Chosen";
+			public static const ITEM_MOVE_SELECTED:String = "Item Move Selected";
+			public static const CONTINUE_MOVE:String = "Continue Move";
+			public static const RESPONDING_ITEM_MOVE:String = "Responding Item Move";
+			public static const CONTINUE_ITEM_MOVE:String = "Continue Item Move";
+			public static const FINISH_MOVE:String = "Finish Move";
+			public static const ITEM_CLICKED:String = "Item Clicked";
+			
+			public var typeOfDialog:String;
+			public var playerIsInitiator:Boolean = false;
+			
+			// AI agent stuff
+			public var isAIPlayer:Boolean = false;
+			public var mechanicList:Vector.<String> = new Vector.<String>();
+			
+			public var movesLeft:int = 5;
+			public var chosenMove:String;
+			public var loader:URLLoader;
+			public var numTimes:int = 0;
+			public var totalTimes:int = 100;
+			
+			
+			public function onLoadComplete():void {		
+				if (stage) {
+					init();
+				}
+				else {
+					addEventListener(Event.ADDED_TO_STAGE, init);
+				}
+			}
+
+		
+			public function clean(): void {
+				if (this.gameMap)
+					this.gameMap.clean();
+		
+				if (this.gameState)
+					this.gameState.clean();
+					
+				this.gameMap = new Map;
+				this.gameState = GameState.getInstance();
+			}
+					
+			// This should default to using URLs of local files
+			public function loadState(path:String=""):void {
+				
+			}
+			
+			// This should default to using URLs of local files
+			public function loadLibrary(path:String=""):void {
+				
+			}
+			
+			// reset the game so it can be run again
+			public function reset(): void
+			{
+		//		var xmlState:File= File.userDirectory.resolvePath(gameStateXML);
+		//		if(!xmlState.exists)
+		//			File.applicationDirectory.resolvePath(gameStateXML).copyTo(xmlState,true);
+		//		var xmlLibrary:File = File.userDirectory.resolvePath(gameLibraryXML);
+		//		if(!xmlLibrary.exists)
+		//			File.applicationDirectory.resolvePath(gameLibraryXML).copyTo(xmlLibrary,true);
+				grailGM.reset();
+				clean();
+				// TODO: Figure out way to gracefully reset it without file dependencies. URLs?
+				// reset the state
+		//		stateLoaded = false;
+				loadState();
+				
+				// reload the library
+		//		libLoaded = false;
+				loadLibrary();	
+		
+				// TODO: This should go into the state xml file!
+				var livingRoom:Room = new Room();
+				livingRoom.name = "living room";
+				livingRoom.id = Map.LIVING_ROOM;
+				if (!isAIPlayer)
+				{
+					livingRoom.graphic = new room1BackgroundClass();
+				}
+				this.gameMap.locationList.push(livingRoom);
+				
+				var diningRoom:Room = new Room();
+				diningRoom.name = "dining room";
+				diningRoom.id = Map.DINING_ROOM;
+				if (!isAIPlayer)
+				{
+					diningRoom.graphic = new room2BackgroundClass();
+				}
+				this.gameMap.locationList.push(diningRoom);
+				
+				var gardens:Room = new Room();
+				gardens.name = "gardens";
+				gardens.id = Map.GARDENS;
+				if (!isAIPlayer)
+				{
+					gardens.graphic = new room3BackgroundClass();
+				}
+				this.gameMap.locationList.push(gardens);
+				
+				grailGM.world = this.gameMap as World;
+			}
+					
+		
+				
+			public function onClose(e:Event): void {
+			}
+			
+			public function onError(e:Error):void {
+				e.message += " " + userName + "/" + userNumber;
+			}
+			
+			public function savePlayFileSnapshot(e:Event): void {
+			}
+			
+			public function saveObjsSnapshot(e:Event): void {
+				//Diagnostics.saveObjsFile(grailGM);
+			}
+							
+			
+			protected function initPlayer(): void	{
+				for each (var char:GameCharacter in grailGM.charList)
+				{
+					if (char.name.toLowerCase() == "player")
+					{
+						player = char as Player;
+					}
+				}
+			}
+			
+			protected function initGraphics(): void {
+				// Testing File I/O
+				//writeMoves();
+				
+				// Go through the character list and get the graphics set up
+				for each (var character:GameCharacter in grailGM.charList)
+				{
+					trace("INIT GRAPHICS " + character.name.toLowerCase());
+					switch (character.name.toLowerCase())
+					{
+						case "player":
+						case "thomas":
+							character.graphic = new playerMaleClass();
+							break;
+						case "colonel":
+							character.graphic = new colonelClass();
+							break;
+						case "violet":
+						case "liz":
+						case "baroness":
+							character.graphic = new violetClass();
+							break;
+						case "james":
+							character.graphic = new jamesClass();
+							break;
+						default:
+							trace( character.name + " does not have a graphic file associated with it.");
+							break;
+					}
+					
+					if (character.roomSide == "right")
+						character.graphic.x = width - character.graphic.width; 
+					else
+						character.graphic.x = 0;
+						
+					character.graphic.y = height - character.graphic.height - 50 + character.yOffset;
+					character.graphic.visible = false;
+					character.characterContainer.addEventListener(MouseEvent.CLICK, characterClicked);
+					character.characterContainer.addChild(character.graphic);
+					character.characterContainer.buttonMode = true;
+					mainGraphics.addChild(character.characterContainer);
+					
+					// put the character behind the inventory UI
+					character.characterContainer.setChildIndex(character.graphic, character.characterContainer.getChildIndex(character.inventoryUI.itemBG));
+					
+					// need to do this for items in inventory as well. Kind of hacky, but can't think of a better way to do it at the moment
+					// problem: This stuff is called after the items are copied into the inventory when the XML is being parsed
+					var item:GameItem;
+					
+					for each (item in character.inventory.items)
+					{
+						switch (item.name.toLowerCase())
+						{
+							case "violet's diary":
+								item.graphic = new bookClass();
+								break;
+							case "colonel's diary":
+								item.graphic = new blueBookClass();
+								break;
+							case "gate":
+								item.graphic = new gateClass();
+								break;
+							case "cult statue":
+								item.graphic = new statueClass();
+								break;
+							case "wine":
+								item.graphic = new wineClass();
+								break;
+							case "white wine":
+								item.graphic = new whiteWineClass();
+								break;
+							default:
+								trace( item.name + " does not have a graphic file associated with it.");
+						}
+						
+						item.graphic.x = item.x;
+						item.graphic.y = item.y;
+						item.graphic.visible = false;
+						item.itemContainer.addEventListener(MouseEvent.CLICK, itemClicked);
+						item.itemContainer.addChild(item.graphic);
+						item.itemContainer.buttonMode = true;
+						mainGraphics.addChild(item.itemContainer);	
+					}
+					
+					//addChild(dialog.triangle);
+				}
+				
+				// All items in the list. Duplicating work, not sure how to fix, see comment above
+				for each (item in grailGM.itemList)
+				{
+					switch (item.name.toLowerCase())
+					{
+						case "book":
+							item.graphic = new bookClass();
+							break;
+						case "blue book":
+							item.graphic = new blueBookClass();
+							break;
+						case "gate":
+							item.graphic = new gateClass();
+							break;
+						case "cult statue":
+							item.graphic = new statueClass();
+							break;
+						case "wine":
+							item.graphic = new wineClass();
+							break;
+						case "white wine":
+							item.graphic = new whiteWineClass();
+							break;
+						default:
+							trace( item.name + " does not have a graphic file associated with it.");
+							break;
+					}
+						
+					item.graphic.x = item.x;
+					item.graphic.y = item.y;
+					item.graphic.visible = false;
+					item.itemContainer.addEventListener(MouseEvent.CLICK, itemClicked);
+					item.itemContainer.addChild(item.graphic);
+					item.itemContainer.buttonMode = true;
+					mainGraphics.addChild(item.itemContainer);	
+				}
+				
+			}
+				
+			private function itemGraphicLoadComplete(e:Event):void {
+				var loader:Loader = e.currentTarget.loader as Loader;
+				var item:GameItem = this.gameState.getItemByLoader(loader);
+				
+				if (item)
+				{
+					item.graphic = Bitmap( loader.contentLoaderInfo.content );
+				// set appropriate x, y values and such
+				// TODO: Need to add this stuff to the xml file
+					item.graphic.x = item.x;
+					item.graphic.y = item.y;
+					item.graphic.visible = false;
+					item.itemContainer.addEventListener(MouseEvent.CLICK, itemClicked);
+					item.itemContainer.addChild(item.graphic);
+					item.itemContainer.buttonMode = true;
+					mainGraphics.addChild(item.itemContainer);	
+				}
+			}
+				
+			private function playerGraphicLoadComplete(e:Event):void {
+				player.graphic = Bitmap(player.graphicLoader.contentLoaderInfo.content);
+				player.graphic.x = 0;
+				player.graphic.y = height - player.graphic.height - 50;
+				player.graphic.visible = false;
+				player.characterContainer.addChild(player.graphic);
+				mainGraphics.addChild(player.characterContainer);
+			}
+		
+			// if we move away from the dialog Box interface, we can move this to the game character class and lose all the getcharbycontainer crap
+			private function characterClicked(e:MouseEvent): void {
+				// do character clicked stuff here!
+				if (gameState.midAction == false) {
+					gameMap.shareKnowsInRoom(player);
+					var clickGraphic:Sprite = e.currentTarget as Sprite;
+					gameState.curCharacter = gameState.getCharByContainer(clickGraphic);
+					responderName = gameState.curCharacter.name;
+	
+					showCharMenu(e);
+	
+					//Makes each character except for the one clicked on invisible.
+					for each (var char:GameCharacter in grailGM.charList)
+					{
+						if (gameState.curCharacter.name.toLowerCase() != char.name.toLowerCase() && char.name.toLowerCase() != "player")
+						{
+							
+							char.hide();
+							//char.hideInventory();
+						}
+					}
+				}
+			}
+				
+			private function showCharMenu(e:MouseEvent):void {
+				charMenuX = e.stageX-x;
+				charMenuY = e.stageY-y;
+				
+				// Update status text
+				statusInfo.defaultTextFormat = statusDefaultTextFormat;
+				statusInfo.text = "Choose action with " + responderName;
+				
+				// Set up text box
+				charMenuText.defaultTextFormat = defaultTextFormat;
+				charMenuText.x = e.stageX-x;
+				charMenuText.y = e.stageY-y;
+				charMenuText.htmlText = "Social action options for " + responderName;
+				var moves:String = grailGM.printMoves(player.name, responderName, numOptionsToShowPlayer, showIntents, isAIPlayer) + "<a href =\"event:Cancel\">Cancel</A>";
+				
+				charMenuText.htmlText += "\n" + moves;
+				charMenuText.visible = true;
+				//Add another function for AI so doesn't have to depend on AI?/////////
+				charMenuText.addEventListener(TextEvent.LINK, offerOthers);
+				menuGraphics.addChild(charMenuText);
+				
+				//Set up buttons
+				charMenuInvButton.x = e.stageX- x;
+				charMenuInvButton.y = e.stageY + charMenuText.height;
+				charMenuInvButton.visible = true;
+				charMenuInvButton.addEventListener(MouseEvent.CLICK, invButtonClicked);
+				charMenuStatButton.x = e.stageX - x+ 20;
+				charMenuStatButton.y = e.stageY + charMenuText.height;
+				charMenuStatButton.visible = true;
+				charMenuStatButton.addEventListener(MouseEvent.CLICK, charButtonClicked);
+				
+				if (e.stageX-x > (width / 2))
+				{
+					charMenuText.x -= charMenuText.width;
+					charMenuInvButton.x -= charMenuText.width;
+					charMenuStatButton.x -= charMenuText.width;
+				}
+				if(charMenuInvButton.parent==null)
+				menuGraphics.addChild(charMenuInvButton);
+				if(charMenuStatButton.parent==null)
+				menuGraphics.addChild(charMenuStatButton);
+				
+				//addElement(menuGraphics);
+				// Refresh side menus
+				if (charMenuItemBG.visible && charMenuStatText.visible)
+				{
+					charMenuStatText.visible = false;
+					showCharMenuItemBG();
+					charMenuStatText.visible = true;
+					placeWindowCM(charMenuStatText,charMenuItemBG);
+				}
+				else {
+					if (charMenuItemBG.visible) showCharMenuItemBG();
+					if (charMenuStatText.visible) placeWindowCM(charMenuStatText,charMenuItemBG);
+				}
+				
+				charMenuStatText.htmlText = gameState.curCharacter.getStatuses() + "\n";
+				
+			}
+				
+			private function hideCharMenu():void {
+				charMenuText.htmlText = "";
+				charMenuText.removeEventListener(TextEvent.LINK, offerOthers);
+				charMenuText.visible = false;
+				charMenuInvButton.visible = false;
+				charMenuStatButton.visible = false;
+				charMenuItemBG.visible = false;
+//				menuGraphics.removeChild(charMenuText);
+//				menuGraphics.removeChild(charMenuInvButton);
+//				menuGraphics.removeChild(charMenuStatButton);
+				if (charMenuItemBG.visible) menuGraphics.removeChild(charMenuItemBG);
+				if (itemCM != -1) {
+					if (charMenuItemCurr.graphic.visible) menuGraphics.removeChild(charMenuItemCurr.graphic);
+				}
+				if (charMenuStatText.visible) menuGraphics.removeChild(charMenuStatText);
+				charMenuStatText.visible = false;
+			}
+				
+			private function charButtonClicked(event:MouseEvent):void {
+				if (!charMenuStatText.visible) {
+					placeWindowCM(charMenuStatText,charMenuItemBG);
+					charMenuStatText.visible = true;
+					menuGraphics.addChild(charMenuStatText);
+				}
+				else {
+					charMenuStatText.visible = false;
+					menuGraphics.removeChild(charMenuStatText);
+					placeWindowCM(charMenuItemBG, charMenuStatText);
+					if (itemCM != -1) showCharMenuItemContent(itemCM)
+				}
+			}
+				
+			private function invButtonClicked(event:MouseEvent):void {
+				if (!charMenuItemBG.visible) {
+					showCharMenuItemBG();
+				}
+				else {
+					if (itemCM != -1) {
+						charMenuItemCurr.graphic.visible = false;
+						mainGraphics.removeChild(charMenuItemCurr.graphic);
+					}
+					charMenuItemBG.removeEventListener(MouseEvent.CLICK, charMenuNextItem);
+					itemCM = -1;
+					charMenuItemBG.visible = false;
+					mainGraphics.removeChild(charMenuItemBG);
+					placeWindowCM(charMenuStatText, charMenuItemBG);
+				}
+			}
+				
+			// Used for calculating the placement of a CharMenu window
+			private function placeWindowCM(window:TextField,otherWindow:TextField):void {
+				if (charMenuX < (mainGraphics.width / 2)) {
+					window.x = charMenuX + charMenuText.width + 10;
+					if (otherWindow.visible) window.x += 10 + otherWindow.width;
+				}
+				else {
+					window.x = charMenuX - 10 - window.width - charMenuText.width;
+					if (otherWindow.visible) window.x -= 10 + otherWindow.width;
+				}
+				window.y = charMenuY;
+			}
+				
+			private function showCharMenuItemBG():void {
+				charMenuItemBG.visible = true;
+				placeWindowCM(charMenuItemBG, charMenuStatText);
+				mainGraphics.addChild(charMenuItemBG);
+				if (gameState.curCharacter.inventory.items.length != 0) {
+					showCharMenuItemContent(0);
+					charMenuItemBG.addEventListener(MouseEvent.CLICK, charMenuNextItem);
+				}
+			}
+				
+			private function charMenuNextItem(e:MouseEvent):void {
+				itemCM = (itemCM + 1) % gameState.curCharacter.inventory.items.length;
+				showCharMenuItemContent(itemCM);
+			}
+				
+			private function showCharMenuItemContent(i:int):void {
+				if (itemCM != -1) {
+					charMenuItemCurr.graphic.visible = false;
+					mainGraphics.removeChild(charMenuItemCurr.graphic);
+				}
+				itemCM = i;
+				trace("itemCM = " + i);
+				if (i < gameState.curCharacter.inventory.items.length) {
+					charMenuItemCurr = gameState.curCharacter.inventory.items[i] as GameItem;
+					charMenuItemCurr.graphic.visible = true;
+					charMenuItemCurr.graphic.x = charMenuItemBG.x + 5;
+					charMenuItemCurr.graphic.y = charMenuItemBG.y + 5;
+					mainGraphics.addChild(charMenuItemCurr.graphic);
+				}
+			}
+				
+				// Click event for any object item 
+			private function itemClicked(event:MouseEvent):void {
+			//		try{
+					if (gameState.midAction == false) {
+						 gameMap.shareKnowsInRoom(player);
+						//TODO: Is there a cleaner way to do this?
+						typeOfDialog = ITEM_CLICKED;
+						var clickGraphic:Sprite = event.currentTarget as Sprite;
+						gameState.curItem = gameState.getItemByContainer(clickGraphic);
+						responderName = gameState.curItem.name;
+						//dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+						var string:String = "Item options for " + responderName + "\n";
+						string += grailGM.printItemMoves(player.name, responderName, numOptionsToShowPlayer, showIntents);
+						dialog.dialogBox.textFlow = TextConverter.importToFlow(string,TextConverter.TEXT_FIELD_HTML_FORMAT,cfg);
+						try {
+							dialog.dialogBox.removeEventListener(TextEvent.LINK, offerOthers);
+						} catch(errObject:Error) {
+							trace("no char event to remove from itemClicked");
+						}
+						try {
+							dialog.dialogBox.removeEventListener(TextEvent.LINK, itemMoveSelected);
+						} catch(errObject:Error) {
+							trace("no item event to remove from itemClicked");
+						}
+						dialog.dialogBox.addEventListener(TextEvent.LINK, itemMoveSelected);
+					}
+			/*	} catch (e:Error) {
+					if (hideCrashes == false) { 
+						onError(e);
+					}
+					else { 
+						onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+					}
+				}
+		*/	}
+			
+			public static function addLinkClickHandler(html:String, 
+													   linkClickedHandler:Function):TextFlow {
+				var textFlow:TextFlow = TextConverter.importToFlow(html, 
+					TextConverter.TEXT_FIELD_HTML_FORMAT,cfg);
+				for(var i:int = 0; i < textFlow.numChildren; i++) { 
+					var element:FlowElement = textFlow.getChildAt(i);
+					var links:Array = findLinkElements(textFlow);
+					for each(var linkElement:LinkElement in links) {
+						if (linkElement != null) {
+							linkElement.addEventListener(FlowElementMouseEvent.CLICK, 
+								linkClickedHandler, false, 0, true);
+						} else {
+							trace("Warning - couldn't find link tag in: " + html);
+						}
+					}
+				}
+				return textFlow;
+			}
+			
+			/**
+			 * Finds the first LinkElement recursively and returns it.
+			 */
+			private static function findLinkElements(group:FlowGroupElement,arr:Array=null):Array {
+				var childGroups:Array = [];
+				if(arr==null)
+				arr = new Array();
+				// First check all the child elements of the current group,
+				// Also save any children that are FlowGroupElement
+				for (var i:int = 0; i < group.numChildren; i++) {
+					var element:FlowElement = group.getChildAt(i);
+					if (element is LinkElement) {
+						arr.push(element);
+					} else if (element is FlowGroupElement) {
+						childGroups.push(element);
+					}
+				}
+				// Recursively check the child FlowGroupElements now
+				for (i = 0; i < childGroups.length; i++) {
+					var childGroup:FlowGroupElement = childGroups[i];
+					findLinkElements(childGroup,arr);
+				}
+				return arr;
+			}
+		
+			private function offerOthers(e:TextEvent):void {
+		//	try {
+//				hideCharMenu();
+//				dialog.visible=true;
+				// remove ability to interrupt responding move
+				gameMap.disableMap();
+				gameState.midAction = true;
+				typeOfDialog = OFFER_OTHERS;
+				charMenuText.removeEventListener(TextEvent.LINK, offerOthers);
+				playerIsInitiator = true;
+				// Skip along as normal if sg is "Complete Quest" or if it requires no other
+				if (e.text == "Cancel") {
+					finishMove(new TextEvent(TextEvent.LINK));
+				}
+				else if (e.text == "Complete Quest") {
+					
+					var tflow:TextFlow = addLinkClickHandler(grailGM.completeQuest(player.name, responderName),finishMove);
+					dialog.dialogBox.textFlow = tflow;
+					typeOfDialog = FINISH_MOVE;
+					//dialog.addEventListener(MouseEvent.CLICK, triclicked);h
+					this.questJournal.defaultTextFormat = defaultTextFormat;
+					questJournal.htmlText = "Quest Journal\n\n";
+			//		updateStatsText();
+				} else {
+					//dialog.dialogBox.visible = false;///////////////////
+					var stringContent:String = grailGM.offerOthers(e.text, player.name, responderName, isAIPlayer);
+					charMenuText.htmlText = stringContent;
+					charMenuText.visible = true;
+					if (grailGM.gameWaitingForInput)
+					{
+						charMenuText.addEventListener(TextEvent.LINK, otherChosen);
+					}
+					else
+					{
+						//add stuff to this for triangle continue
+						var linkElem:LinkElement = new LinkElement();
+						linkElem = TextConverter.importToFlow("<a href =\"event:continue\">Continue...</a>",TextConverter.TEXT_FIELD_HTML_FORMAT,cfg) as LinkElement;
+						dialog.dialogBox.textFlow.addChild(linkElem);
+		
+						//dialog.dialogBox.addEventListener(TextEvent.LINK, continueMove);
+						typeOfDialog = CONTINUE_MOVE;
+						displayDialog(stringContent);////////////////////////////
+		
+		
+					}
+				}
+//				player.inventoryUI.updateInventoryItemPositions(player, inventoryBox.x, inventoryBox.y + 10, 60, inventoryBox.width, inventoryBox.height );
+		/*	} catch (e:Error) {
+					if (hideCrashes == false) { 
+						onError(e);
+					}
+					else { 
+						onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+					}
+				}
+		*/	}
+		
+			//3 person moves
+			private function otherChosen(e:TextEvent): void {
+				typeOfDialog = OTHER_CHOSEN;
+				charMenuText.removeEventListener(TextEvent.LINK, otherChosen);
+				hideCharMenu();
+				//dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+				//dialog.dialogBox.visible = false;
+				playerIsInitiator = true;
+				var dialogString:String = grailGM.otherChosen(player.name, responderName, e.text, isAIPlayer);
+				dialog.dialogBox.textFlow = TextConverter.importToFlow(dialogString,TextConverter.TEXT_FIELD_HTML_FORMAT);
+				if (grailGM.gameWaitingForInput)
+					dialog.dialogBox.addEventListener(TextEvent.LINK, effectChosen);
+				else
+				{
+					//dialog.dialogBox.htmlText += "<a href =\"event:continue\">Continue...</A>";
+//					trace("otherChosen HERE HAVE SOME TEXT "+dialog.dialogBox.text);
+					//dialog.dialogBox.addEventListener(TextEvent.LINK, continueMove);
+					typeOfDialog = CONTINUE_MOVE;
+					displayDialog(dialogString);
+				}
+			}
+			
+		
+				
+			private function effectChosen(e:TextEvent): void {
+				typeOfDialog = EFFECT_CHOSEN;
+				dialog.dialogBox.removeEventListener(TextEvent.LINK, effectChosen);
+				//	dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+				playerIsInitiator = true;
+				var dialogString:String = grailGM.effectChosen(player.name, responderName, e.text, isAIPlayer);
+				dialog.dialogBox.textFlow = TextConverter.importToFlow(dialogString,TextConverter.TEXT_FIELD_HTML_FORMAT,cfg);
+				
+				typeOfDialog = CONTINUE_MOVE;
+				displayDialog(dialogString);
+//				trace("effectChosen HERE HAVE SOME TEXT "+dialog.dialogBox.htmlText);
+			}
+		
+		
+				
+			private function itemMoveSelected(e:TextEvent):void {
+		//			try{
+					// remove ability to interrupt responding move
+					gameMap.disableMap();
+					gameState.midAction = true;
+					typeOfDialog = ITEM_MOVE_SELECTED;
+					dialog.dialogBox.removeEventListener(TextEvent.LINK, itemMoveSelected);
+					
+			//		dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+					//dialog.dialogBox.visible = false;
+					playerIsInitiator = true;
+					typeOfDialog = CONTINUE_ITEM_MOVE;
+					//				
+					var dialogString:String = grailGM.itemMoveSelected(e.text, player.name, responderName, isAIPlayer);
+					//dialog.dialogBox.textFlow = TextConverter.importToFlow(dialogString,TextConverter.TEXT_FIELD_HTML_FORMAT,cfg);
+					displayDialog(dialogString);
+					
+					//dialog.dialogBox.addEventListener(TextEvent.LINK, continueItemMove);
+					
+					// Take care of item graphics for items that have moved around
+					for (var i:Number = 0; i < grailGM.itemList.length; i++)
+					{
+						var item:GameItem = grailGM.itemList[i] as GameItem;
+						if (item.isHeld())
+						{
+							item.curLocation = Map.INVENTORY;
+							item.graphic.visible = false;
+						}
+						else
+						{
+							item.graphic.x = item.x;
+							item.graphic.y = item.y;
+						}
+					}
+						
+						//dialog.dialogBox.addEventListener(TextEvent.LINK, effectChosen);
+		/*			} catch (e:Error) {
+						if (hideCrashes == false) { 
+							onError(e);
+						}
+						else { 
+							onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+						}
+					}
+		*/	}
+		
+			private function itemMoveSelectedAi(move:String):void {
+				gameState.midAction = true;
+				typeOfDialog = ITEM_MOVE_SELECTED;
+				playerIsInitiator = true;
+				typeOfDialog = CONTINUE_ITEM_MOVE;
+				var response:String = grailGM.itemMoveSelected(move, player.name, responderName, isAIPlayer);
+				//playtraceresponse);
+			}
+		
+			//instead of displaying text returned from grailGM then enabling continueMove, call new display text function
+			//which does new UI style and calls responding move when done
+			private function displayDialog(s:String):void {
+				hideCharMenu();
+				if(s) {
+					currentState="dialogState";
+				dialogList = new ArrayList();
+				var d:String;
+				var a:Array = s.split('<br>', s.length);
+//				for (var j:int = a.length-1; j >= 0; j--) {
+//					if((a[j] as String).match(/\S+/)==null||a[j]=="")
+//						a.
+//				}
+				var sub:String;
+				//dialog.addEventListener(MouseEvent.CLICK, triclicked);
+				for (var i:int = 0; i < a.length; i++)
+				{
+					trace("displayDialog: i= " + (i));
+					trace(a[i]);
+					if(a[i].toString() == "" || i==0)
+						continue;
+					//suba[i] = a[i];//sub;
+					sub = a[i].toString();
+					dialogList.addItem(a[i]);
+					//trace("dialogList length=" + dialogList.length);
+				}
+		
+				statusInfo.defaultTextFormat = statusDefaultTextFormat;
+				statusInfo.text = grailGM.systemMessage;
+				d = dialogList.getItemAt(0) as String;
+				dialog.dialogBox.textFlow = TextConverter.importToFlow(d,TextConverter.TEXT_FIELD_HTML_FORMAT,cfg);
+				dialog.addEventListener(MouseEvent.CLICK, triclicked);
+				}
+			}
+				
+			private function resetChars():void {
+				player.graphic.visible = false;
+				gameState.curCharacter.graphic.visible = true;
+				
+				if (gameState.curCharacter.roomSide == "right")
+				{
+					gameState.curCharacter.graphic.scaleX = 1;
+					gameState.curCharacter.graphic.x = width - gameState.curCharacter.graphic.width; // - questJournal.width;
+				}
+				else
+				{
+					gameState.curCharacter.graphic.x = 0;
+				}
+			}
+
+			//displays character picture depending on whether they are the initiator or not
+			private function displayChar(str:String):void {
+				if (playerIsInitiator)
+				{
+					if (gameState.curCharacter.roomSide != "right")
+					{
+						gameState.curCharacter.graphic.scaleX = -1;
+						gameState.curCharacter.graphic.x = width;
+					}
+					else
+						gameState.curCharacter.graphic.x = width - gameState.curCharacter.graphic.width;
+					player.graphic.scaleX = -1;
+					player.graphic.x = player.graphic.width;
+				}
+				else
+				{
+					if (gameState.curCharacter.roomSide == "right")
+					{
+						gameState.curCharacter.graphic.scaleX = -1;
+						gameState.curCharacter.graphic.x = gameState.curCharacter.graphic.width;
+					}
+					else
+					{
+						gameState.curCharacter.graphic.scaleX = 1;
+						gameState.curCharacter.graphic.x = 0;
+					}
+					
+					player.graphic.scaleX = 1;
+					player.graphic.x = width - player.graphic.width; // - questJournal.width;
+				}
+				//if there's actually dialog and not stuff like "Colonel accepts blah blah" and stuff check to see 
+				//if line is for player or for npc
+				if (str.toLowerCase() == responderName.toLowerCase() || str.toLowerCase() == player.displayName.toLowerCase())
+				{
+					if(str.toLowerCase() == responderName.toLowerCase())
+					{
+						gameState.curCharacter.graphic.visible = true;
+						
+						player.graphic.visible = false;
+					}
+					else
+					{
+						gameState.curCharacter.graphic.visible = false;
+						player.graphic.visible = true;
+		
+					}
+					
+				}
+			}
+				
+			private function triclicked(e:MouseEvent):void 
+			{
+				trace("dialogi: " + dialogi);
+				dialog.dialogBox.visible = true;
+				if (dialogi < dialogList.length)
+				{
+					 var d:String = dialogList.getItemAt(dialogi) as String;
+					 //dialog.dialogBox.visible = true;
+					 var subint:int = d.search(":");
+					//trace("subint: " + subint);
+					if (subint != -1 || subint != 1)
+					{
+					
+						var substr:String = d.substring(0, Number (subint));
+						displayChar(substr);
+					}
+					//trace(d);
+					dialog.dialogBox.textFlow = TextConverter.importToFlow(d,TextConverter.TEXT_FIELD_HTML_FORMAT,cfg);
+					//dialog.dialogBox.visible = true;
+					dialogi++;
+				}
+				
+				if (dialogi >= dialogList.length)
+				{
+					dialogi = 1;
+					
+					dialog.removeEventListener(MouseEvent.CLICK, triclicked);
+					switch(typeOfDialog)
+					{
+						case CONTINUE_MOVE:
+							dialog.triangle.addEventListener(MouseEvent.CLICK, continueMove);
+							break;
+							
+						case FINISH_MOVE:
+							//put stuff here so the character bitmaps look like how they did before they entered dialog
+							resetChars();
+							dialog.triangle.addEventListener(MouseEvent.CLICK, finishMove);
+							break;
+							
+						case OFFER_OTHERS:
+							dialog.addEventListener(MouseEvent.CLICK, offerOthers);
+							break;
+							
+						case EFFECT_CHOSEN:
+							dialog.addEventListener(MouseEvent.CLICK, effectChosen);
+							break;
+							
+						case ITEM_MOVE_SELECTED:
+							dialog.addEventListener(MouseEvent.CLICK, itemMoveSelected);
+							break;
+							
+						case RESPONDING_ITEM_MOVE:
+							dialog.addEventListener(MouseEvent.CLICK, respondingItemMove);
+							break;
+							
+						case CONTINUE_ITEM_MOVE:
+							dialog.addEventListener(MouseEvent.CLICK, continueItemMove);
+							break;
+							
+						case OTHER_CHOSEN:
+							dialog.addEventListener(MouseEvent.CLICK, otherChosen);
+							break;
+							
+						
+					}
+				}
+			}
+				
+			/**
+			 * This is where the other character responds to the player with a move/quest of their own.
+			 */
+			private function continueMove(e:Event):void	{
+			//	try{
+					typeOfDialog = CONTINUE_MOVE;
+					dialog.removeEventListener(MouseEvent.CLICK, continueMove);
+					// dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+					// TODO: Add the possibility for a character to respond with a move aimed at someone other than the player
+		
+					playerIsInitiator = false;
+					dialog.dialogBox.text = grailGM.respondingMove(responderName, player.name, isAIPlayer);
+					
+					typeOfDialog = FINISH_MOVE;
+					displayDialog(dialog.dialogBox.text);
+					trace("continueMove HERE HAVE SOME TEXT "+dialog.dialogBox.text);
+		
+					for each (var char:GameCharacter in grailGM.charList)
+					{
+						char.inventoryUI.hideNPCInventory(char);
+						for each (var item:GameItem in char.inventory.items)
+							mainGraphics.setChildIndex(item.itemContainer, mainGraphics.numChildren-1);
+					}
+					// player needs to go second, otherwise their inventory will be hidden by the call above
+					player.inventoryUI.updateInventoryItemPositions(player, inventoryBox.x, inventoryBox.y + 10, 60, inventoryBox.width, inventoryBox.height );
+		/*		} catch (e:Error) {
+					if (hideCrashes == false) { 
+						onError(e);
+					}
+					else { 
+						onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+					}
+				}
+		*/	}
+			
+			private function continueMoveAi():void {
+				typeOfDialog = CONTINUE_MOVE;
+				playerIsInitiator = false;
+		
+				var response:String = grailGM.respondingMove(responderName, player.name, isAIPlayer);
+				//playtraceresponse);
+				typeOfDialog = FINISH_MOVE;
+			}
+				
+			private function finishMove(e:Event): void {
+			//	try {
+					dialog.removeEventListener(MouseEvent.CLICK, finishMove);
+					gameMap.enableMap();
+					hideCharMenu();
+					gameState.midAction = false;
+					currentState="State1";
+					statusInfo.defaultTextFormat = statusDefaultTextFormat;
+					statusInfo.text = "Click on a character or item to interact.";
+					//trace("FINISHING GAME WITH: " + gameState.curCharacter.name.toLowerCase());
+					//Makes characters visible again
+					for each (var chara:GameCharacter in grailGM.charList)
+						{
+							if (gameState.curCharacter.name.toLowerCase() != chara.name.toLowerCase() && chara.name.toLowerCase() != "player")
+							{
+								chara.show();
+								//chara.showInventory();
+								//trace(char.name.toLowerCase());
+								//trace(gameState.curCharacter.name.toLowerCase());
+							}
+//								chara.graphic.y += dialog.dialogBox.height;
+						}
+					// Deal with updated inventories
+					for each (var char:GameCharacter in grailGM.charList)
+						char.inventoryUI.hideNPCInventory(char);
+					player.inventoryUI.updateInventoryItemPositions(player, inventoryBox.x, inventoryBox.y + 10, 60, inventoryBox.width, inventoryBox.height );
+			/*} catch (e:Error) {
+					if (hideCrashes == false) { 
+						onError(e);
+					}
+					else { 
+						onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+					}
+				}
+		*/	}
+	
+		
+		private function respondingItemMove(e:TextEvent): void {
+//			try {
+				typeOfDialog = RESPONDING_ITEM_MOVE;
+				//dialog.dialogBox.removeEventListener(TextEvent.LINK, respondingItemMove);
+				dialog.removeEventListener(MouseEvent.CLICK, respondingItemMove);
+//				dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+				//dialog.dialogBox.visible = false;
+				var dialogString:String = grailGM.respondingItemMove(player, isAIPlayer);
+				dialog.dialogBox.textFlow = TextConverter.importToFlow(dialogString,TextConverter.TEXT_FIELD_HTML_FORMAT,cfg);
+				typeOfDialog = FINISH_MOVE;
+				displayDialog(dialogString);
+				//displayDialog(dialog.dialogBox.htmlText);
+				//dialog.dialogBox.addEventListener(TextEvent.LINK, finishMove);
+				
+/*			} catch (e:Error) {
+				if (hideCrashes == false) { 
+					onError(e);
+				}
+				else { 
+					onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+				}
+			}
+*/		}
+
+		/**
+		 * AI move
+		 */
+		private function respondingItemMoveAi(): void {
+//			try {
+				typeOfDialog = RESPONDING_ITEM_MOVE;
+				
+				//dialog.removeEventListener(Event.ACTIVATE, respondingItemMoveAi);///////
+				//dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+				//dialog.dialogBox.visible = false;
+				//dialog.dialogBox.htmlText = grailGM.respondingItemMove(player);
+				var result:String = grailGM.respondingItemMove(player, isAIPlayer)
+				//playtraceresult);
+				//writeToPlayTestFile(result);
+				typeOfDialog = FINISH_MOVE;
+				//displayDialog(dialog.dialogBox.text);
+				
+				
+/*			} catch (e:Error) {
+				if (hideCrashes == false) { 
+					onError(e);
+				}
+				else { 
+					onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+				}
+			}
+*/		}
+		
+		private function continueItemMove(e:TextEvent):void {
+//			try {
+				typeOfDialog = CONTINUE_ITEM_MOVE;
+				dialog.dialogBox.removeEventListener(TextEvent.LINK, continueItemMove);
+//				dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+				playerIsInitiator = true;
+				dialog.dialogBox.textFlow = TextConverter.importToFlow(grailGM.effectChosen(player.name, responderName, e.text, isAIPlayer),TextConverter.TEXT_FIELD_HTML_FORMAT,cfg);
+
+				if (grailGM.calculateItemMoveResponse(player))
+					dialog.dialogBox.addEventListener(TextEvent.LINK, respondingItemMove);
+				else
+					dialog.dialogBox.addEventListener(TextEvent.LINK, finishMove);
+				// Deal with updated inventories
+				for each (var char:GameCharacter in grailGM.charList)
+					char.inventoryUI.hideNPCInventory(char);
+				// player needs to go second, otherwise their inventory will be hidden by the call above
+				player.inventoryUI.updateInventoryItemPositions(player, inventoryBox.x, inventoryBox.y + 10, 60, inventoryBox.width, inventoryBox.height );
+	/*		} catch (e:Error) {
+				if (hideCrashes == false) { 
+					onError(e);
+				}
+				else { 
+					onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+				}
+			}
+	*/	}
+	
+		private function continueItemMoveAi(move:String):void {
+//			try {
+				typeOfDialog = CONTINUE_ITEM_MOVE;
+				//dialog.dialogBox.removeEventListener(Event.ACTIVATE, continueItemMoveAi);/////////
+				//dialog.dialogBox.defaultTextFormat = dialog.dialogDefaultTextFormat;
+				playerIsInitiator = true;
+				//dialog.dialogBox.htmlText = grailGM.effectChosen(player.name, responderName, e.text);
+				var result:String;
+				result = grailGM.effectChosen(player.name,responderName,move, isAIPlayer)
+				//playtraceresult);
+				//writeToPlayTestFile(result);
+
+/*				if (grailGM.calculateItemMoveResponse(player))
+					//dialog.dialogBox.addEventListener(Event.ACTIVATE, respondingItemMoveAi);/////////
+				else
+					//dialog.dialogBox.addEventListener(Event.ACTIVATE, finishMoveAi);//////////
+				// Deal with updated inventories
+*/				//for each (var char:GameCharacter in grailGM.charList)
+					//char.inventoryUI.hideNPCInventory(char);
+				// player needs to go second, otherwise their inventory will be hidden by the call above
+				//player.inventoryUI.updateInventoryItemPositions(player, inventoryBox.x, inventoryBox.y + 10, 60, inventoryBox.width, inventoryBox.height );
+	/*		} catch (e:Error) {
+				if (hideCrashes == false) { 
+					onError(e);
+				}
+				else { 
+					onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+				}
+			}
+	*/	}
+				
+		private function keyboardHandler(e:KeyboardEvent): void {
+			var keyPressed:Number = e.keyCode;
+
+			if (keyPressed == 77)
+				this.gameMap.toggleMap();
+			if (keyPressed == 192)
+				savePlayFileSnapshot(null);
+			if (keyPressed == 49)
+				saveObjsSnapshot(null);
+		}
+		
+		private function inventoryTabClicked(event:MouseEvent):void {
+//			try{
+				inventoryTab.graphic.alpha = 1;
+			//	inventoryBox.alpha = 0.5;
+				inventoryBox.visible = true;
+				//trace("resetting inventory text?!");
+				//inventoryBox.htmlText = "Inventory List<br><br>" + player.inventory;
+				//trace(player.inventory);
+				trace(player);
+				player.showInventory();
+				questJournal.visible = statsBox.visible = false;
+				statsTab.graphic.alpha = questTab.graphic.alpha = tabFade;
+	/*		} catch (e:Error) {
+				if (hideCrashes == false) { 
+					onError(e);
+				}
+				else { 
+					onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+				}
+			}
+	*/	}
+		
+		private function questTabClicked(event:MouseEvent):void {
+	//		try{
+				questTab.graphic.alpha = 1;
+				inventoryBox.visible = statsBox.visible = false;
+				player.hideInventory();
+				questJournal.visible = true;
+				statsTab.graphic.alpha = inventoryTab.graphic.alpha = tabFade;
+	/*		} catch (e:Error) {
+				if (hideCrashes == false) { 
+					onError(e);
+				}
+				else { 
+					onError(new Error("We're sorry, but the game has crashed. Adjust settings to see crash info, or check crash logs (User " +userName +"/" + userNumber +")"));
+				}
+			}
+	*/	}
+
+		private function statsTabClicked(event:MouseEvent):void {
+				statsTab.graphic.alpha = 1;
+				statsBox.visible = true;
+				inventoryBox.visible = questJournal.visible = false;
+				player.hideInventory();
+				inventoryTab.graphic.alpha = questTab.graphic.alpha = tabFade;
+		}
+		
+		private function openingScreenClicked(event:MouseEvent):void {
+			openingScreen.removeEventListener(MouseEvent.CLICK, openingScreenClicked);
+			removeElement(openingScreen);
+			charCreationScreen = new CharacterSheet();
+			charCreationScreen.percentHeight=100;
+			charCreationScreen.percentWidth=100;
+			addElement(charCreationScreen);
+			//mainGraphics.removeChild(openingScreen.textFormat);
+			// After the opening screen, display the character creation screen!
+			charCreationScreen.visible = true;
+			charCreationScreen.initTraits(player,grailGM,mainGraphics);
+			charCreationScreen.addEventListener(CharacterSheetEvent.CREATE_SHEET,charSelectDoneClicked);
+		}
+			
+		private function charSelectDoneClicked(evt:CharacterSheetEvent):void 
+		{
+			if ((charCreationScreen.playerPoints + charCreationScreen.posPoints + charCreationScreen.negPoints) >= 0) {
+				// update player name and player graphic (depending on gender)
+				player.displayName = grailGM.playerName = charCreationScreen.playerName.text;
+				if (charCreationScreen.femaleRadio.selected)
+				{
+					player.graphic = new playerFemaleClass();
+				}
+				else
+					player.graphic = new playerMaleClass();
+				
+				player.yOffset = -50;
+				player.graphic.x = 0;
+				player.graphic.y = mainGraphics.height- player.graphic.height - 50;
+				player.graphic.visible = false;
+				player.characterContainer.addChild(player.graphic);
+				mainGraphics.addChild(player.characterContainer);
+				charCreationScreen.visible = false;
+				// Initialize the game playingfield
+				
+				initGame();
+			}
+		}
+	
+		private function updateStatsText():void {
+			statsBox.defaultTextFormat = defaultTextFormat;
+			statsBox.htmlText = "Player Stats<br><br>";
+			statsBox.htmlText += grailGM.getNetworkStats(isAIPlayer);
+			statsBox.htmlText += "\n";
+			statsBox.htmlText += "Statuses:\n";
+			for each (var char:GameCharacter in this.grailGM.charList)
+			{
+				statsBox.htmlText += char.name + ": " + char.getStatuses() + "\n";
+			}
+		}
+		
+		private function initItems(): void {
+			for each (var item:GameItem in grailGM.itemList)
+			{
+				// put the items in the room
+				if (item.curLocation != Map.INVENTORY)
+					this.gameMap.addItemToRoom(item, item.curLocation);
+					
+				// if they are in inventory, make sure they will draw on top of everything else for the inventory UI
+				else 
+				{
+					if(!isAIPlayer)
+						mainGraphics.setChildIndex(item.itemContainer, mainGraphics.numChildren - 1);
+				}
+			}
+		}
+		
+		private function initCharacters(): void	{
+			// Load up all the characters into their correct locations
+			for each (var char:GameCharacter in grailGM.charList)
+			{
+				this.gameMap.addCharToRoom(char, char.curLocation);
+				// TODO: Remove this hack. It is here because currently you can initiate a social move with a character that require an other
+				// and it will match an other that the player doesn't know about. Then it gets stuck because it won't offer you an other you don't know about
+				// but it is waiting for input from the player
+				char.addDirectCharStatus(Status.KNOWN_BY, player);
+			}
+		}
+		public static var cfg:Configuration;
+		private function init(e:Event = null):void {
+//			writeToStatusFile("vanessa"); //make it Mismanor's turn
+			var questJournalWidth:int = 200;
+			var inventoryWidth:int = 200;
+			
+			cfg = new Configuration(true);
+			
+			var normal:TextLayoutFormat=  new TextLayoutFormat();
+			normal.setStyle("fontSize",28);
+			normal.setStyle("fontFamily","bodoni");
+			var normalFmt:TextLayoutFormat = new TextLayoutFormat(cfg.defaultLinkNormalFormat);
+			normalFmt.color = 0x000000; // red
+			normalFmt.textDecoration = TextDecoration.NONE;
+			
+			var hoverFmt:TextLayoutFormat = new TextLayoutFormat(cfg.defaultLinkHoverFormat);
+			hoverFmt.color = 0xFF00FF; // purple
+			hoverFmt.textDecoration = TextDecoration.UNDERLINE;
+			
+			cfg.defaultLinkNormalFormat = normalFmt;
+			cfg.defaultLinkHoverFormat = hoverFmt;
+			cfg.textFlowInitialFormat = normal;
+			
+			removeEventListener(Event.ADDED_TO_STAGE, init);
+			mainGraphics.addEventListener(Event.CLOSE, onClose);
+			
+			// TODO: Replace with URLs and/or factor out code to be independent of client/web.
+//			if(!File.userDirectory.resolvePath("mismanor").exists)
+//				File.userDirectory.resolvePath("mismanor").createDirectory();
+//			var xmlState:File= File.userDirectory.resolvePath("mismanor/"+gameStateXML);
+//			if(!xmlState.exists)
+//				File.applicationDirectory.resolvePath(gameStateXML).copyTo(xmlState,true);
+//			var xmlLibrary:File = File.userDirectory.resolvePath("mismanor/"+gameLibraryXML);
+//			if(!xmlLibrary.exists)
+//				File.applicationDirectory.resolvePath(gameLibraryXML).copyTo(xmlLibrary,true);
+			// reset the state
+			
+			// load playtrace file
+			//var urlStr:String = "file:///c:/projects/grailgm/mismanor/bin/playtrace" + new Date().getTime() + ".txt"; 
+			//playtraceFile = new File(urlStr);
+			
+			// load the rooms
+			// TODO: This should go into the state xml file!
+			var livingRoom:Room = new Room();
+			livingRoom.name = "living room";
+			livingRoom.id = Map.LIVING_ROOM;
+			if (!isAIPlayer)
+			{
+				livingRoom.graphic = new room1BackgroundClass();
+			}
+			this.gameMap.locationList.push(livingRoom);
+			
+			var diningRoom:Room = new Room();
+			diningRoom.name = "dining room";
+			diningRoom.id = Map.DINING_ROOM;
+			if (!isAIPlayer)
+			{
+				diningRoom.graphic = new room2BackgroundClass();
+			}
+			this.gameMap.locationList.push(diningRoom);
+			
+			var gardens:Room = new Room();
+			gardens.name = "gardens";
+			gardens.id = Map.GARDENS;
+			if (!isAIPlayer)
+			{
+				gardens.graphic = new room3BackgroundClass();
+			}
+			this.gameMap.locationList.push(gardens);
+			
+			grailGM.world = this.gameMap as World;
+
+			// don't need to load graphics if the AI agent is playing
+			if (!isAIPlayer)
+			{
+				livingRoom.graphic.width = diningRoom.graphic.width = gardens.graphic.width = mainGraphics.width; // -questJournalWidth;
+				livingRoom.graphic.height = diningRoom.graphic.height = gardens.graphic.height = mainGraphics.height;
+				mainGraphics.addChild(livingRoom.graphic);
+				mainGraphics.addChild(diningRoom.graphic);
+				mainGraphics.addChild(gardens.graphic);			
+				
+				// April
+				openingScreen = new OpeningScreen();
+				addElement(openingScreen);
+				//mainGraphics.addChild(openingScreen.blankBG);
+				//mainGraphics.addChild(openingScreen.graphic);
+				//Vanessa
+				//add opening Screen text
+				//mainGraphics.addChild(openingScreen.nameBG);
+				openingScreen.addEventListener(MouseEvent.CLICK, openingScreenClicked);
+			}
+
+//			stateLoaded = false;
+			loadState();
+			
+			// reload the library
+//			libLoaded = false;
+			loadLibrary();	
+		}
+		
+		private function drawButtonState(rgb:uint, txt:String, x:Number, y:Number, w:Number, h:Number):Sprite {
+			
+			var sprite:Sprite = new Sprite();
+			var text:TextField = new TextField();
+			
+			sprite.graphics.lineStyle(4,0x632E00,1);
+			sprite.graphics.beginFill(rgb);
+			sprite.graphics.drawRoundRect(x, y, w, h, 10, 10);
+			text.x = x;
+			text.y = y ;
+			text.width = w;
+			text.height = h;
+			text.text = txt;
+			sprite.addChild(text);
+			
+			return sprite;
+		}
+		
+		private function initButton(x:Number, y:Number, width:Number, height:Number, name:String):SimpleButton {
+			var button:SimpleButton = new SimpleButton();
+			button.x = x;
+			button.y = y;
+			//button.width = width;
+			//button.height = height;
+			button.upState = drawButtonState(0xD9770F,name,x,y,width,height);
+			button.overState = drawButtonState(0xE69137,name,x,y,width,height);
+			button.downState = drawButtonState(0xD9770F,name,x,y,width,height);
+			button.hitTestState = drawButtonState(0xD9770F,name,x,y,width,height);
+			button.useHandCursor = true;
+			button.visible = false;
+			return button;
+		}
+
+		private function createMechanicList(): void {
+			if (mechanicList)
+			{
+				for each (var str:String in createMechanicList)
+					str = null;
+			}
+			mechanicList = null;
+			mechanicList = new Vector.<String>();
+			
+			// set up possible mechanics
+			for each (var room:Room in gameMap.locationList)
+			{
+				if ((room.id != Map.INVENTORY) && (gameMap.curRoom != room.id))
+					mechanicList.push("move to " + room.name);
+			}
+			for each (var char:GrailCharacter in gameMap.locationList[gameMap.curRoom].charactersInLocation)
+			{
+				if (char.name.toLowerCase() != "player")
+					mechanicList.push("talk to " + char.name);
+			}
+
+		}
+		
+		/**
+		 * testMoves is an AI function that goes through moves.
+		 */
+		private function testMoves( moves:String):String
+		{
+			//Need to have a variable that changes. Goes through agent.
+			//responderName = "colonel";
+			//var moves:String = grailGM.printMoves(player.name, responderName, numOptionsToShowPlayer, showIntents, aiIsPlaying) + "Cancel";
+			//trace(grailGM.printMoves(player.name, responderName, numOptionsToShowPlayer, showIntents, aiIsPlaying));
+//			trace("airtest.xml should be written/changed");
+//			writeMoves(moves);
+			
+			//trace(moves);
+			var moveArray:Array = moves.split(/\n/);
+			var move:int = 0;
+			for ( var i:int = 0; i < moveArray.length; i++)
+			{
+				trace(moveArray[i]);
+				//if(moveArray[i] == 
+			}
+			
+			//variable will depend on what the agent has decided on.
+			//var move:int = 0;
+			
+			
+			return moveArray[move];
+			
+		}
+		
+		private function initGame():void {
+			// April separated all the picture-drawing code (and event initializing code)
+			// into this separate function so that it's not active until the game has started.
+			var dialogBoxHeight:int = 200;
+			var questJournalWidth:int = 200;
+			var inventoryWidth:int = 200;
+			// For iniatial inventory adjustments -- NPCs pick up items from the beginning
+			
+			gameMap.initMapGraphics(mainGraphics);
+			gameMap.setCurrentRoom(Map.LIVING_ROOM);
+			// load characters
+			initCharacters();
+			// load items
+			
+			initItems();
+//			this.grailGM.curQuest = this.grailGM.questLib.quests[0];
+//			this.grailGM.questLib.quests[0].chosenStart = 0;
+			grailGM.initPlotPoints(); 
+
+			for each (var character:GameCharacter in this.gameMap.locationList[this.gameMap.curRoom].charactersInLocation)
+			{
+				trace(character.name);
+				if (character.name.toLowerCase() !="player")
+					character.enable();
+			}
+			grailGM.initActions();
+			// TODO: Figure out what roomChangeItemMove does, and figure out where it belongs
+			/*
+			gameMap.room1Container.addEventListener(MouseEvent.CLICK, roomChangeItemMove);
+			gameMap.room2Container.addEventListener(MouseEvent.CLICK, roomChangeItemMove);
+			gameMap.room3Container.addEventListener(MouseEvent.CLICK, roomChangeItemMove);
+			*/
+			// load ui elements
+/*			questTab.graphic.x = mainGraphics.width - questTab.graphic.width - questJournalWidth;
+			questTab.tabLabel = "Quests";
+			questTab.tabContainer.addEventListener(MouseEvent.CLICK, questTabClicked);
+			questTab.tabContainer.buttonMode = true;
+			questTab.tabContainer.addChild(questTab.graphic);
+			addChild(questTab.tabContainer);
+			
+			inventoryTab.graphic.x = mainGraphics.width - inventoryTab.graphic.width - questJournalWidth;
+			inventoryTab.graphic.y = questTab.graphic.y + questTab.graphic.height;
+			inventoryTab.tabLabel = "Inventory";
+			inventoryTab.graphic.alpha = tabFade;
+			inventoryTab.tabContainer.addEventListener(MouseEvent.CLICK, inventoryTabClicked);
+			inventoryTab.tabContainer.addEventListener(MouseEvent.MOUSE_OVER, inventoryTabMouseOver);
+			inventoryTab.tabContainer.addEventListener(MouseEvent.MOUSE_OUT, inventoryTabMouseOut);
+			inventoryTab.tabContainer.buttonMode = true;
+			inventoryTab.tabContainer.addChild(inventoryTab.graphic);
+			addChild(inventoryTab.tabContainer);
+			
+			statsTab.graphic.x = mainGraphics.width - statsTab.graphic.width - questJournalWidth;
+			statsTab.graphic.y = inventoryTab.graphic.y + inventoryTab.graphic.height;
+			statsTab.tabLabel = "Stats";
+			statsTab.graphic.alpha = tabFade;
+			statsTab.tabContainer.addEventListener(MouseEvent.CLICK, statsTabClicked);
+			statsTab.tabContainer.buttonMode = true;
+			statsTab.tabContainer.addChild(statsTab.graphic);
+			addChild(statsTab.tabContainer);
+*/			
+			// set the text format for the text boxes on the screen
+			defaultTextFormat.color = 0xFFFFFF;
+			defaultTextFormat.size = 15;
+			defaultTextFormat.font = "Calibri";
+			defaultTextFormat.blockIndent = 15;
+			
+			
+			statusDefaultTextFormat.color = 0xFFFFFF;
+			statusDefaultTextFormat.size = 18;
+			statusDefaultTextFormat.font = "bodoni";
+			statusDefaultTextFormat.blockIndent = 15;
+						
+			//add new dialog box
+			
+			//addChild(dialog.triangle);
+			
+			// quest journal settings
+/*			questJournal.defaultTextFormat = defaultTextFormat;
+			questJournal.background = true;
+			questJournal.backgroundColor = 0x000000;
+			questJournal.multiline = true;
+			questJournal.wordWrap = true;
+			questJournal.htmlText = "Quest Journal\n\n";
+			for each(var quest:String in grailGM.questLib.quests)
+			{
+				questJournal.htmlText += quest;
+			}
+			
+			questJournal.width = questJournalWidth;
+			questJournal.height = mainGraphics.height - dialog.dialogBox.height;
+			questJournal.x = mainGraphics.width - questJournal.width;
+			questJournal.border = true;
+			addChild(questJournal);
+			
+			// inventory settings
+			inventoryBox.defaultTextFormat = defaultTextFormat;
+			inventoryBox.background = true;
+			inventoryBox.backgroundColor = 0x000000;
+			inventoryBox.multiline = true;
+			inventoryBox.wordWrap = true;
+			inventoryBox.htmlText = "Inventory List<br><br>"; // + player.inventory;
+			inventoryBox.border = true;
+			inventoryBox.width = questJournal.width;
+			inventoryBox.height = questJournal.height;
+			inventoryBox.x = questJournal.x;
+			inventoryBox.visible = false;
+			addChild(inventoryBox);
+			mainGraphics.setChildIndex(inventoryBox, 1);
+			
+			// stats box settings
+			statsBox.defaultTextFormat = defaultTextFormat;
+			statsBox.background = true;
+			statsBox.backgroundColor = 0x000000;
+			statsBox.multiline = true;
+			statsBox.wordWrap = true;
+			updateStatsText();
+			statsBox.border = true;
+			statsBox.width = questJournal.width;
+			statsBox.height = questJournal.height;
+			statsBox.x = questJournal.x;
+			statsBox.visible = false;
+			addChild(statsBox);
+*/
+			// statusInfo settings
+			statusInfo.embedFonts = true;
+			statusInfo.antiAliasType = AntiAliasType.ADVANCED;
+			statusInfo.setTextFormat(statusDefaultTextFormat);
+			statusInfo.defaultTextFormat = statusDefaultTextFormat;
+			statusInfo.background = true;
+			statusInfo.backgroundColor = 0x000000;
+			statusInfo.multiline = true;
+			statusInfo.wordWrap = true;
+			statusInfo.htmlText = "Click on a character or item to interact.";
+			statusInfo.width = mainGraphics.width;
+			statusInfo.height = 50;
+			statusInfo.x = 0;
+			statusInfo.y = 10;
+			statusInfo.visible = true;
+			statusSpr.graphics.beginFill(0x000000,1);
+			statusSpr.graphics.drawRect(0,0, statusInfo.width,statusInfo.height);
+			statusSpr.graphics.endFill();
+			statusSpr.y = mainGraphics.height - statusSpr.height;
+			statusSpr.x = 0;
+			mainGraphics.addChild(statusSpr);
+			statusSpr.addChild(statusInfo);	
+			
+			// Initialize SEEN
+			// Gather possible initiators other than the player
+			grailGM.world.shareKnowsInRoom(player);
+			
+			// Hit M to toggle the mini-map
+			mainGraphics.addEventListener(KeyboardEvent.KEY_UP, keyboardHandler);
+			
+			// Initialize charMenu
+			var tf:TextFormat = new TextFormat();
+			tf.color = 0xFFFFFF;
+			charMenuText.defaultTextFormat = tf;
+			charMenuText.x = 50;
+			charMenuText.y = 50;
+			charMenuText.width = 300;
+			charMenuText.height = 150;
+			charMenuText.background = true;
+			charMenuText.alpha = 0.5;
+			charMenuText.backgroundColor = 0x000000;
+			charMenuText.text = "THIS IS A TEST";
+			charMenuText.visible = false;
+			
+			var wTemp:Number = (charMenuText.width / 2) - 30;
+			charMenuInvButton = initButton(10, 10,wTemp, 30, "Inv");
+			charMenuStatButton = initButton(10 + wTemp, 10, wTemp, 30, "Stat");
+			
+			charMenuStatText.defaultTextFormat = defaultTextFormat;
+			charMenuStatText.width = 200;
+			charMenuStatText.height = 150;
+			charMenuStatText.text = "THIS IS A TEST";
+			charMenuStatText.background = true;
+			charMenuStatText.backgroundColor = 0x000000;
+			charMenuStatText.alpha = 0.5;
+			charMenuStatText.visible = false;
+			
+			charMenuItemBG.width = 150;
+			charMenuItemBG.height = 150;
+			charMenuItemBG.background = true;
+			charMenuItemBG.backgroundColor = 0x000000;
+			charMenuItemBG.alpha = 0.5;
+			charMenuItemBG.visible = false;
+			//dialog.addEventListener(MouseEvent.CLICK, triclicked);
+		}
+		
+		private function initGameAI():void 
+		{
+			gameMap.setCurrentRoom(Map.LIVING_ROOM);
+
+			grailGM.initPlotPoints(); 
+
+			grailGM.initActions();
+
+			grailGM.world.shareKnowsInRoom(player);
+		}
+
+		
+		
+		
+		]]>
+	</fx:Script>
+<s:Group width="100%" height="100%">
+	<mx:UIComponent id="mainGraphics" width="100%" height="100%" top="0" left="0\
+					cdix x"/>
+	<mx:UIComponent id="menuGraphics" left="0\      cdix x" top="0" width="100%" height="100%"
+					left.dialogState="0" top.dialogState="0" height.dialogState="520"/>
+	<Mismanor:DialogueSystem id="dialog" visible="false" left="0" width="100%" height="200"
+							 visible.dialogState="true" left.dialogState="0" bottom.dialogState="35"
+							 bottom.State1="60"/>
+</s:Group>
+<s:Label width="74" height="22" color="#FFFFFF" id="lblAppVersion" text="Version!" fontFamily="Times New Roman" fontSize="12" verticalAlign="middle" textAlign="center" backgroundColor="#000000" backgroundAlpha="0.4" bottom="10" left="10"/>
+</s:Group>

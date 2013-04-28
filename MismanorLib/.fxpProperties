@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fxpProperties abbreviated="false" authoringTool="Flex Builder" parentProject="53e88577-3439-4c82-8c90-00dd8e41bfbc" projectUUID="f2025b5f-2ddb-457e-b333-d5160f8bdf9d" pureCatalystProject="false" sdkVersion="4.6.0" uuid="b400042b-f05a-4e72-a448-42bd1f2d5946" version="15">
+  <projects>
+    <project filename="GrailGM.fxpl" position="1" projectUUID="6bb9574e-8235-457e-ae77-a0075f121e5a" uuid="b400042b-f05a-4e72-a448-42bd1f2d5946"/>
+  </projects>
+  <src/>
+  <swc>
+    <linked location="sdkPlaceHolder" path="sdkPlaceHolder" position="0" uuid="b400042b-f05a-4e72-a448-42bd1f2d5946"/>
+  </swc>
+  <misc/>
+  <theme/>
+  <mxmlFormattingPrefs groupAttributesByState="true" maxLineWidth="100" mxmlAlignAttributes="true" mxmlAttributeOrder="id,userLabel,includeIn,excludeFrom,visible,x,y,z,left,right,top,bottom,width,height,minWidth,minHeight,maxWidth,maxHeight,label" mxmlKeepAttributeValuesOrganized="true"/>
+</fxpProperties>

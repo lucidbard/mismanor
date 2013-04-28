@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:Tool="tool.*"
+		 width="610" height="500" creationComplete="onCreationComplete()">
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="character"/>
+		<s:State name="item"/>
+		<s:State name="knowledge"/>
+	</s:states>
+	
+	<s:TextInput id="description" x="156" y="27" width="446"
+				 contentBackgroundColor="#FFFFFF" enabled="true"
+				 fontWeight="bold" prompt="Author Notes" 
+				 />
+	<s:List id="gameObjectsList" x="10" y="82" width="130" height="100"
+			contentBackgroundColor="#FFFFFF" 
+			></s:List>
+	<s:DropDownList id="knowledgeList" includeIn="knowledge" x="110"
+					y="349" width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.knowledgeTypes}"
+					selectedIndex="0"
+					change="updateTagsEditor()"></s:DropDownList>
+	<s:Label x="10" y="61" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Game Objects"/>
+	<s:Button x="156" y="81" label="Add"
+			  click="addGameObject(gameObjectsList.selectedIndex)"/>
+	<s:Button x="156" y="110" label="Remove"
+			  click="removeGameObject(gameObjectEditor.selectedIndex)"/>
+	<s:List id="gameObjectEditor" x="234" y="81" width="368" height="100"
+			click="clickOnGameObjectEditor(gameObjectEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF"
+			dataProvider="{this.gameObjects}" enabled="false"
+			 selectedIndex="0"
+			
+			></s:List>
+	<s:List id="gameLocationsList" x="10" y="210" width="130" height="100" contentBackgroundColor="#FFFFFF"></s:List>
+	<s:Label x="10" y="190" color="#522E34" fontSize="20" fontWeight="bold" text="Game Locations"/>
+	<s:Button x="156" y="210" label="Add" click="addGameLocation(gameLocationsList.selectedIndex)"/>
+	<s:Button x="156" y="239" label="Remove" click="removeGameLocation(gameLocationEditor.selectedIndex)"/>
+	<s:List id="gameLocationEditor" x="233" y="210" width="368" height="100" click="clickOnGameLocationEditor(gameLocationEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF" dataProvider="{this.gameLocations}" enabled="false"
+			 selectedIndex="0"
+			
+			></s:List>
+	
+	<mx:HRule x="10" y="319" width="592" height="10"
+			  />
+	
+	<s:Label x="10" y="339" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Details"
+			 />
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			import mx.utils.object_proxy;
+			
+			import tool.*;
+			[Bindable] public var gameObjects:ArrayCollection;
+			[Bindable] public var gameLocations:ArrayCollection;
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			public var workingGameObjects:Vector.<GameObject> = new Vector.<GameObject>();
+			
+			public function onCreationComplete():void{
+				this.gameObjects = new ArrayCollection();
+				this.gameLocations = new ArrayCollection();
+				this.gameObjectsList.dataProvider = this.dte.generateGameObjectListProvider();
+//				this.gameLocationsList.dataProvider = this.dte
+				this.gameObjectsList.selectedIndex = 0;
+				this.gameLocationsList.selectedIndex = 0;
+			}
+			
+			public function updateTagsEditor():void
+			{
+			}
+			
+			public function addGameObject(gameObjectType:Number):void{
+				var result:String = new String();
+				this.changeStateByType(gameObjectType);
+				
+				var workingGameObject:GameObject = new GameObject();
+				workingGameObject.type = gameObjectType;
+				workingGameObject = updateGameObjectByState(workingGameObject);
+				
+				result = workingGameObject.toString();
+				this.workingGameObjects.push(workingGameObject);
+				this.gameObjects.addItem(result);
+				if (!this.gameObjectEditor.enabled)
+				{
+					this.gameObjectEditor.enabled = true;
+				}				
+				this.gameObjectEditor.selectedIndex = this.workingGameObjects.length-1;
+			}
+			
+			public function addGameLocation(gameLocationType:Number):void{
+				
+			}
+			
+			public function changeStateByType(predType:Number):void {
+				setCurrentState(GameObject.getNameByNumber(predType));
+			}
+			
+			public function updateDropDownValueByState(workingGameObject:GameObject):void
+			{
+				
+				switch (this.currentState)
+				{
+					case "character":
+
+						break;
+					case "item":
+
+						break;
+					case "knowledge":
+						break;
+					
+					default:
+						"updateDropDownValueByState: State not found";
+						break;
+				}
+			}
+			
+			public function updateGameObjectByState(workingGameObject:GameObject):GameObject
+			{
+				var newGameObject:GameObject = workingGameObject.cloneGameObject();
+				
+
+				switch (this.currentState)
+				{
+					case "character":
+						
+						break;
+					case "item":
+
+						break;
+					case "knowledge":
+						
+						break;
+					default:
+						trace ("state not found");
+				}
+				return newGameObject;
+				
+			}
+			
+			public function removeGameObject(selection:Number):void{
+				try {
+					this.gameObjects.removeItemAt(selection);
+					this.workingGameObjects.splice(selection, 1);
+				} catch (e:Error) {
+					return; // TODO: Create a popup error message that something must be selected to remove it?
+				}
+				if (this.gameObjects.length == 0)
+				{
+					this.gameObjectEditor.enabled = false;
+					this.setCurrentState("default");
+				}
+				else
+				{
+					this.gameObjectEditor.selectedIndex = 0;
+					this.changeStateByType(workingGameObjects[this.gameObjectEditor.selectedIndex].type);
+				}
+			}
+			
+			public function removeGameLocation(selection:Number):void{
+				
+			}
+			
+			public function clickOnGameLocationEditor(itemSelected:Number):void{
+				
+			}
+			
+			public function clickOnGameObjectEditor(itemSelected:Number):void {
+//				var workingPredicate:Predicate = this.workingPreCons[itemSelected];
+				
+//				this.notBox.selected = workingPredicate.negated;
+//				this.changeStateByType(workingPredicate.type);
+//				this.updateDropDownValueByState(workingPredicate);
+			}
+		]]>
+	</fx:Script>
+</s:Group>

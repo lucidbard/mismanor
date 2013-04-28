@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="610" height="538" creationComplete="onCreationComplete()"
+		 >
+	<fx:Declarations>
+		<s:RadioButtonGroup id="speaker"/>
+		<s:RadioButtonGroup id="initSpeakingTo"/>
+		<s:RadioButtonGroup id="respSpeakingTo"/>
+		<s:RadioButtonGroup id="otherSpeakingTo"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:TextInput id="description" x="147" y="27" width="455" contentBackgroundColor="#FFFFFF"
+				 enabled="true" fontWeight="bold" prompt="Name of Dialog Exchange"/>
+	<s:Label x="205" y="295" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Responder"
+			 />
+	<s:Label x="415" y="295" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Other"
+			 />
+	<s:List id="instantiationList" x="148" y="57" width="452" height="202"
+			contentBackgroundColor="#FFFFFF" dataProvider="{this.instantiations}" click="clickOnInstantiationList(this.instantiationList.selectedIndex)"></s:List>
+	<s:Button x="60" y="57" width="80" label="New"/>
+	<s:Button x="60" y="86" width="80" label="Remove"/>
+	<s:Button x="60" y="115" width="80" label="Move Up"/>
+	<s:Button x="60" y="144" width="80" label="Move Down"/>
+	<s:Label x="10" y="295" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Initiator"
+			 />
+	<mx:HRule x="10" y="267" width="592" height="10"
+			  />
+	<s:Button x="60" y="57" width="80" label="New" click="newInstantiation()"/>
+	<s:Button x="60" y="86" width="80" label="Remove" click="removeInstantiation()"/>
+	<s:Button x="60" y="115" width="80" label="Move Up" click="moveUpInstantiation()"/>
+	<s:Button x="60" y="144" width="80" label="Move Down" click="moveDownInstantiation()"/>
+	<mx:VRule x="195" y="285" height="240"/>
+	<mx:VRule x="405" y="285" height="240"/>
+	<s:RadioButton x="10" y="314" label="Primary Speaker" fontSize="14"
+				   fontWeight="bold" groupName="speaker" selected="true" value="initiator" click="primarySpeakerChange()"/>
+	<s:RadioButton x="205" y="314" label="Primary Speaker" fontSize="14"
+				   fontWeight="bold" groupName="speaker" value="responder" click="primarySpeakerChange()"/>
+	<s:RadioButton x="415" y="314" label="Primary Speaker" fontSize="14"
+				   fontWeight="bold" groupName="speaker" value="other" click="primarySpeakerChange()"/>
+	<s:VGroup x="10" y="442" fontSize="14" fontWeight="bold" gap="1">
+		<s:RadioButton label="Speaking to Responder" fontWeight="bold" value="responder" groupName="initSpeakingTo"
+					   selected="true" click="initSpeakingToChange()"/>
+		<s:RadioButton label="Speaking to Other" fontWeight="bold" value="other" groupName="initSpeakingTo" click="initSpeakingToChange()"/>
+	</s:VGroup>
+	<s:VGroup x="205" y="442" fontSize="14" fontWeight="bold" gap="1">
+		<s:RadioButton label="Speaking to Initiator" fontWeight="bold" value="initiator" groupName="respSpeakingTo"
+					   selected="true" click="respSpeakingToChange()"/>
+		<s:RadioButton label="Speaking to Other" fontWeight="bold" value="other" groupName="respSpeakingTo" click="respSpeakingToChange()"/>
+	</s:VGroup>
+	<s:VGroup x="415" y="442" fontSize="14" fontWeight="bold" gap="1">
+		<s:RadioButton label="Speaking to Initiator" fontWeight="bold" value="initiator" groupName="otherSpeakingTo"
+					   selected="true" click="otherSpeakingToChange()"/>
+		<s:RadioButton label="Speaking to Responder" fontWeight="bold" value="responder" groupName="otherSpeakingTo" click="otherSpeakingToChange()"/>
+	</s:VGroup>
+	<s:TextArea id="initDialog" x="10" y="338" width="177" height="70"
+				contentBackgroundColor="#FFFFFF" prompt="Enter initiator line of dialog" change="initDialogChange()"/>
+	<s:TextArea id="respDialog" x="205" y="338" width="192" height="70" contentBackgroundColor="#FFFFFF"
+				prompt="Enter response" change="respDialogChange()"/>
+	<s:TextArea id="otherDialog" x="415" y="338" width="177" height="70" contentBackgroundColor="#FFFFFF"
+				prompt="Enter other's line of dialog, if any" change="otherDialogChange()"/>
+	<s:CheckBox id="initThoughtBox" x="10" y="410" label="Thought" fontSize="14" fontWeight="bold" click="thoughtChange()"/>
+	<s:CheckBox id="respThoughtBox" x="205" y="410" label="Thought" fontSize="14" fontWeight="bold" click="thoughtChange()"/>
+	<s:CheckBox id="otherThoughtBox" x="415" y="410" label="Thought" fontSize="14" fontWeight="bold" click="thoughtChange()"/>
+	<s:DropDownList id="initEmotion" x="68" y="504" width="119" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.emotionTypes}" change="emotionChange()"></s:DropDownList>
+	<s:DropDownList id="respEmotion" x="263" y="504" width="119" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.emotionTypes}" change="emotionChange()"></s:DropDownList>
+	<s:Label x="205" y="509" fontFamily="Calibri" fontSize="14" fontWeight="bold" text="Emotion"/>
+	<s:Label x="10" y="509" fontFamily="Calibri" fontSize="14" fontWeight="bold" text="Emotion"/>
+	<s:DropDownList id="otherEmotion" x="473" y="504" width="119" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.emotionTypes}" change="emotionChange()"></s:DropDownList>
+	<s:Label x="415" y="509" fontFamily="Calibri" fontSize="14" fontWeight="bold" text="Emotion"/>
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+			[Bindable] public var instantiations:ArrayCollection; 
+			[Bindable] public var emotionTypes:ArrayCollection;
+			public var workingInst:Instantiation = new Instantiation();
+		//	public var workingLoD:LineOfDialogue = new LineOfDialogue();
+			public var initLoD:String = new String();
+			public var respLoD:String = new String();
+			public var otherLoD:String = new String();
+			
+			public function onCreationComplete():void {
+				var workingLoD:LineOfDialogue = new LineOfDialogue();
+				
+				this.instantiations = new ArrayCollection();
+				workingLoD.primarySpeaker = this.speaker.selectedValue.toString();
+				this.instantiations.addItem(getLoDAsString(workingLoD));
+				this.workingInst.lines.push(workingLoD);
+				this.instantiationList.selectedIndex = 0;
+				this.emotionTypes = new ArrayCollection();
+				this.emotionTypes.addItem("neutral");
+				this.emotionTypes.addItem("angry");
+				this.emotionTypes.addItem("sad");
+				this.emotionTypes.addItem("happy");
+				this.initEmotion.selectedIndex=0;
+				this.respEmotion.selectedIndex=0;
+				this.otherEmotion.selectedIndex=0;
+			}				
+			
+			public function removeInstantiation(): void {
+				var selection:Number = this.instantiationList.selectedIndex;
+				
+				this.instantiations.removeItemAt(selection);
+				this.workingInst.lines.splice(selection, 1);
+
+				if (this.instantiations.length == 0)
+					reset();
+
+				this.instantiationList.selectedIndex = 0;
+				updateDetailsUI();
+			}
+			
+			public function moveUpInstantiation(): void {
+				var selectedIndex:int = instantiationList.selectedIndex;
+				if (selectedIndex <= 0) return;
+				
+				var temp:LineOfDialogue;
+				temp = this.workingInst.lines[selectedIndex].clone();
+				this.workingInst.lines[selectedIndex] = this.workingInst.lines[selectedIndex - 1].clone();
+				this.workingInst.lines[selectedIndex - 1] = temp.clone();
+				this.instantiationList.selectedIndex--;
+				this.updateInstList();				
+			}
+			
+			public function moveDownInstantiation(): void {
+				var selectedIndex:int = instantiationList.selectedIndex;
+				if (selectedIndex >= (this.instantiations.length - 1)) return;
+				
+				var temp:LineOfDialogue;
+				temp = this.workingInst.lines[selectedIndex].clone();
+				this.workingInst.lines[selectedIndex] = this.workingInst.lines[selectedIndex + 1].clone();
+				this.workingInst.lines[selectedIndex + 1] = temp.clone();
+				this.instantiationList.selectedIndex++;
+				this.updateInstList();				
+				
+			}
+			
+			public function clickOnInstantiationList(selectedInst:Number):void {
+				updateDetailsUI();
+			}
+			
+			public function emotionChange(): void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].initiatorFaceState = this.initEmotion.selectedItem;
+				this.workingInst.lines[this.instantiationList.selectedIndex].responderFaceState = this.respEmotion.selectedItem;
+				this.workingInst.lines[this.instantiationList.selectedIndex].otherFaceState = this.otherEmotion.selectedItem;
+			}
+			
+			public function initSpeakingToChange(): void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].initiatorAddressing = this.initSpeakingTo.selectedValue.toString();	
+			}
+			
+			public function respSpeakingToChange(): void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].responderAddressing = this.respSpeakingTo.selectedValue.toString();	
+			}
+
+			public function otherSpeakingToChange(): void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].otherAddressing = this.otherSpeakingTo.selectedValue.toString();	
+			}
+			
+
+			public function thoughtChange(): void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].initiatorIsThought = this.initThoughtBox.selected;
+				this.workingInst.lines[this.instantiationList.selectedIndex].responderIsThought = this.respThoughtBox.selected;
+				this.workingInst.lines[this.instantiationList.selectedIndex].otherIsThought = this.otherThoughtBox.selected;
+			}
+			
+			public function updateDetailsUI(): void {
+				var workingLoD:LineOfDialogue = this.workingInst.lines[this.instantiationList.selectedIndex];
+				this.speaker.selectedValue = workingLoD.primarySpeaker;
+				this.initDialog.text = workingLoD.initiatorLine;
+				this.respDialog.text = workingLoD.responderLine;
+				this.otherDialog.text = workingLoD.otherLine;
+				this.initSpeakingTo.selectedValue = workingLoD.initiatorAddressing;
+				this.respSpeakingTo.selectedValue = workingLoD.responderAddressing;
+				this.otherSpeakingTo.selectedValue = workingLoD.otherAddressing;
+				this.initThoughtBox.selected = workingLoD.initiatorIsThought;
+				this.respThoughtBox.selected = workingLoD.responderIsThought;
+				this.otherThoughtBox.selected = workingLoD.otherIsThought;
+				this.initEmotion.selectedItem = workingLoD.initiatorFaceState;
+				this.respEmotion.selectedItem = workingLoD.responderFaceState;
+				this.otherEmotion.selectedItem = workingLoD.otherFaceState;
+			}
+			
+			public function getLoDAsString(line:LineOfDialogue):String {
+				return (line.primarySpeaker + ": " + line.initiatorLine + ", " 
+					+ line.responderLine + ", " + line.otherLine);
+			}
+			
+			public function primarySpeakerChange():void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].primarySpeaker = this.speaker.selectedValue.toString();
+				updateInstList();
+			}
+			
+			public function newInstantiation(): void {
+				var workingLoD:LineOfDialogue = new LineOfDialogue();
+				this.speaker.selectedValue = "initiator";
+				this.initDialog.text = "";
+				this.respDialog.text = "";
+				this.otherDialog.text = "";
+				this.initSpeakingTo.selectedValue = "responder";
+				this.respSpeakingTo.selectedValue = "initiator";
+				this.otherSpeakingTo.selectedValue = "initiator";
+				this.initThoughtBox.selected = false;
+				this.respThoughtBox.selected = false;
+				this.otherThoughtBox.selected = false;
+				this.initEmotion.selectedIndex = 0;
+				this.respEmotion.selectedIndex = 0;
+				this.otherEmotion.selectedIndex = 0;
+				workingLoD = new LineOfDialogue();
+				workingLoD.primarySpeaker = this.speaker.selectedValue.toString();
+				workingLoD.initiatorAddressing = this.initSpeakingTo.selectedValue.toString();
+				workingLoD.responderAddressing = this.respSpeakingTo.selectedValue.toString();
+				workingLoD.otherAddressing = this.otherSpeakingTo.selectedValue.toString();
+				workingLoD.initiatorFaceState = this.initEmotion.selectedItem;
+				workingLoD.responderFaceState = this.respEmotion.selectedItem;
+				workingLoD.otherFaceState = this.otherEmotion.selectedItem;
+				this.instantiations.addItem(getLoDAsString(workingLoD));
+				this.workingInst.lines.push(workingLoD);
+				this.instantiationList.selectedIndex = this.instantiations.length - 1;
+				this.updateInstList();
+			}
+			public function updateInstList():void {
+				if (instantiationList.selectedIndex == -1) {
+					return;
+				}
+				
+				if (this.initDialog.text.search("\"") != -1
+					|| this.respDialog.text.search("\"") != -1
+					|| this.otherDialog.text.search("\"") != -1
+					|| this.initDialog.text.search("<") != -1
+					|| this.respDialog.text.search("<") != -1
+					|| this.otherDialog.text.search("<") != -1
+					|| this.initDialog.text.search(">") != -1
+					|| this.respDialog.text.search(">") != -1
+					|| this.otherDialog.text.search(">") != -1
+					|| this.initDialog.text.search("!--") != -1
+					|| this.respDialog.text.search("!--") != -1
+					|| this.otherDialog.text.search("!--") != -1
+					|| this.initDialog.text.search("--") != -1
+					|| this.respDialog.text.search("--") != -1
+					|| this.otherDialog.text.search("--") != -1)
+				{
+					parentApplication.openPopUp("Error", "You entered a double quote or a less than or greater than sign somewhere in the dialogue. Also two dashes next to each other is bad.\nDon't do that please!");
+				}
+				
+				var lastIndex:int = this.instantiationList.selectedIndex;
+				
+				/*
+				//The speech in the lines of dialog
+				this.initDialog.text = this.workingLoD.initiatorLine;
+				this.respDialog.text = this.workingLoD.responderLine;
+				this.otherDialog.text = this.workingLoD.otherLine;
+				
+				//The isThoughts
+				this.initThoughtBox.selected = this.workingLoD.initiatorIsThought;
+				this.respThoughtBox.selected = this.workingLoD.responderIsThought;
+				this.otherThoughtBox.selected = this.workingLoD.otherIsThought;
+				
+				//Address who is addressing who!
+				if (this.workingLoD.initiatorAddressing == "responder") this.speainitAddressingResponder.selected = true; else this.initAddressingOther.selected = true;
+				if (this.workingLoD.responderAddressing == "initiator") this.responderAddressingInitiator.selected = true; else this.responderAddressingOther.selected = true;
+				if (this.workingLoD.otherAddressing == "initiator") this.otherAddressingInitiator.selected = true; else this.otherAddressingResponder.selected = true;
+	*/			
+				this.instantiations.removeAll();
+				for each (var line:LineOfDialogue in this.workingInst.lines)
+					this.instantiations.addItem(getLoDAsString(line));
+
+				this.instantiationList.selectedIndex = lastIndex;
+			}
+			
+			
+			public function initDialogChange():void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].initiatorLine = this.initDialog.text;
+				updateInstList();
+			}
+			
+			public function respDialogChange():void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].responderLine = this.respDialog.text;
+				updateInstList();
+			}
+			
+			public function otherDialogChange():void {
+				this.workingInst.lines[this.instantiationList.selectedIndex].otherLine = this.otherDialog.text;
+				updateInstList();
+			}
+			
+			
+			// set everything back to defaults, ready for new pre-condition to be created
+			public function reset(): void
+			{
+				var workingLoD:LineOfDialogue = new LineOfDialogue();
+				
+				this.workingInst = new Instantiation();
+				this.instantiations.removeAll();
+				this.instantiationList.selectedIndex = 0;
+				this.description.text = "";
+				this.initThoughtBox.selected = false;
+				this.respThoughtBox.selected = false;
+				this.otherThoughtBox.selected = false;
+				this.speaker.selectedValue = "initiator";
+				this.initSpeakingTo.selectedValue = "responder";
+				this.respSpeakingTo.selectedValue = "initiator";
+				this.otherSpeakingTo.selectedValue = "initiator";
+				this.initDialog.text = "";
+				this.respDialog.text = "";
+				this.otherDialog.text = "";
+				this.initEmotion.selectedIndex = 0;
+				this.respEmotion.selectedIndex = 0;
+				this.otherEmotion.selectedIndex = 0;
+				workingLoD.primarySpeaker = this.speaker.selectedValue.toString();
+				workingLoD.initiatorAddressing = this.initSpeakingTo.selectedValue.toString();
+				workingLoD.responderAddressing = this.respSpeakingTo.selectedValue.toString();
+				workingLoD.otherAddressing = this.otherSpeakingTo.selectedValue.toString();
+				workingLoD.initiatorFaceState = this.initEmotion.selectedItem;
+				workingLoD.responderFaceState = this.respEmotion.selectedItem;
+				workingLoD.otherFaceState = this.otherEmotion.selectedItem;
+				this.workingInst.lines.push(workingLoD);
+				this.instantiations.addItem(getLoDAsString(workingLoD));				
+			}
+			
+		]]>
+	</fx:Script>
+</s:Group>

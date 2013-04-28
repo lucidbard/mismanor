@@ -1,0 +1,62 @@
+<CiFLibraries>
+  <SocialGameLibrary>
+    <SocialGame name="Testing" requiresOther="false" type="0" othertype="0">
+      <PatsyRule>
+        <Rule name="Anonymous Rule" id="-1" description=""/>
+      </PatsyRule>
+      <Intents>
+        <Rule name="intent-network up: buddy (initiator toward responder)" id="0" description="">
+          <Predicate type="network" networkType="buddy" first="initiator" second="responder" comparator="+" value="0" negated="false" name="intent-network up: buddy (initiator toward responder)" intent="true" intentType="0" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Intents>
+      <Preconditions>
+        <Rule name="" id="0" description="">
+          <Predicate type="CKBEntry" first="initiator" second="" firstSubjective="" secondSubjective="" label="" negated="false" name="" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="SFDB label" first="initiator" second="responder" label="cat: negative" negated="false" name="" intent="false" intentType="-1" isSFDB="true" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </Rule>
+      </Preconditions>
+      <InitiatorInfluenceRuleSet>
+        <InfluenceRule weight="0" name="" id="0">
+          <Predicate type="SFDB label" first="initiator" second="responder" label="cat: negative" negated="false" name="[SFDBLabel(cat: negative,initiator,responder,0) window(0)]" intent="false" intentType="-1" isSFDB="true" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="CKBEntry" first="initiator" second="" firstSubjective="" secondSubjective="" label="" negated="false" name="ckb(initiator, , , , )" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </InitiatorInfluenceRuleSet>
+      <ResponderInfluenceRuleSet>
+        <InfluenceRule weight="0" name="" id="0">
+          <Predicate type="SFDB label" first="initiator" second="responder" label="cat: negative" negated="false" name="[SFDBLabel(cat: negative,initiator,responder,0) window(0)]" intent="false" intentType="-1" isSFDB="true" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          <Predicate type="CKBEntry" first="initiator" second="" firstSubjective="" secondSubjective="" label="" negated="false" name="ckb(initiator, , , , )" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+        </InfluenceRule>
+      </ResponderInfluenceRuleSet>
+      <Effects>
+        <Effect id="0" accept="true" instantiationID="-1" rejectID="-1">
+          <PerformanceRealization/>
+          <ConditionRule>
+            <Predicate type="SFDB label" first="initiator" second="responder" label="cat: negative" negated="false" name="[SFDBLabel(cat: negative,initiator,responder,0) window(0)]" intent="false" intentType="-1" isSFDB="true" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="CKBEntry" first="initiator" second="" firstSubjective="" secondSubjective="" label="" negated="false" name="ckb(initiator, , , , )" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ConditionRule>
+          <ChangeRule>
+            <Predicate type="SFDB label" first="initiator" second="responder" label="cat: negative" negated="false" name="[SFDBLabel(cat: negative,initiator,responder,0) window(0)]" intent="false" intentType="-1" isSFDB="true" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+            <Predicate type="CKBEntry" first="initiator" second="" firstSubjective="" secondSubjective="" label="" negated="false" name="ckb(initiator, , , , )" intent="false" intentType="-1" isSFDB="false" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+          </ChangeRule>
+        </Effect>
+      </Effects>
+      <Instantiations>
+        <Instantiation id="0" name="">
+          <LineOfDialogue lineNumber="0" initiatorLine="" responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="neutral" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="neutral" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="neutral" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <ToC1/>
+          <ToC2/>
+          <ToC3/>
+          <ConditionalRules/>
+        </Instantiation>
+      </Instantiations>
+    </SocialGame>
+  </SocialGameLibrary>
+  <Microtheories/>
+</CiFLibraries>

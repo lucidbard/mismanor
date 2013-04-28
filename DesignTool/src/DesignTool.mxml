@@ -1,0 +1,1679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   height="768"
+					   width="1024"
+					   xmlns:Tool="tool.*"
+					   xmlns:Manor="mismanor.*"
+					   creationComplete="onCreationComplete()"	
+					   xmlns:services="services.*"
+					   applicationComplete="onApplicationComplete()"
+					   >
+	<fx:Style source="DesignTool.css"/>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<services:SocialgamesService id="socialgamesService"
+									 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+									 showBusyCursor="true"/>
+		<s:CallResponder id="getAllSocial_gamesNamesResult" result="getgameNames_Handler(event)"/>
+		<!--<services:UserService id="userService"
+							  fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+							  showBusyCursor="true"/>-->
+		<!--<s:CallResponder id="createUserResult" result="createUserResult_resultHandler(event)"/>-->
+	</fx:Declarations>
+	<s:SkinnableContainer id="designContainer" 
+						  height="100%" width="100%" 
+						  skinClass="tool.ScrollBarContainerSkin" chromeColor="#E9E3DF" focusColor="#595650" 
+						  contentBackgroundColor="#9c4849" color="#331111" fontFamily="Calibri"> 
+	<s:HGroup width="100%" height="100%">
+		
+		<mx:TabNavigator x="0" y="0" creationPolicy="all" width="80%"
+					  height="100%" selectedIndex="1" change="tabnavigator1_changeHandler(event)" id="tabNavigator">
+			<s:NavigatorContent id = "microtheories" width="100%" height="100%" label="Microtheories"  >
+				<s:Scroller width="100%" height="100%">
+					<s:Group minHeight="600">
+						<mx:VBox>
+							<Tool:MicrotheoryEditor id="microtheoryEditor" width="100%" height="100%" />
+						</mx:VBox>
+					</s:Group>
+				</s:Scroller>
+			</s:NavigatorContent>
+			<s:NavigatorContent id="socialMoves" width="100%" height="100%" label="Social Moves">
+				<s:Scroller width="100%" height="100%">
+					<s:Group minHeight="600">
+						<mx:VBox>
+							<Tool:SocialMoveEditor id="socialMoveEditor" width="1006" height="633" />
+						</mx:VBox>
+					</s:Group>
+				</s:Scroller>
+			</s:NavigatorContent>
+			<s:NavigatorContent width="100%" height="100%" label="Plot Points"
+								contentBackgroundColor="#9C4849">
+				<s:Scroller width="100%" height="100%">
+					<s:Group minHeight="600">
+						<mx:VBox>
+							<Tool:PlotPointEditor id="plotPointEditor" width="100%" height="100%" />
+						</mx:VBox>
+					</s:Group>
+				</s:Scroller>
+			</s:NavigatorContent>
+			<s:NavigatorContent width="100%" height="100%" label="Design Simulator" contentBackgroundColor="#9c4849" >
+					<!--<Tool:DesignSimulation id="designSimulation" width="100%" height="100%" />-->
+			</s:NavigatorContent>
+			<s:NavigatorContent width="100%" height="100%" label="Quests" contentBackgroundColor="#9c4849">
+				<s:Scroller width="100%" height="100%">
+					<s:Group minHeight="600">
+						<mx:VBox>
+							<Tool:QuestEditor id="questsEditor" width="100%" height="100%" />
+						</mx:VBox>
+					</s:Group>
+				</s:Scroller>
+			</s:NavigatorContent>
+			<s:NavigatorContent width="100%" height="100%" label="Configuration" contentBackgroundColor="#9c4849">
+				<s:Scroller width="100%" height="100%">
+					<s:Group minHeight="600">
+						<mx:VBox>
+							<s:Label id="loadedLibrary" x="848" y="10"  width="166" color="#F5E9EB" fontSize="14" 
+									 text="No Library Loaded" textAlign="right"/>
+							<s:Button label="Load Library" click="loadLibrary()"/>
+							<s:Button label="Save All Games" click="saveGames()"/>
+							<s:Button label="Save Library As" click="saveAsCurrentLibrary()"/>
+							<s:Button label="Save Library" click="saveCurrentLibrary()"/>
+							<s:Label id="loadedState" width="166" color="#F5E9EB" fontSize="14" 
+									 text="No State Loaded" textAlign="right"/>
+							<s:Button label="Load State" click="loadState()"/>
+							<s:Button label="Save State As" click="saveAsCurrentState()"/>
+							<s:Button x="577" y="28" label="Save State" click="saveCurrentState()" enabled="true"/>
+<!--							<s:CheckBox left="20" width="50%" height="15" y="35" label="Remember Me" id="setCookie"  selected="{cookieAction}" />
+							<s:CheckBox left="80" width="50%" height="15" y="35" label="Auto Login" id="setAutoLogin"  selected="{autoLogin}" />-->
+						</mx:VBox>
+					</s:Group>
+				</s:Scroller>
+			</s:NavigatorContent>
+		</mx:TabNavigator>
+	<s:VGroup width="400">
+		
+		<s:VGroup width="100%" gap="10" horizontalAlign="center">
+			<s:HGroup verticalAlign="middle" width="100%"
+		paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
+		<s:Label text="URL" />
+		<s:TextInput id="urlField" width="100%" />
+		<s:ComboBox dataProvider="{protocolList}" width="200" selectedIndex="0" id="protocolSelector" />
+	</s:HGroup>
+		<s:HGroup verticalAlign="middle"
+				  paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
+			<s:Button id="disconnectButton" enabled="false" label="Disconnect" click="closeConnection();" />
+			<s:Button id="connectButton" label="Connect" click="openConnection();" />
+			<s:Button id="pingButton" label="Ping" click="ping();" enabled="false" />
+			<s:Button id="saveVersionBtn" label="Save Version" enabled="false" click="saveVersion(event)" />
+		</s:HGroup>
+		
+		<s:VGroup horizontalAlign="center" width="100%">
+			<s:Label text="Dumb Increment value: {dumbIncrementValue}" />
+			<s:Button label="Reset Counter" click="resetCounter()" />
+		</s:VGroup>
+		
+		<s:Group width="100%" height="306"
+				 clipAndEnableScrolling="true">
+			<s:layout>
+				<s:VerticalLayout/>
+			</s:layout>
+			<s:TextArea id="input" width="100%" height="100%" editable="true" enabled="true" change="sendValue(event);"/>
+			<s:TextArea id="results" width="100%" height="100%" editable="false"/>
+		</s:Group>
+	</s:VGroup>
+		
+		<s:VGroup horizontalAlign="center" gap="10" width="100%" height="100%" paddingBottom="7">
+			<s:TextArea id="logOutput" width="100%" height="100%" />
+			<s:Button label="Clear Log" click="clearLog()" />
+		</s:VGroup>
+	</s:VGroup>
+	</s:HGroup>
+		<s:Label x="306" bottom="0" width="74" height="13" color="#FFFFFF" id="lblAppVersion" text="Version!"/>
+	</s:SkinnableContainer> 
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import air.update.ApplicationUpdaterUI;
+			import air.update.events.UpdateEvent;
+			
+			import events.EntityCreatedEvent;
+			import events.EntityLoadedEvent;
+			import events.EntityUpdatedEvent;
+			import events.LoadEntityEvent;
+			import events.LoginEvent;
+			import events.SaveEntityEvent;
+			
+			import flash.sampler.NewObjectSample;
+			
+			import grailgm.*;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.IFlexDisplayObject;
+			import mx.core.UIComponent;
+			import mx.events.CloseEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.graphics.IFill;
+			import mx.graphics.SolidColor;
+			import mx.managers.PopUpManager;
+			import mx.rpc.CallResponder;
+			import mx.rpc.events.ResultEvent;
+			
+			import org.osmf.elements.LoadFromDocumentElement;
+			
+			import spark.components.TitleWindow;
+			import spark.events.*;
+			import spark.primitives.Rect;
+			
+			import tool.*;
+			
+			import valueObjects.EffectVO;
+			import valueObjects.InstantiationVO;
+			import valueObjects.LineOfDialogueVO;
+			import valueObjects.PredicateVO;
+			import valueObjects.RuleVO;
+			import valueObjects.SocialGameVO;
+			import valueObjects.User;
+			
+			import com.hurlant.crypto.prng.Random;
+			import com.worlize.websocket.WebSocket;
+			import com.worlize.websocket.WebSocketErrorEvent;
+			import com.worlize.websocket.WebSocketEvent;
+			import com.worlize.websocket.WebSocketMessage;
+			
+			import flash.sampler.DeleteObjectSample;
+			
+			import flashx.textLayout.events.FlowOperationEvent;
+			import flashx.textLayout.events.SelectionEvent;
+			import flashx.textLayout.operations.CompositeOperation;
+			import flashx.textLayout.operations.DeleteTextOperation;
+			import flashx.textLayout.operations.FlowOperation;
+			import flashx.textLayout.operations.InsertTextOperation;
+			import flashx.textLayout.operations.SplitParagraphOperation;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import spark.events.TextOperationEvent;
+			
+			private var websocket:WebSocket;
+			
+			private var pingCounter:uint = 0;
+			private var pings:Object = {};
+			
+			private static var INTENT:Number = 0;
+			private static var PRECON:Number = 1;
+			private static var INITIRS:Number = 2;
+			private static var RESPIRS:Number = 3;
+			private static var EFFECT:Number = 4;
+			private static var INST:Number = 5;
+			[Bindable]
+			private var cookieAction:Boolean;
+			[Bindable]
+			private var autoLogin:Boolean;
+
+			
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			
+			public var libraryFile:File;
+			public var stateFile:File;
+			private var cif:CiFSingleton;
+			private var ggm:GrailGM;
+			private var lastPath:String;
+			private var appUpdater:ApplicationUpdaterUI;
+			public static var current_userid:int;
+			public static var socialGames:Array = new Array();
+			
+			public static var socialGamesToVO:Dictionary = new Dictionary();
+			public static var ruleToVO:Dictionary = new Dictionary();
+			public static var responderToRule:Dictionary = new Dictionary();
+			public static var effectToVO:Dictionary = new Dictionary();
+			public static var responderToEffect:Dictionary = new Dictionary();
+			public static  var instantiationToVO:Dictionary = new Dictionary();
+			public static var responderToInstantiation:Dictionary = new Dictionary();
+			public static var lineOfDialogueToVO:Dictionary=new Dictionary();
+			public static var responderToLineOfDialogue:Dictionary = new Dictionary();
+			private var voToEffect:Dictionary = new Dictionary();
+			private var oldIdsToEffects:Dictionary = new Dictionary();
+			private var responderToPredicate:Dictionary=new Dictionary();
+			private var predicateToVO:Dictionary=new Dictionary();
+			private var responderToCollection:Dictionary=new Dictionary();
+			private var responderToGameID:Dictionary=new Dictionary();
+			private var callResponderToRule:Dictionary=new Dictionary();
+			private var ruleToEffect:Dictionary = new Dictionary();
+			private var callResponderToInstantiation:Dictionary = new Dictionary();
+			
+			/*protected function button_registerHandler(event:MouseEvent):void
+			{
+				var user2:User = new User();
+				user2.username = username.text;
+				user2.password = password.text;
+				user2.email = emailTextInput.text;
+				createUserResult.token = userService.createUser(user2);
+			}
+			*/
+			/*private function checkLogin(event:ResultEvent):void
+			{
+				userid = event.result.loginsuccess;
+				usertype = event.result.usertype;
+				if (userid != 0)
+				{
+					dispatchEvent(new LoginEvent(LoginEvent.LOGGED_IN,userid));
+				}
+				else
+				{
+					mx.controls.Alert.show('Invalid username/password');
+				}
+			}
+*/
+			[Bindable]
+			private var dumbIncrementValue:int = 0;
+			
+			[Bindable]
+			private var protocolList:ArrayCollection = new ArrayCollection([
+				{
+					label: "dumb-increment-protocol",
+					value: "dumb-increment-protocol"
+				}
+			]);
+			
+			private var log:String = "";
+			
+			private function handleCreationComplete():void {
+				websocket = new WebSocket("ws://54.245.105.219/", "*");
+				loadSettings();
+				var scrollToBottomTimer:Number = NaN;
+				WebSocket.logger = function(text:String):void {
+					trace(text);
+					log += (text + "\n");
+					logOutput.text = log + "\n";
+					if (isNaN(scrollToBottomTimer)) {
+						scrollToBottomTimer = setTimeout(function():void {
+							logOutput.scroller.verticalScrollBar.value = logOutput.scroller.verticalScrollBar.maximum;
+							scrollToBottomTimer = NaN;
+						}, 10);
+					}
+				}
+			}
+			
+			private function handleWindowClosing(event:Event):void {
+				if (websocket.connected) {
+					websocket.close();
+				}
+			}
+			
+			private function loadSettings():void {
+				var sharedObject:SharedObject = SharedObject.getLocal('settings');
+				urlField.text = sharedObject.data.url || 'ws://54.245.105.219:8080/';
+				if ('subprotocol' in sharedObject.data) {
+					protocolSelector.selectedItem = null;
+					protocolSelector.textInput.text = sharedObject.data.subprotocol;
+				}
+			}
+			
+			private function saveSettings():void {
+				var sharedObject:SharedObject = SharedObject.getLocal('settings');
+				sharedObject.data.url = urlField.text;
+				sharedObject.data.subprotocol = protocolSelector.selectedIndex < 0 ? protocolSelector.textInput.text : protocolSelector.selectedItem['value'];
+				sharedObject.flush();
+			}
+			
+			private function openConnection():void {
+				saveSettings();
+				connectButton.enabled = false;
+				var subprotocol:String = protocolSelector.selectedIndex < 0 ? protocolSelector.textInput.text : protocolSelector.selectedItem['value'];
+				websocket = new WebSocket(urlField.text, "*", subprotocol, 5000);
+				websocket.debug = true;
+				websocket.connect();
+				websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocketClosed);
+				websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocketOpen);
+				websocket.addEventListener(WebSocketEvent.MESSAGE, handleWebSocketMessage);
+				websocket.addEventListener(WebSocketEvent.PONG, handlePong);
+				websocket.addEventListener(IOErrorEvent.IO_ERROR, handleIOError);
+				websocket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSecurityError);
+				websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
+			}
+			
+			private function handleIOError(event:IOErrorEvent):void {
+				connectButton.enabled = true;
+				disconnectButton.enabled = false;
+				pingButton.enabled = false;
+			}
+			
+			private function handleSecurityError(event:SecurityErrorEvent):void {
+				connectButton.enabled = true;
+				disconnectButton.enabled = false;
+				pingButton.enabled = false;
+			}
+			
+			private function handleConnectionFail(event:WebSocketErrorEvent):void {
+				WebSocket.logger("Connection Failure: " + event.text);
+			}
+			
+			private function handleWebSocketClosed(event:WebSocketEvent):void {
+				WebSocket.logger("Websocket closed.");
+				disconnectButton.enabled = false;
+				pingButton.enabled = false;
+				connectButton.enabled = true;
+				saveVersionBtn.enabled = false;
+			}
+			
+			private function handleWebSocketOpen(event:WebSocketEvent):void {
+				WebSocket.logger("Websocket Connected");
+				disconnectButton.enabled = true;
+				pingButton.enabled = true;
+				saveVersionBtn.enabled = true;
+				websocket.sendUTF(JSON.stringify({t:"str"}));
+			}
+			
+			private function handleWebSocketMessage(event:WebSocketEvent):void {
+				if (event.message.type === WebSocketMessage.TYPE_UTF8) {
+					if (websocket.protocol === 'dumb-increment-protocol') {
+						//						var obj:Object = JSON.parse(event.message.utf8Data);
+						var obj:Object = JSON.parse(event.message.utf8Data);
+						var curText:String;
+						if(obj.i=="t") {
+							input.text = obj.p;							
+						}
+						else if(obj.t=="i") {
+							curText = input.text;
+							curText = curText.slice(0,obj.s) + obj.c + curText.slice(obj.s);
+							input.text = curText;
+						} else if (obj.t=="d") {
+							curText = input.text;
+							curText = curText.slice(0,obj.e) + obj.c + curText.slice(obj.s);
+							input.text=curText;
+						}
+						results.text = obj.p;
+					}
+					else {
+						WebSocket.logger(event.message.utf8Data);
+					}
+				}
+				else if (event.message.type === WebSocketMessage.TYPE_BINARY) {
+					WebSocket.logger("Binary message received.  Length: " + event.message.binaryData.length);
+				}
+			}
+			
+			private function resetCounter():void {
+				if (websocket.connected && websocket.protocol === 'dumb-increment-protocol') {
+					websocket.sendUTF("reset\n");
+				}
+			}
+			
+			private function closeConnection():void {
+				WebSocket.logger("Disconnecting.");
+				websocket.close();
+			}
+			
+			private function ping():void {
+				var id:uint = pingCounter++;
+				pings[id] = new Date();
+				var payload:ByteArray = new ByteArray();
+				payload.writeUnsignedInt(id);
+				websocket.ping(payload);
+			}
+			
+			private var newEntry:Boolean = true;
+			private var lastEntry:TextOperationEvent;
+			
+			private var lastLength:int = 0;
+			private var lastPos:int =0;
+			private function sendValue(event:TextOperationEvent):void {
+				trace("Op!! " + event.operation + " type: "+event.type );
+				//create a bytearray
+				//var bytes:ByteArray = new ByteArray();
+				//var dest:ByteArray;
+				var json:Object = new Object();
+				var operation;
+				if(event.operation is CompositeOperation) {
+					trace("Composite Operation:");
+					var compOp:CompositeOperation = event.operation as CompositeOperation;
+					var test:int = compOp.operations.length;
+					for each(var op in compOp.operations) {
+						trace("Composite operation ("+test+" of "+compOp.operations.length+" contents: " + op);
+						test--;
+					}
+					operation = compOp.operations[compOp.operations.length-1];
+					if(compOp.operations.length > 1) {
+						trace("Composite Operation Continuation:");
+						compOp.operations.pop();
+						var newOp = new TextOperationEvent(TextOperationEvent.CHANGE);
+						newOp.operation = compOp;
+						sendValue(newOp);
+					} else return;
+				} else 
+					operation = event.operation
+				if(operation is InsertTextOperation) {
+					var evtI:InsertTextOperation = operation as InsertTextOperation;
+					json.t = "i";
+					var startPos:int;
+					var offset:int = evtI.textFlow.parentRelativeStart;
+					if(evtI.absoluteStart == lastPos && evtI.text.length > lastLength)
+					{
+						startPos = evtI.absoluteStart+lastLength;
+					} else {
+						startPos = evtI.absoluteStart;
+						lastLength = 0;
+					}
+					json.s=startPos+offset+1;
+					json.e=startPos+offset+1;
+					json.c = evtI.text.substr(-(evtI.text.length-lastLength));
+					trace("length: " + evtI.text.length+ ", lastLength: " + lastLength + ", off: " + offset);
+					trace("Insert Text Operation: Transmitting: "+evtI.text.substr(-(evtI.text.length-lastLength)));
+					lastLength = evtI.text.length;
+					lastPos = evtI.absoluteStart;	
+				}
+				else if(operation is DeleteTextOperation) {
+					trace("Delete Text Operation:");
+					var evtD:DeleteTextOperation = operation as DeleteTextOperation;
+					json.t = "d";
+					json.s=evtD.absoluteStart;
+					json.e=evtD.absoluteEnd;
+				} else if(operation is SplitParagraphOperation) {
+					trace("Split Text Operation");
+					var evtSP:SplitParagraphOperation = operation as SplitParagraphOperation;
+					json.t = "np";
+					json.s=evtSP.absoluteStart;
+					json.e=evtSP.absoluteEnd;
+				} else {
+					trace("Unknown operation: " + operation);
+				}
+				newEntry=false;
+				//var encoder:GZIPBytesEncoder = new GZIPBytesEncoder();
+				//bytes.writeUTF(JSON.stringify(json));
+				//dest = encoder.compressToByteArray(bytes);
+				//websocket.sendBytes(dest);
+				websocket.sendUTF(JSON.stringify(json));
+			}
+			
+			private function saveVersion(event:MouseEvent):void {
+				var json:Object = {t:"s"};
+				websocket.sendUTF(JSON.stringify(json));
+			}
+			
+			private function selectionChangeEvent(event:SelectionEvent):void {
+				newEntry=true;
+			}
+			
+			
+			private function handlePong(event:WebSocketEvent):void {
+				if (event.frame.length === 4) {
+					var id:uint = event.frame.binaryPayload.readUnsignedInt();
+					var startTime:Date = pings[id];
+					if (startTime) {
+						var latency:uint = (new Date()).valueOf() - startTime.valueOf();
+						WebSocket.logger("Ping latency " + latency + " ms");
+						delete pings[id];
+					}
+				}
+				else {
+					WebSocket.logger("Unsolicited pong received");
+				}
+			}
+			
+			private function clearLog():void {
+				log = "";
+				logOutput.text = log;
+			}
+			
+			private function onApplicationComplete():void {
+				
+				var appXML:XML = NativeApplication.nativeApplication.applicationDescriptor;
+				var ns:Namespace = appXML.namespace();
+				lblAppVersion.text = appXML.ns::versionNumber;
+				/*lblAppName.text  = appXML.ns::name;*/
+				appUpdater = new ApplicationUpdaterUI();
+				appUpdater.isCheckForUpdateVisible = false;
+				appUpdater.configurationFile = new File("app:/updateConfig.xml"); 
+				appUpdater.initialize();
+				appUpdater.addEventListener(UpdateEvent.INITIALIZED, onUpdate);
+				appUpdater.addEventListener(ErrorEvent.ERROR, onError);
+				
+			}
+			
+			// if there's an error to the update show an alert
+			
+			private function onError(event:ErrorEvent):void
+			{
+				Alert.show(event.toString());
+			}
+			
+			// check to see if updated is needed
+			
+			private function onUpdate(event:UpdateEvent):void
+			{
+				appUpdater.checkNow();
+			}
+			
+			// set up everything once it's all created
+			private function onCreationComplete():void {
+				this.socialMoveEditor.currentGame = new SocialGame();
+				this.socialMoveEditor.moveListDP = new ArrayCollection();
+				this.socialMoveEditor.addEventListener(SaveEntityEvent.SOCIAL_MOVE, saveSelectedMove);
+				this.socialMoveEditor.addEventListener(LoadEntityEvent.SOCIAL_MOVE, loadMove);
+				this.cif = CiFSingleton.getInstance();
+				this.ggm = GrailGM.getInstance();
+				this.dte.initializeDataProviders();
+				reinitChildData();
+				var win : LoginRegister= new LoginRegister();
+				win.addEventListener(LoginEvent.LOGGED_IN, function(evt:LoginEvent):void {
+					current_userid = evt.userId;
+					getAllSocial_gamesNames();
+					//loadAllSocialGamesFromDB();
+					PopUpManager.removePopUp(evt.target as IFlexDisplayObject);
+				});
+				PopUpManager.addPopUp(win,this,true);
+				PopUpManager.centerPopUp(win);
+
+			}
+			
+			// (April) The use of multiple acordian tabs at once means we had to initialize them all
+			// However, that changed the order of when onCreationComplete happened
+			// such that the components got created before data was initialized.
+			// Re-initialize data providers now that we have it
+			private function reinitChildData():void {
+				microtheoryEditor.defEditor.onCreationComplete();
+				microtheoryEditor.microIRSEditor.onCreationComplete();
+				//socialMoveEditor.roleTypeEditor.onCreationComplete();
+				socialMoveEditor.intentEditor.onCreationComplete();
+				socialMoveEditor.preConEditor.onCreationComplete();
+				socialMoveEditor.initIRSEditor.onCreationComplete();
+				socialMoveEditor.respIRSEditor.onCreationComplete();
+				socialMoveEditor.effectEditor.onCreationComplete();
+				socialMoveEditor.instEditor.onCreationComplete();
+				plotPointEditor.overviewEditor.onCreationComplete();
+			}
+			
+			// Close the pop up windows via hitting the little X in the corner
+			private function closePopUp(evt:CloseEvent):void {
+				PopUpManager.removePopUp(evt.target as TitleWindow);
+			}
+			
+			// Close the pop up windows via hitting the button
+			private function closePopUpMouse(evt:MouseEvent):void {
+				var but:Button = evt.target as Button;
+				var tw:TitleWindow = but.owner as TitleWindow;
+				PopUpManager.removePopUp(tw);
+			}
+			
+			// Error PopUp window handler for all our error pop up needs
+			public function openPopUp(title:String, dialog:String):void {
+				// create and configure the TitleWindow
+				var tw:TitleWindow = new TitleWindow();
+				tw.title = title;
+				tw.width = 350;
+				tw.height = 240;
+				
+				// callback for hitting the little X in the corner
+				tw.addEventListener(Event.CLOSE, closePopUp);
+				
+				// set up the look and feel of the pop up
+				var back:Rect = new Rect();
+				var solid:SolidColor = new SolidColor();
+				solid.color = 0x9c4849;
+				back.percentWidth = 100;
+				back.percentHeight = 100;
+				back.fill = solid;
+				tw.addElement(back);
+
+				var label:Label = new Label();
+				label.x = 10;
+				label.y = 10;
+				label.width = 330;
+				label.height = 147;
+				label.text = dialog;
+
+				label.setStyle("backgroundAlpha", 0.7);
+				label.setStyle("backgroundColor", 0xFFFFFF);
+				label.setStyle("fontSize", 18);
+				label.setStyle("font-family", "Calibri");
+				label.setStyle("paddingLeft", 20);
+				label.setStyle("paddingRight", 20);
+				label.setStyle("verticalAlign", "middle");
+				tw.addElement(label);
+				
+				// add close button to the Title Window
+				var button:Button = new Button();
+				button.label = "OK";
+				button.addEventListener(MouseEvent.CLICK, closePopUpMouse);
+				button.x=139;
+				button.y=175;
+				tw.addElement(button);
+
+				// open the TitleWindow as a modal popup window
+				PopUpManager.addPopUp(tw, this, true);
+				PopUpManager.centerPopUp(tw);
+			}
+
+			
+			public function writeLibraryFile():void
+			{
+				var stream:FileStream = new FileStream();
+				var outXML:XML;
+				var xmlFile:File = new File(this.libraryFile.nativePath + ".xml");
+				var txtFile:File = new File(this.libraryFile.nativePath + ".txt");
+				
+				// if the user does not specify an extension, make it an xml file
+				if (this.libraryFile.type == null) { // make unspecified type .xml
+					
+					try{
+						stream.open(xmlFile, FileMode.WRITE);
+						outXML = new XML(this.cif.librariesToXMLString());
+						stream.writeUTFBytes(outXML); 	
+						stream.close();
+					}
+					catch (errObject:Error) {
+						openPopUp("Error Saving", "There was an error writing the file: " + errObject.name + "\n" + errObject.message);
+						Debug.debug(this, "There was an error writing the file: " + errObject.name + " and error message: " + errObject.message);
+						stream.open(txtFile, FileMode.WRITE);
+						var outString:String = "";
+						outString = new String(this.cif.librariesToXMLString());
+						stream.writeUTFBytes(outString); 	
+						stream.close();
+					}
+				}
+				else if(this.libraryFile.type.toLocaleLowerCase() == ".xml"){			
+					try{
+						stream.open(this.libraryFile, FileMode.WRITE);
+						outXML = new XML(this.cif.librariesToXMLString());
+						stream.writeUTFBytes(outXML); 	
+						stream.close();
+					}
+					
+					catch (errObject:Error) {
+						openPopUp("Error Saving", "There was an error writing the file: " + errObject.name + "\n" + errObject.message);
+						Debug.debug(this, "There was an error writing the file: " + errObject.name + " and error message: " + errObject.message);
+						stream.open(txtFile, FileMode.WRITE);
+						outString = "";
+						outString = new String(this.cif.librariesToXMLString());
+						stream.writeUTFBytes(outString); 	
+						stream.close();
+					}
+				}
+				else { // some extension that isn't xml!  This is a problem!  Shouldn't be around!
+					openPopUp("Unrecognized File Extension", "Unrecognized file extension. XML is the only acceptable file type");
+				}
+				
+				this.loadedLibrary.text = this.libraryFile.name;
+				
+				// update the list of games in the UI
+				this.socialMoveEditor.moveListDP.removeAll();
+				for each (var game:SocialGame in this.cif.socialGamesLib.games)
+				{
+					this.socialMoveEditor.moveListDP.addItem(game.name);
+				}
+				var selectedMove:Number = this.cif.socialGamesLib.getIndexByName(this.socialMoveEditor.moveName.text);
+				if (selectedMove >= 0)
+				{
+					this.socialMoveEditor.moveList.selectedIndex = selectedMove;
+				}
+
+			}
+			
+			public function writeStateFile():void
+			{
+				var stream:FileStream = new FileStream();
+				var outXML:XML;
+				var xmlFile:File = new File(this.stateFile.nativePath + ".xml");
+				var txtFile:File = new File(this.stateFile.nativePath + ".txt");
+				
+				// if the user does not specify an extension, make it an xml file
+				if (this.stateFile.type == null) { // make unspecified type .xml
+					
+					try{
+						stream.open(xmlFile, FileMode.WRITE);
+						outXML = new XML(this.ggm.gameStateToXMLString());
+						stream.writeUTFBytes(outXML); 	
+						stream.close();
+					}
+					catch (errObject:Error) {
+						openPopUp("Error Saving", "There was an error writing the file: " + errObject.name + "\n" + errObject.message);
+						Debug.debug(this, "There was an error writing the file: " + errObject.name + " and error message: " + errObject.message);
+						stream.open(txtFile, FileMode.WRITE);
+						var outString:String = "";
+						outString = new String(this.ggm.gameStateToXMLString());
+						stream.writeUTFBytes(outString); 	
+						stream.close();
+					}
+				}
+				else if(this.stateFile.type.toLocaleLowerCase() == ".xml"){			
+					try{
+						stream.open(this.stateFile, FileMode.WRITE);
+						outXML = new XML(this.ggm.gameStateToXMLString());
+						stream.writeUTFBytes(outXML); 	
+						stream.close();
+					}
+					
+					catch (errObject:Error) {
+						openPopUp("Error Saving", "There was an error writing the file: " + errObject.name + "\n" + errObject.message);
+						Debug.debug(this, "There was an error writing the file: " + errObject.name + " and error message: " + errObject.message);
+						stream.open(txtFile, FileMode.WRITE);
+						outString = "";
+						outString = new String(this.ggm.gameStateToXMLString());
+						stream.writeUTFBytes(outString); 	
+						stream.close();
+					}
+				}
+				else { // some extension that isn't xml!  This is a problem!  Shouldn't be around!
+					openPopUp("Unrecognized File Extension", "Unrecognized file extension. XML is the only acceptable file type");
+				}
+				
+				//this.loadedState.text = this.stateFile.name;
+				
+				// update the list of plot points in the UI
+				this.plotPointEditor.plotPointListDP.removeAll();
+				for each (var pp:PlotPoint in this.ggm.plotPointPool.plotPoints){
+					this.plotPointEditor.plotPointListDP.addItem(pp.name);
+				}
+				this.plotPointEditor.overviewEditor.generatePreConList();
+				
+				this.plotPointEditor.plotPointList.selectedItem = this.plotPointEditor.plotPointName.text;
+				// update the list of games in the UI
+				/*
+				this.socialMoveEditor.moveListDP.removeAll();
+				for each (var game:SocialGame in this.cif.socialGamesLib.games)
+				{
+					this.socialMoveEditor.moveListDP.addItem(game.name);
+				}
+				var selectedMove:Number = this.cif.socialGamesLib.getIndexByName(this.socialMoveEditor.moveName.text);
+				if (selectedMove >= 0)
+				{
+					this.socialMoveEditor.moveList.selectedIndex = selectedMove;
+				}*/
+				
+			}
+			
+			// Callback for when a library file has been selected to save to
+			public function onLibrarySelectWrite(event:Event):void {
+				this.libraryFile = event.target as File;				
+				writeLibraryFile();
+			}
+			
+			// Callback for when a state file has been selected to save to
+			public function onStateSelectWrite(event:Event):void {
+				this.stateFile = event.target as File;				
+				writeStateFile();
+			}
+			
+			public function checkLibPath():Boolean {
+				try{
+					var xmlFile:File = new File(this.libraryFile.nativePath + ".xml");
+				}
+				catch(error:Error){
+						return true;
+				}
+				return false;
+			}
+			
+			public function saveCurrentLibrary():void {
+				saveCurrentMove();
+				saveCurrentMicrotheory();
+				
+				if (!libraryFile || checkLibPath())
+				{
+					// load browser
+					this.libraryFile = new File();
+					
+					try {
+						this.libraryFile.browseForSave("Save Library File");
+						this.libraryFile.addEventListener(Event.SELECT, onLibrarySelectWrite);
+					}catch(error:Error) {
+						openPopUp("Save Error", "Failed to open CiF library for saving: " + error.message);
+						Debug.debug(this, "Failed to open CiF library file for saving: " + error.message);
+					}		
+				}
+				else
+				{
+					writeLibraryFile();
+					// let user know move has been saved
+					openPopUp("File Saved", "File has been successfully saved.");
+				}
+			}
+			
+			public function saveAsCurrentLibrary():void {
+				saveCurrentMove();
+				saveCurrentMicrotheory();
+				this.libraryFile = new File();
+				try{
+					this.libraryFile.browseForSave("Save Library File");
+					this.libraryFile.addEventListener(Event.SELECT, onLibrarySelectWrite);
+				}catch(error:Error) {
+					openPopUp("Save Error", "Failed to open CiF library for saving: " + error.message);
+					Debug.debug(this, "Failed to open CiF library file for saving: " + error.message);					
+				}
+				
+			}
+			
+			public function saveCurrentState():void {
+				// Save any changes to state once we add the ability to do so
+				saveCurrentPlotPoint();
+				
+				if (!stateFile)
+				{
+					// load browser
+					this.stateFile = new File();
+					
+					try {
+						this.stateFile.browseForSave("Save State File");
+						this.stateFile.addEventListener(Event.SELECT, onStateSelectWrite);
+					}catch(error:Error) {
+						openPopUp("Save Error", "Failed to open CiF state for saving: " + error.message);
+						Debug.debug(this, "Failed to open CiF state file for saving: " + error.message);
+					}		
+				}
+				else
+				{
+					writeStateFile();
+					// let user know move has been saved
+					openPopUp("File Saved", "File has been successfully saved.");
+				}
+			}
+			
+			public function saveAsCurrentState():void {
+				// Save any changes to state once we add the ability to do so
+				saveCurrentPlotPoint();
+				
+				// load browser
+				this.stateFile = new File();
+				
+				try {
+					this.stateFile.browseForSave("Save State File");
+					this.stateFile.addEventListener(Event.SELECT, onStateSelectWrite);
+				}catch(error:Error) {
+					openPopUp("Save Error", "Failed to open CiF state for saving: " + error.message);
+					Debug.debug(this, "Failed to open CiF state file for saving: " + error.message);		
+				}
+			}
+			
+			// Callback function for when the user wants to save the currently edited move
+			public function saveCurrentMove():void {
+				// check to make sure there is a move name, otherwise make an error popup
+				if (this.socialMoveEditor.moveName.text == "")
+				{
+					// error
+					this.openPopUp("Save Notice", "No name found for current social move. Move was not saved.");
+				}
+				else
+				{
+					// Save to the cif social games library so it can be written to a file correctly
+					// see if this move is already in the socialGamesLib
+					var sg:SocialGame = this.cif.socialGamesLib.getByName(this.socialMoveEditor.currentGame.name);
+					if (sg)
+					{
+						this.cif.socialGamesLib.removeGame(sg);
+					}
+					this.cif.socialGamesLib.addGame(this.socialMoveEditor.currentGame); 
+				}
+			}
+			
+			public function saveCurrentMicrotheory():void {
+				// check to make sure there is a move name, otherwise make an error popup
+				if (this.microtheoryEditor.microtheoryName.text == "")
+				{
+					// error
+					this.openPopUp("Save Notice", "No name found for current microtheory. Microtheory was not saved.");
+				}
+				else
+				{
+					// Save to the cif microtheories so it can be written to a file correctly
+					// see if this move is already in the microtheory list
+					var mt:Microtheory;
+					for each (var micro:Microtheory in this.cif.microtheories){
+						if (micro.name == this.microtheoryEditor.currentTheory.name) mt = micro;
+					}
+					if (mt)
+					{
+						this.cif.microtheories.splice(this.cif.microtheories.indexOf(mt), 1);
+					}
+					this.cif.microtheories.push(this.microtheoryEditor.currentTheory);
+				}
+			}
+			
+			public function saveCurrentPlotPoint():void {
+				// check to make sure there is a move name, otherwise make an error popup
+				if (this.plotPointEditor.plotPointName.text == "New Plot Point")
+				{
+					// error
+					this.openPopUp("Save Notice", "No name found for current plot point. Plot Point was not saved.");
+				}
+				else if (this.plotPointEditor.plotPointName.text != "")
+				{
+					// Save to the plot point list so it can be written to a file correctly
+					// see if this plot point is already in the plot point list
+					var pp:PlotPoint;
+					for each (var plotPt:PlotPoint in this.ggm.plotPointPool.plotPoints){
+						if (plotPt.name == this.plotPointEditor.currentPlotPt.name) pp = plotPt;
+					}
+					if (pp)
+					{
+						this.ggm.plotPointPool.plotPoints.splice(this.ggm.plotPointPool.plotPoints.indexOf(pp), 1);
+					}
+					else
+					{
+						// add new knowledge
+						var workingKnowledge:GrailKnowledge = new GrailKnowledge();
+						workingKnowledge.id = this.ggm.knowledgeList.length;
+						workingKnowledge.cifKnowledge = this.plotPointEditor.currentPlotPt.cifKnowledge.clone();
+						this.ggm.knowledgeList.push(workingKnowledge);
+					}
+					this.ggm.plotPointPool.plotPoints.push(this.plotPointEditor.currentPlotPt);
+				}
+			}
+			
+			public function onBrowseForOpenLibrariesSelect(event:Event):void {
+				var stream:FileStream = new FileStream();
+				stream.open(event.target as File, FileMode.READ);
+				var libraryXML:XML = new XML(stream.readUTFBytes(stream.bytesAvailable));
+
+				this.socialMoveEditor.moveListDP.removeAll();
+				this.microtheoryEditor.microtheoryListDP.removeAll();
+				this.cif.parseCiFState(libraryXML, false);
+				
+				// update the list of microtheories in the UI
+				for each (var microT:Microtheory in this.cif.microtheories){
+					this.microtheoryEditor.microtheoryListDP.addItem(microT.name);
+				}
+				
+				// update the list of games in the UI
+				for each (var game:SocialGame in this.cif.socialGamesLib.games)
+				{
+					this.socialMoveEditor.moveListDP.addItem(game.name);
+				}
+				// change the name of the library loaded
+				this.loadedLibrary.text = this.libraryFile.name;
+			}
+			
+			public function onBrowseForOpenStatesSelect(event:Event):void {
+				var stream:FileStream = new FileStream();
+				stream.open(event.target as File, FileMode.READ);
+				var stateXML:XML = new XML(stream.readUTFBytes(stream.bytesAvailable));
+				
+				this.ggm.parseGameState(stateXML);
+
+				this.dte.knowledgeTypes = this.dte.generateKnowledgeListProvider();
+				this.plotPointEditor.overviewEditor.onCreationComplete();
+				
+				this.plotPointEditor.plotPointListDP.removeAll();
+				for each (var pp:PlotPoint in this.ggm.plotPointPool.plotPoints){
+					this.plotPointEditor.plotPointListDP.addItem(pp.name);
+				}
+				
+				this.plotPointEditor.ppInstEditor.generateCharList();
+				this.plotPointEditor.overviewEditor.generatePreConList();
+				// change the name of the library loaded
+				//this.loadedState.text = this.stateFile.name;
+				
+			}
+			
+			// load a library file
+			public function loadLibrary():void {
+				// bring up load window
+				// if (!libraryFile) *this line was what was causing files to be rewritten when loading*
+				this.libraryFile = new File();
+				var txtFilter:FileFilter = new FileFilter("XML", "*.xml");
+				
+				try {
+					this.libraryFile.browseForOpen("Open CiF Library", [txtFilter]);
+					this.libraryFile.addEventListener(Event.SELECT, onBrowseForOpenLibrariesSelect);
+				}catch(error:Error) {
+					openPopUp("Load Error", "Failed to open CiF library for loading: " + error.message);
+				}
+			}
+			
+			// load a state file
+			public function loadState():void {
+				// bring up load window
+				if (!stateFile)
+					this.stateFile = new File();
+				var txtFilter:FileFilter = new FileFilter("XML", "*.xml");
+				
+				try {
+					this.stateFile.browseForOpen("Open CiF State", [txtFilter]);
+					this.stateFile.addEventListener(Event.SELECT, onBrowseForOpenStatesSelect);
+				}catch(error:Error) {
+					openPopUp("Load Error", "Failed to open CiF state for loading: " + error.message);
+				}
+			}
+			
+			/**
+			 * Loads the filtered rules into the provided vector.
+			 */
+			protected function loadRulesByTypeAndGameID(orig:SocialGame, vo:SocialGameVO, ruleType:int):void
+			{
+				var collection;
+				switch(ruleType) {
+					case INTENT:
+						collection = orig.intents; 
+						break;
+					case PRECON:
+						collection = orig.preconditions;
+						break;
+					case INITIRS:
+						collection = orig.initiatorIRS.influenceRules;
+						break;
+					case RESPIRS:
+						collection = orig.responderIRS.influenceRules;
+						break;
+				}
+				
+				var numRules:int=0;
+				function handlePredsLoaded(evt:EntityLoadedEvent):void {
+					if(numRules>1)
+						numRules--;
+					else
+						vo.dispatchEvent(new EntityLoadedEvent(EntityLoadedEvent.RULES, ruleType));
+				}
+				var getRulesByTypeAndGameIDResult:CallResponder = new CallResponder();
+				getRulesByTypeAndGameIDResult.addEventListener(ResultEvent.RESULT, function(evt:ResultEvent):void {
+					var result:ArrayCollection = evt.result as ArrayCollection;
+					numRules = result.length;
+					for each(var rule:RuleVO in result) {
+						var newRule:Rule;
+						if(ruleType==INTENT || ruleType==PRECON) {
+							newRule = new Rule();
+							(collection as Vector.<Rule>).push(newRule);
+						}
+						else {
+							newRule = new InfluenceRule();
+							(collection as Vector.<InfluenceRule>).push(newRule);
+						}
+						rule.load(newRule);
+						rule.addEventListener(EntityLoadedEvent.PREDICATES,handlePredsLoaded);
+						loadPredicatesByRuleID(newRule.predicates,rule.id,rule);
+					}
+				});
+				getRulesByTypeAndGameIDResult.token = socialgamesService.getRulesByTypeAndGameID(vo.id, ruleType);
+			}
+			
+			public function loadMove(event:LoadEntityEvent):void {
+				getSocial_gamesByID(moveNamesToGameIDs[event.name].id);
+			}
+			
+			public function loadNewMoveFromDB(event:ResultEvent):void {
+				
+				var sg:SocialGame = new SocialGame();
+				var currentMove:SocialGameVO = event.result as SocialGameVO;
+				socialGamesToVO[sg] = currentMove;
+				
+				currentMove.vid = event.result.vid;
+//				currentMove.gid = event.gid;
+				var sgLib:SocialGamesLib = SocialGamesLib.getInstance();
+				var sfdbInstance:SocialFactsDB = SocialFactsDB.getInstance();
+				var i:int;
+				var ir:InfluenceRule;
+				var irIter:InfluenceRule;
+				var r:Rule;
+				var rIter:Rule;
+				var eIter:Effect;
+				var maxID:int;
+				var inst:Instantiation;
+				var instIter:Instantiation;
+				var e:Effect;
+				var t:Trigger;
+				var socialStatusUpdateEntry:SocialStatusUpdateEntry;
+				currentMove.load(sg);
+				sgLib.addGame(sg);
+				socialMoveEditor.currentMove = currentMove;
+				socialMoveEditor.loadNewMove(sg.name,currentMove);
+
+				loadRulesByTypeAndGameID(sg,currentMove,INTENT);
+				
+				// Preconditions
+				loadRulesByTypeAndGameID(sg,currentMove,PRECON);
+				
+				// Initiator Influence Rule Set
+				loadRulesByTypeAndGameID(sg,currentMove,INITIRS);
+				// Responder Influence Rule Set
+				loadRulesByTypeAndGameID(sg,currentMove,RESPIRS);
+				
+				// Effects
+				loadEffectsByGameID(sg,currentMove);
+				loadInstantiationsByGameID(sg,currentMove);
+				var iteratorRule:Rule;
+				//before saving, sort all the predicates in all rules
+				
+				for each (iteratorRule in sg.initiatorIRS.influenceRules)
+				{
+					iteratorRule.sortPredicates();
+				}
+				for each (iteratorRule in sg.responderIRS.influenceRules)
+				{
+					iteratorRule.sortPredicates();
+				}
+				
+				for each (var effect:Effect in sg.effects)
+				{
+					effect.condition.sortPredicates();
+					effect.change.sortPredicates();
+				}
+				
+				// (April) Also check if it requires an other -- needs to be set for editor to use properly
+				sg.updateRequiresOther();
+				
+				
+				currentMove.dispatchEvent(new EntityLoadedEvent(EntityLoadedEvent.SOCIAL_MOVE));
+				//cif.socialGamesLib.addGame(sg);
+			}
+
+			
+			/** 
+			 *  Save the selected social game to Database
+			 */
+			public function saveGames():void {
+				for each(var sg:SocialGame in this.cif.socialGamesLib.games)
+				{
+					var socialGame:SocialGameVO;
+					if(socialGamesToVO[sg])
+						socialGame = socialGamesToVO[sg];
+					else {
+						socialGame = new SocialGameVO();
+						socialGame.id = 0;
+						socialGame.vid = 0;
+						socialGamesToVO[sg] = socialGame;
+					}
+					socialGame.init(sg,current_userid);
+					saveSocial_game(socialGame,sg);
+				}
+			}
+
+			
+			/** 
+			 *  Save the selected social game to Database
+			 */
+			public function saveSelectedMove(evt:SaveEntityEvent):void {
+				var sg:SocialGame = this.cif.socialGamesLib.getByName(evt.entName);
+				var socialGame:SocialGameVO;
+				if(socialGamesToVO[sg])
+					socialGame = socialGamesToVO[sg];
+				else {
+					socialGame = new SocialGameVO();
+					socialGame.id = 0;
+					socialGame.vid = 0;
+					socialGamesToVO[sg] = socialGame;
+				}
+				socialGame.init(sg,current_userid);
+				saveSocial_game(socialGame,sg);
+			}
+			
+			public var instToEffectVO:Dictionary= new Dictionary();
+			public var instVoToInstantiation:Dictionary = new Dictionary();
+			public static var moveNamesToGameIDs:Dictionary = new Dictionary();
+			/**
+			 * When game is created, finish by creating each of its children. The result is the version ID.
+			 */
+			
+
+			protected function tabnavigator1_changeHandler(event:IndexChangedEvent):void
+			{
+				if(event.newIndex==3)
+					tabNavigator.y=0;
+				else
+					tabNavigator.y=0;
+				
+				var sgLib:SocialGamesLib = SocialGamesLib.getInstance();
+			}
+			
+			protected function saveSocial_game(item:SocialGameVO,sg:SocialGame):void
+			{
+				var createSocial_gameResult:CallResponder = new CallResponder();
+				var criteria:Object = {intent:false,precon:false,initirs:false,respirs:false,effects:false,inst:false};
+				function handleSaveEvent(event:EntityCreatedEvent):void {
+					switch(event.type) {
+						case EntityCreatedEvent.RULES:
+							switch(event.specificType) {
+								case INTENT:
+									criteria.intent = true;
+									break;
+								case PRECON:
+									criteria.precon = true;
+									break;
+								case INITIRS:
+									criteria.initirs = true;
+									break;
+								case RESPIRS:
+									criteria.respirs = true;
+									break;		
+							}
+							break;
+						case EntityCreatedEvent.EFFECTS:
+							criteria.effects = true;
+							break 
+						case EntityCreatedEvent.INSTANTIATIONS:
+							criteria.inst = true;
+							break;
+					}
+					if(criteria.intent&&criteria.precon&&criteria.initirs&&criteria.respirs&&criteria.effects&&criteria.inst)
+					{
+						item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.SOCIAL_GAME,item,null));
+					}
+				}
+				function handleSocialGameCreated(event:ResultEvent):void {
+					item.gid = ((event.result as ArrayCollection).getItemAt(0) as int);
+					item.id = ((event.result as ArrayCollection).getItemAt(1) as int);
+					item.vid = ((event.result as ArrayCollection).getItemAt(2) as int);
+					if (moveNamesToGameIDs[item.game_name]==undefined)
+						moveNamesToGameIDs[item.game_name] = new Object();						
+					moveNamesToGameIDs[item.game_name].gid = item.gid;
+					moveNamesToGameIDs[item.game_name].id = item.id;
+					moveNamesToGameIDs[item.game_name].vid = item.vid;
+					// Initialize list of intents.
+					var rule:RuleVO;
+					function createRules(rules:*,type:int):void {
+						var numRules:int=0;
+						function handleRulesCreated(event:EntityCreatedEvent):void {
+							if(numRules > 1)
+								numRules--;
+							else
+								item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.RULES,null,sg,type));
+						}
+						numRules=rules.length;
+						if(rules is Vector.<Rule>) {
+							for each(var ruleOrig:Rule in rules as Vector.<Rule>) {
+								rule = new RuleVO();
+								rule.init(ruleOrig,item.id);
+								rule.type = type;
+								rule.microtheory = false;
+								rule.addEventListener(EntityCreatedEvent.RULE, handleRulesCreated);
+								createRule(rule,ruleOrig,item);
+							}
+						} else if (rules is Vector.<InfluenceRule>) {
+							for each(var ruleOrig:Rule in rules as Vector.<InfluenceRule>) {
+								rule = new RuleVO();
+								rule.init(ruleOrig,item.id);
+								rule.type = type;
+								rule.microtheory = false;
+								rule.addEventListener(EntityCreatedEvent.RULE, handleRulesCreated);
+								createRule(rule,ruleOrig,item);
+							}
+						}
+					}
+					item.addEventListener(EntityCreatedEvent.RULES, handleSaveEvent);
+					createRules(sg.intents,INTENT);
+					createRules(sg.preconditions,PRECON);
+					createRules(sg.initiatorIRS.influenceRules,INITIRS);
+					createRules(sg.responderIRS.influenceRules,RESPIRS);
+					// Effects
+					item.addEventListener(EntityCreatedEvent.EFFECTS, handleSaveEvent);
+					var numInst:int = sg.instantiations.length;						
+					function handleInstantiationCreated():void {
+						if(numInst > 1)
+							numInst--;
+						else
+							item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.INSTANTIATIONS,item));
+					}
+					function handleEffectCreated(effectEvt:EntityCreatedEvent):void { 
+						var effectTargetVO:EffectVO = (effectEvt.target as EffectVO);
+						var origEffect:Effect = effectEvt.original as Effect;
+						effectTargetVO.removeEventListener(EntityCreatedEvent.EFFECT, handleEffectCreated);
+						var dependencies:Object = {condition:false,change:false,conditionUpdated:false,changeUpdated:false};
+						
+						function handleEffectRuleCreated(ruleEvt:EntityCreatedEvent):void {
+							ruleEvt.target.removeEventListener(EntityCreatedEvent.RULE, handleEffectRuleCreated);
+							if(ruleEvt.specificType==CONDITION) {
+								effectTargetVO.conditionRuleID = (ruleEvt.target as RuleVO).id;
+								dependencies.condition=true;
+							}
+							else {
+								effectTargetVO.changeRuleID = (ruleEvt.target as RuleVO).id;
+								dependencies.change=true;
+							}
+							updateEffectRemote(ruleEvt.entityParent as EffectVO);
+							(ruleEvt.entityParent as EffectVO).addEventListener(EntityUpdatedEvent.EFFECT, function(evt:EntityUpdatedEvent):void {
+								if(ruleEvt.specificType==CONDITION)
+									dependencies.conditionUpdated=true;
+								if(ruleEvt.specificType==CHANGE)
+									dependencies.changeUpdated=true;
+								if(dependencies.condition&&dependencies.change&&dependencies.conditionUpdated&&dependencies.changeUpdated)
+									item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.EFFECTS,item));
+							});
+							
+							if(dependencies.condition&&dependencies.change&&dependencies.conditionUpdated&&dependencies.changeUpdated)
+								item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.EFFECTS,item));
+						}
+						if(origEffect.condition) {
+							var conditionRule:RuleVO = new RuleVO();
+							conditionRule.init(origEffect.condition,effectTargetVO.id);
+							conditionRule.type = EFFECT;
+							conditionRule.microtheory = false;
+							conditionRule.addEventListener(EntityCreatedEvent.RULE, handleEffectRuleCreated);
+							createRule(conditionRule,origEffect.condition,effectTargetVO,CONDITION);
+							dependencies.condition=true;
+							dependencies.conditionUpdated=true;
+						}
+						if(origEffect.change) {
+							var changeRule:RuleVO = new RuleVO();
+							changeRule.init(origEffect.change,effectTargetVO.id);
+							changeRule.type = EFFECT;
+							changeRule.microtheory = false;
+							changeRule.addEventListener(EntityCreatedEvent.RULE, handleEffectRuleCreated);
+							createRule(changeRule,origEffect.change,effectTargetVO,CHANGE);
+							dependencies.change=true;
+							dependencies.changeUpdated=true;							
+						}
+						if(dependencies.condition&&dependencies.change&&dependencies.conditionUpdated&&dependencies.changeUpdated)
+							item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.EFFECTS,item));
+						//Loop through instantiations, looking for one that corresponds to this effect.
+						
+						
+						item.addEventListener(EntityCreatedEvent.INSTANTIATIONS, handleSaveEvent);
+
+						for each(var inst:Instantiation in sg.instantiations) {
+							if(inst.id == origEffect.instantiationID) {
+								var instantiation:InstantiationVO = new InstantiationVO();
+								instantiation.init(inst,effectTargetVO.gameID,effectTargetVO.id);
+								instToEffectVO[instantiation] = effectTargetVO;
+								function handleInstantiationInit(evt:EntityCreatedEvent):void {
+									
+									/*
+									Make sure that the effect ID and the instance ID remain in sync.
+									*/
+									evt.entityParent.instantiationID = (evt.target as InstantiationVO).id;
+									var instantiationVO = evt.target;
+									updateEffectRemote(evt.entityParent as EffectVO);
+									var numLinesOfDialogue:int = inst.lines.length;
+									for each(var lod:LineOfDialogue in (evt.original as Instantiation).lines) {
+										var lodVO:LineOfDialogueVO = new LineOfDialogueVO();
+										lodVO.init(lod,(evt.target as InstantiationVO).id);
+										function handleLineOfDialogueCreated():void {
+											if(numLinesOfDialogue > 1)
+												numLinesOfDialogue--;
+											else
+												item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.INSTANTIATION,item));
+										}
+										lodVO.addEventListener(EntityCreatedEvent.LINEOFDIALOGUE_CREATED, handleLineOfDialogueCreated);
+										createLineOfDialogue(lodVO,lod,evt.target as InstantiationVO);
+									}
+								}
+								instantiation.addEventListener(EntityCreatedEvent.INSTANTIATION_INIT, handleInstantiationInit);
+								item.addEventListener(EntityCreatedEvent.INSTANTIATION, handleInstantiationCreated);
+								createInstantiation(instantiation,inst,effectTargetVO);
+							}
+						}
+					}
+					var numEffects:int=sg.effects.length;
+					for each(var origEffect:Effect in sg.effects) {
+						var effect:EffectVO = new EffectVO();
+						effect.init(origEffect,item.id);
+						effect.addEventListener(EntityCreatedEvent.EFFECT, handleEffectCreated);
+						createEffect(effect,origEffect,item);
+					}
+					var instancesToInstancesVO:Dictionary = new Dictionary();
+					// Handle orphan instances
+					for each(var inst:Instantiation in sg.instantiations) {
+						if(inst.id == 0) {
+							var instantiation:InstantiationVO = new InstantiationVO();
+							instantiation.addEventListener(EntityCreatedEvent.INSTANTIATION_INIT, handleInstantiationInit);
+							instantiation.init(inst,item.id,-1);
+							instToEffectVO[instantiation] = null;
+							function handleInstantiationInit(evt:EntityCreatedEvent):void {
+								
+								/*
+								Make sure that the effect ID and the instance ID remain in sync.
+								*/
+								//evt.entityParent.instantiationID = (evt.target as InstantiationVO).id;
+								var instantiationVO = evt.target;
+								updateEffectRemote(evt.entityParent as EffectVO);
+								var numLinesOfDialogue:int = inst.lines.length;
+								for each(var lod:LineOfDialogue in (evt.original as Instantiation).lines) {
+									var lodVO:LineOfDialogueVO = new LineOfDialogueVO();
+									lodVO.init(lod,(evt.target as InstantiationVO).id);
+									function handleLineOfDialogueCreated():void {
+										if(numLinesOfDialogue > 1)
+											numLinesOfDialogue--;
+										else
+											item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.INSTANTIATION,item));
+									}
+									lodVO.addEventListener(EntityCreatedEvent.LINEOFDIALOGUE_CREATED, handleLineOfDialogueCreated);
+									createLineOfDialogue(lodVO,lod,evt.target as InstantiationVO);
+								}
+							}
+							createInstantiation(instantiation,inst,null);
+						}
+					}
+					item.addEventListener(EntityCreatedEvent.INSTANTIATION, handleInstantiationCreated);
+				}
+				
+				createSocial_gameResult.addEventListener(ResultEvent.RESULT, handleSocialGameCreated);
+				createSocial_gameResult.token = socialgamesService.createSocial_game(item);
+			}
+			
+			private var CONDITION:int = -1;
+			private var CHANGE:int = -2;
+			protected function createRule(item:RuleVO,orig:Rule,prnt:Object=null,specificType:int=0):void
+			{
+				var createRuleResult:CallResponder = new CallResponder();
+				var numPreds:int=orig.predicates.length;
+				function handlePredCreated():void {
+					if(numPreds > 1)
+						numPreds--;
+					else
+						item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.RULE,orig,prnt,specificType));
+				}
+				function ruleCreated(event:ResultEvent):void {
+					item.id = (event.result as int);
+					for each(var pred:Predicate in orig.predicates) {
+						var predVO:PredicateVO = new PredicateVO();
+						predVO.init(pred, item.id);
+						predVO.addEventListener(EntityCreatedEvent.PREDICATE, handlePredCreated);
+						createPredicate(predVO, pred);
+					}
+				}
+				createRuleResult.addEventListener(ResultEvent.RESULT,ruleCreated);
+				createRuleResult.token = socialgamesService.createRule(item);
+			}
+			
+			
+			protected function createEffect(item:EffectVO, orig:Effect, game:SocialGameVO):void
+			{
+				var createEffectResult:CallResponder = new CallResponder();
+				function effectCreated(event:ResultEvent):void
+				{
+					item.id = (event.result as int);
+					item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.EFFECT,orig,game));
+				}
+				createEffectResult.addEventListener(ResultEvent.RESULT,effectCreated);
+				createEffectResult.token = socialgamesService.createEffect(item);
+			}
+			
+			protected function createInstantiation(item:InstantiationVO,orig:Instantiation,effect:EffectVO):void
+			{
+				var createInstantiationResult:CallResponder = new CallResponder();
+				function instantiationCreated(event:ResultEvent):void
+				{
+					item.id = (event.result as int);
+					item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.INSTANTIATION_INIT,orig,effect));
+				}
+				createInstantiationResult.addEventListener(ResultEvent.RESULT,instantiationCreated);
+				createInstantiationResult.token = socialgamesService.createInstantiation(item);
+			}
+			
+			protected function updateEffectRemote(item:EffectVO):void
+			{
+				if(item!=null) {
+					var updateEffectResult:CallResponder = new CallResponder();
+					updateEffectResult.addEventListener(ResultEvent.RESULT, function(evt:ResultEvent):void {
+						item.dispatchEvent(new EntityUpdatedEvent(EntityUpdatedEvent.EFFECT));
+					});
+					updateEffectResult.token = socialgamesService.updateEffect(item);
+				}
+			}
+			
+			
+			protected function createLineOfDialogue(item:LineOfDialogueVO, orig:LineOfDialogue,inst:InstantiationVO):void
+			{
+				var createLineOfDialogueResult:CallResponder = new CallResponder();
+				
+				function lineOfDialogueCreated(event:ResultEvent):void
+				{
+					
+					item.id = (event.result as int);
+					item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.LINEOFDIALOGUE_CREATED,orig,inst));	
+				}
+				
+				createLineOfDialogueResult.addEventListener(ResultEvent.RESULT,lineOfDialogueCreated);
+				createLineOfDialogueResult.token = socialgamesService.createLineofdialogue(item);
+				
+			}
+			
+			
+			protected function createPredicate(item:PredicateVO,orig:Predicate):void
+			{
+				var createPredicateResult:CallResponder = new CallResponder();
+				function predicateCreated(event:ResultEvent):void
+				{
+					item.id = (event.result as int);
+					item.dispatchEvent(new EntityCreatedEvent(EntityCreatedEvent.PREDICATE,orig));
+				}
+				createPredicateResult.addEventListener(ResultEvent.RESULT,predicateCreated);
+				createPredicateResult.token = socialgamesService.createPredicate(item);
+			}
+			
+			
+			/*protected function loadAllSocialGamesFromDB():void
+			{
+				var getSocial_gamesByIDResult:CallResponder = new CallResponder();
+				getSocial_gamesByIDResult.addEventListener(ResultEvent.RESULT,loadGameByID);
+				getSocial_gamesByIDResult.token = socialgamesService.getAllSocial_games();
+			}*/
+			
+			protected function loadPredicatesByRuleID(collection:Vector.<Predicate>, ruleID:int, vo:RuleVO):void
+			{
+				var getPredicateResult:CallResponder = new CallResponder();
+				getPredicateResult.addEventListener(ResultEvent.RESULT,function(evt:ResultEvent):void {
+					for each(var predVO:PredicateVO in (evt.result as ArrayCollection)) {
+						var pred:Predicate = new Predicate();
+						predVO.load(pred);
+						collection.push(pred);
+					}
+					vo.dispatchEvent(new EntityLoadedEvent(EntityLoadedEvent.PREDICATES));
+				});
+				getPredicateResult.token = socialgamesService.getPredicatesByRuleID(ruleID);
+			}
+			
+			
+			protected function loadEffectsByGameID(sg:SocialGame, vo:SocialGameVO):void
+			{
+				var getEffectsByGameIDResult:CallResponder = new CallResponder();
+				var numRules:int;
+
+				getEffectsByGameIDResult.addEventListener(ResultEvent.RESULT, effectsLoaded); 
+				function effectsLoaded (evt:ResultEvent):void {
+					var effRules:int = 0;
+					function handleRuleLoaded(evt:EntityLoadedEvent):void {
+						if(effRules>1)
+							effRules--;
+						else
+							evt.target.removeEventListener(EntityLoadedEvent.RULES,handleRuleLoaded);
+						if(numRules>1)
+							numRules--;
+						else
+							vo.dispatchEvent(new EntityLoadedEvent(EntityLoadedEvent.EFFECTS));
+					}
+					for each(var effectVO:EffectVO in (evt.result as ArrayCollection)) {
+						var newEffect:Effect = new Effect();
+						effectVO.load(newEffect);
+						if(effectVO.conditionRuleID > 0) {
+							numRules++;
+							effRules++;
+							loadRuleByID(newEffect.condition,effectVO.conditionRuleID,effectVO);
+						}
+						if(effectVO.changeRuleID > 0) {
+							effRules++;
+							numRules++;
+							loadRuleByID(newEffect.change,effectVO.changeRuleID,effectVO);
+						}
+						newEffect.scoreSalience();
+						sg.effects.push(newEffect);
+						effectVO.addEventListener(EntityLoadedEvent.RULES, handleRuleLoaded);
+					}
+				}
+				getEffectsByGameIDResult.token = socialgamesService.getEffectsByGameID(vo.id);
+			}
+			
+			
+			protected function loadRuleByID(rule:Rule,itemID:int,parentVO:*):void
+			{
+				var getRuleResult:CallResponder = new CallResponder();
+				getRuleResult.addEventListener(ResultEvent.RESULT, function(evt:ResultEvent):void {
+					function handlePredLoaded(evt:EntityLoadedEvent):void {
+						evt.target.removeEventListener(EntityLoadedEvent.PREDICATES,handlePredLoaded);
+						parentVO.dispatchEvent(new EntityLoadedEvent(EntityLoadedEvent.RULES));
+					}
+					var oldRule:RuleVO = evt.result as RuleVO;
+					oldRule.load(rule);
+					oldRule.addEventListener(EntityLoadedEvent.PREDICATES, handlePredLoaded);
+					loadPredicatesByRuleID(rule.predicates,itemID,oldRule);
+				});
+				getRuleResult.token = socialgamesService.getRuleByID(itemID);
+			}
+			
+			
+			protected function loadInstantiationsByGameID(sg:SocialGame, vo:SocialGameVO):void
+			{						 
+				function handleLineLoaded(evt:EntityLoadedEvent):void {
+					(evt.target as InstantiationVO).removeEventListener(EntityLoadedEvent.LINEOFDIALOGUE, handleLineLoaded);
+					numInst--;
+					if(numInst == 0)
+						vo.dispatchEvent(new EntityLoadedEvent(EntityLoadedEvent.INSTANTIATION));
+				}
+				var getInstantiationResult:CallResponder = new CallResponder();
+				var numInst:int;
+				getInstantiationResult.addEventListener(ResultEvent.RESULT, function(evt:ResultEvent):void {
+					numInst = (evt.result as ArrayCollection).length;
+					for each(var instVO:InstantiationVO in evt.result as ArrayCollection) {
+						instVO.addEventListener(EntityLoadedEvent.LINEOFDIALOGUE, handleLineLoaded);
+						var inst:Instantiation = new Instantiation();
+						instVO.load(inst);
+						loadLinesOfDialogueByInstanceID(inst.lines,instVO);
+						sg.instantiations.push(inst);
+					}
+				});
+				getInstantiationResult.token = socialgamesService.getInstantiationsByGameID(vo.id);
+			}
+			
+			
+			protected function loadLinesOfDialogueByInstanceID(collection:Vector.<LineOfDialogue>, instVO:InstantiationVO):void
+			{
+				var getLineOfDialogueResult:CallResponder = new CallResponder();
+				getLineOfDialogueResult.addEventListener(ResultEvent.RESULT, function(evt:ResultEvent):void {
+					for each(var lodVO:LineOfDialogueVO in evt.result as ArrayCollection) {
+						var lod:LineOfDialogue = new LineOfDialogue();
+						lodVO.load(lod);
+						collection[collection.length]= lod;
+					}
+					instVO.dispatchEvent(new EntityLoadedEvent(EntityLoadedEvent.LINEOFDIALOGUE));
+				});
+				getLineOfDialogueResult.token = socialgamesService.getLinesOfDialogueByInstanceID(instVO.id);
+			}
+
+
+			
+			protected function getAllSocial_gamesNames():void
+			{
+				getAllSocial_gamesNamesResult.token = socialgamesService.getAllSocial_gamesNames();
+			}
+			
+			protected function getgameNames_Handler(event:ResultEvent):void
+			{
+				for each(var obj:Object in event.result as ArrayCollection) {
+					socialMoveEditor.moveListDP.addItem(obj.game_name);
+					moveNamesToGameIDs[obj.game_name] = {id:obj.id,vid:obj.vid,gid:obj.gid};
+					}
+
+			}
+						
+			
+			protected function getSocial_gamesByID(itemID:int):void
+			{
+				var getSocial_gamesByIDResult:CallResponder = new CallResponder();
+				getSocial_gamesByIDResult.addEventListener(ResultEvent.RESULT,loadNewMoveFromDB);
+				getSocial_gamesByIDResult.token = socialgamesService.getSocial_gamesByID(itemID);
+			}
+			
+		]]>
+	</fx:Script>
+</s:WindowedApplication>

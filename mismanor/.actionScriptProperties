@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties analytics="false" mainApplicationPath="Main.mxml" projectUUID="a03e6f26-22a3-498c-8611-803dfd3566af" version="11">
+  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="true" copyDependentFiles="true" flex3CompatMode="false" flexSDK="Flex 4.6.0" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderLocation="C:/wamp/www/expressive.ai/mismanor/flex" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="false" verifyDigests="true" warn="true">
+    <compilerSourcePath/>
+    <libraryPath defaultLinkType="0">
+      <libraryPathEntry kind="4" path="">
+        <excludedEntries>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/core.swc" useDefaultLinkType="false"/>
+        </excludedEntries>
+      </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="/MismanorLib/bin/MismanorLib.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="${DCD_LIB_LOCATION}"/>
+      <libraryPathEntry kind="1" linkType="1" path="${DCD_LOCALE_LOCATION}"/>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCATION}/fiber.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCALE_LOCATION}/fiber_rb.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCATION}/playerfds.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/GrailGM/bin/GrailGM.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="${DCD_FIBER_LOCALE_LOCATION}"/>
+    </libraryPath>
+    <sourceAttachmentPath/>
+  </compiler>
+  <applications>
+    <application path="Main.mxml">
+      <airExcludes>
+        <airExclude path="nicequestngram.csv"/>
+        <airExclude path="mixing2.csv"/>
+        <airExclude path="library (kevin) (lauren revised).xml"/>
+        <airExclude path="libraries (master).xml"/>
+        <airExclude path="library (lauren).xml"/>
+        <airExclude path="js"/>
+        <airExclude path="state (SFDBTest).xml"/>
+        <airExclude path="library (SFDBTest).xml"/>
+        <airExclude path="library(items).xml"/>
+        <airExclude path="intent2.csv"/>
+        <airExclude path="library (kevin).xml"/>
+        <airExclude path="library(test).xml"/>
+        <airExclude path="state(test).xml"/>
+        <airExclude path="state (lauren).xml"/>
+        <airExclude path="playermodels.xlsx"/>
+        <airExclude path="AIState.xml"/>
+        <airExclude path="intent2.xlsx"/>
+        <airExclude path="nicengram.csv"/>
+        <airExclude path="AIIDEDemoState.xml"/>
+        <airExclude path="library (April).xml"/>
+        <airExclude path="meanngram.csv"/>
+        <airExclude path="state (tabitha).xml"/>
+        <airExclude path="meannice.xlsx"/>
+        <airExclude path="expressInstall.swf"/>
+        <airExclude path="researchLibrary.xml"/>
+        <airExclude path="index.html"/>
+        <airExclude path="library(tabitha).xml"/>
+        <airExclude path="nice1000.csv"/>
+        <airExclude path="researchDemoState.xml"/>
+        <airExclude path="meanquestngram.csv"/>
+        <airExclude path="concentration2.csv"/>
+      </airExcludes>
+    </application>
+  </applications>
+  <modules/>
+  <workers/>
+  <buildCSSFiles/>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
+  <buildTargets>
+    <buildTarget buildTargetName="default" platformId="default">
+      <airSettings airCertificatePath="" airTimestamp="true" anePathSet="true" version="1">
+        <airExcludes>
+          <pathEntry path="expressInstall.swf"/>
+          <pathEntry path="js"/>
+        </airExcludes>
+        <anePaths/>
+        <newLaunchParams/>
+        <modifiedLaunchParams/>
+        <newPackagingParams/>
+        <modifiedPackagingParams/>
+      </airSettings>
+      <actionScriptSettings version="1"/>
+    </buildTarget>
+  </buildTargets>
+</actionScriptProperties>

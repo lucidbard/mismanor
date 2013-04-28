@@ -1,0 +1,146 @@
+<CiFState time="0">
+  <Cast>
+	<Character name="Violet" networkID="0" >
+		<Trait type="female"/>
+		<Trait type="charismatic"/>
+		<Trait type="independent"/>
+		<Trait type="observant"/>
+		<Trait type="confident"/>
+		<Trait type="persuasive"/>
+		<Trait type="outgoing"/>
+		<Trait type="irritable"/>
+		<Trait type="domineering"/>
+		<Trait type="vengeful"/>
+		<Trait type="dishonest"/>
+		<Trait type="hostile"/>
+		<Trait type="snide"/>
+		<Locution type="greeting">Why hello</Locution>
+		<Locution type="shocked">Oh my.</Locution>
+		<Locution type="positiveadj">lovely</Locution>
+		<Locution type="pejorative">idiot</Locution>
+		<Locution type="sweetie">Love</Locution>
+		<Status type="manipulating" from="Violet" to=Player/>
+		<Status type="busy" from="Violet" to=""/>
+		<Status type="estranged from" from="Violet" to="Colonel"/>
+	</Character>	
+	<Character name="James" networkID="1" >
+		<Trait type="male"/>
+		<Trait type="kind"/>
+		<Trait type="sympathetic"/>
+		<Trait type="humble"/>
+		<Trait type="forgiving"/>
+		<Trait type="loyal"/>
+		<Trait type="shy"/>
+		<Trait type="jealous"/>
+		<Trait type="honest"/>
+		<Trait type="indecisive"/>
+		<Locution type="greeting">Hullo</Locution>
+		<Locution type="shocked">Aghhhck!</Locution>
+		<Locution type="positiveadj">grand</Locution>
+		<Locution type="pejorative">bully</Locution>
+		<Locution type="sweetie">Lamby</Locution>
+		<Status type="afraid of" from="James" to=”Violet”/>
+		<Status type="distracted" from="James" to=""/>
+		<Status type="guilty" from="James" to=""/>
+		<Status type="anxious" from="James" to=""/>
+	</Character>	
+	<Character name="Colonel" networkID="2" >
+		<Trait type="male"/>
+		<Trait type="charismatic"/>
+		<Trait type="independant"/>
+		<Trait type="outgoing"/>
+		<Trait type="impulsive"/>
+		<Trait type="disapproving"/>
+		<Trait type="irritable"/>
+		<Trait type="arrogant"/>
+		<Trait type="oblivious"/>
+		<Trait type="unforgiving"/>
+		<Trait type="stubborn"/>
+		<Trait type="gabby"/>
+		<Locution type="greeting">My %gender(r,boy/lady)%</Locution>
+		<Locution type="shocked">Wot?</Locution>
+		<Locution type="positiveadj">excellent</Locution>
+		<Locution type="pejorative">%gender(r,scoundrel/strumpet)%</Locution>
+		<Locution type="sweetie">little apricot</Locution>
+		<Status type="hates" from="Colonel" to=”James”/>
+		<Status type="distracted" from="Colonel" to=""/>
+		<Status type="estranged from" from="Colonel" to="Violet"/>
+		<Status type="anxious" from="Colonel" to=""/>
+	</Character>	
+	<Character name=Player networkID="3" >
+		<Locution type="greeting">Hello</Locution>
+		<Locution type="shocked">Heavens!</Locution>
+		<Locution type="positiveadj">wonderful</Locution>
+		<Locution type="pejorative">simpleton</Locution>
+		<Locution type="sweetie">dear</Locution>
+	</Character>
+  </Cast>
+  <SFDB>
+    <StatusContext time="0">
+      <Predicate type="status" status="has crush" first="stableboy" second="violet" negated="false" isSFDB="true" window="0"/>
+    </StatusContext>
+    <SocialGameContext gameName="Reminisce" initiator="stableboy" responder="violet" other="" initiatorScore="80" responderScore="40" time="-5" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Insult" initiator="stableboy" responder="colonel" other="violet" initiatorScore="80" responderScore="40" time="-4" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Reminisce" initiator="violet" responder="colonel" other="" initiatorScore="80" responderScore="40" time="-3" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Insult" initiator="violet" responder="stableboy" other="colonel" initiatorScore="80" responderScore="40" time="-2" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Show Off" initiator="violet" responder="stableboy" other="colonel" initiatorScore="80" responderScore="40" time="-1" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Reminisce" initiator="violet" responder="stableboy" other="colonel" initiatorScore="80" responderScore="40" time="0" effectIndex="0" chosenItemCKB="" socialGameContextReference="0"/>
+  </SFDB>
+  <CulturalKB>
+    <Proposition type="subjective" head="colonel" connection="likes" tail="pirates"/>
+    <Proposition type="subjective" head="violet" connection="dislikes" tail="flowers"/>
+    <Proposition type="subjective" head="colonel" connection="likes" tail="flowers"/>
+    <Proposition type="truth" head="pirates" connection="are" tail="mean"/>
+    <Proposition type="truth" head="flowers" connection="are" tail="pretty"/>
+  </CulturalKB>
+    <Network type="buddy" numChars="4">
+    <edge from="0" to="1" value="30"/>
+    <edge from="0" to="2" value="5"/>
+    <edge from="0" to="3" value="15"/>
+    <edge from="1" to="0" value="50"/>
+    <edge from="1" to="2" value="30"/>
+    <edge from="1" to="3" value="25"/>
+    <edge from="2" to="0" value="60"/>
+    <edge from="2" to="1" value="5"/>
+    <edge from="2" to="3" value="40"/>
+    <edge from="3" to="0" value="15"/>
+    <edge from="3" to="1" value="25"/>
+    <edge from="3" to="2" value="40"/>    
+  </Network>
+  <Network type="trust" numChars="4">
+    <edge from="0" to="1" value="20"/>
+    <edge from="0" to="2" value="5"/>
+    <edge from="0" to="3" value="5"/>
+    <edge from="1" to="0" value="70"/>
+    <edge from="1" to="2" value="30"/>
+	<edge from="1" to "3" value="20"/>
+    <edge from="2" to="0" value="65"/>
+    <edge from="2" to="1" value="15"/>
+    <edge from="2" to="3" value="10"/>
+    <edge from="3" to="0" value="5"/>
+	<edge from="3" to="1" value="20"/>
+    <edge from="3" to="2" value="10"/>
+  </Network>
+  <Network type="romance" numChars="4">
+    <edge from="0" to="1" value="48"/>
+    <edge from="0" to="2" value="28"/>
+    <edge from="1" to="0" value="85"/>
+    <edge from="1" to="2" value="55"/>
+    <edge from="2" to="0" value="100"/>
+    <edge from="2" to="1" value="55"/>
+    <edge from="2" to="3" value="40"/>
+    <edge from="3" to="1" value="60"/>
+    <edge from="3" to="2" value="60"/>
+  </Network>
+  <Network type="familybond" numChars="4">
+    <edge from="0" to="1" value="48"/>
+    <edge from="0" to="2" value="28"/>
+    <edge from="1" to="0" value="85"/>
+    <edge from="1" to="2" value="55"/>
+    <edge from="2" to="0" value="100"/>
+    <edge from="2" to="1" value="55"/>
+    <edge from="2" to="3" value="40"/>
+    <edge from="3" to="1" value="60"/>
+    <edge from="3" to="2" value="60"/>
+  </Network>
+</CifState>

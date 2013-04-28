@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<fx:String id="htmlTextAsHTML">
+		<![CDATA[<b>Mismanor</b><br/><br/>Plot:<br/><br/>			
+			<p>The year is 1923, and the Roaring Twenties have found their way across the Atlantic to England.</p>
+			<p>You recently met a very nice girl at a high - class London party and, though you failed to hit it off at the event, you were delighted to receive an invitation to a weekend's enjoyment at her family's stately home in the country, Gosrick Hall. On your arrival at the house, you must ingratiate yourself with the house's eccentric inhabitants (the mad old colonel, the domineering daughter, the meek stable boy…) through various hare-brained schemes.</p> 
+			<br/><br/><br/>
+			<p>QUEST:The Colonel has given you the task of breaking up Violet and James. Do it!</p>
+		]]></fx:String>
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import flashx.textLayout.conversion.TextConverter;
+			[Embed(source="../img/MismanorOpening0.png")]
+			[Bindable]
+			public var imgCls:Class;
+		]]>
+	</fx:Script>
+	<s:Image source="{imgCls}" width="100%" height="100%"/>
+	<s:RichText width="80%" height="70%" horizontalCenter="0" verticalCenter="0" textFlow="{TextConverter.importToFlow(htmlTextAsHTML, TextConverter.TEXT_FIELD_HTML_FORMAT)}" backgroundColor="#000000" backgroundAlpha="0.8" fontFamily="Calibri" fontSize="20" color="#909090" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"/>
+</s:Group>

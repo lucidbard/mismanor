@@ -1,0 +1,1329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:Tool="tool.*"
+		 xmlns:services="services.*"
+		 width="1012" height="626" creationComplete="onCreationComplete()" contentBackgroundColor="{modified ? 0xFFCCCC : 0xFFFFFF}">
+	<fx:Declarations>
+		<s:CallResponder/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<services:SocialgamesService id="socialgamesService"
+									 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+									 showBusyCursor="true"/>
+		
+	</fx:Declarations>	
+	
+	<mx:TabNavigator left="379" top="10" bottom="0" width="614" minWidth="0"
+					 backgroundAlpha="0.7" borderVisible="true"
+					 dropShadowVisible="false" id="moveEditor" selectedIndex="5" change="moveEditorTabChange()" creationComplete="moveEditorCreated()">
+		<s:NavigatorContent width="100%" height="100%" label="Role Types">
+			<mx:VBox label="Role Type Editor" width="100%" height="100%">
+				<Tool:RoleTypeEditor id="roleTypeEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addRoleTypesToMove" x="20" y="20" width="130"
+					  label="Save Role Types" click="saveRoleTypes()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent label="Intent" backgroundAlpha="1.0">
+			<mx:VBox label="Intent Editor" width="100%" height="100%">
+				<Tool:IntentEditor id="intentEditor" width="100%" height="100%"/>
+			</mx:VBox>
+			<s:Button id="add_to_move" x="10" y="28" width="130"
+					  label="Save Intent to Move" click="saveIntent()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="PreConditions">
+			<mx:VBox label="Precondition Editor" width="100%" height="100%">
+				<Tool:PreConEditor id="preConEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addPreConToMove" x="10" y="28" width="130"
+					  label="Save PreCon to Move" click="savePreCon()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Initiator IRS">
+			<mx:VBox label="Initiator Influence Rule Set Editor" width="100%" height="100%">
+				<Tool:InitIRSEditor id="initIRSEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addInitIRSToMove" x="10" y="28" width="130"
+					  label="Save IRS to Move" click="saveInitIRS()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Responder IRS">
+			<mx:VBox label="Responder Influence Rule Set Editor" width="100%" height="100%">
+				<Tool:RespIRSEditor id="respIRSEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addRespIRSToMove" x="10" y="28" width="130"
+					  label="Save IRS to Move" click="saveRespIRS()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Effects">
+			<mx:VBox label="Effect Editor" width="100%" height="100%">
+				<Tool:EffectEditor id="effectEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addEffectToMove" x="10" y="28" width="130"
+					  label="Save Effect to Move" click="saveEffect()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Dialogue">
+			<mx:VBox label="Instantiation Editor" width="100%" height="100%">
+				<Tool:InstEditor id="instEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addInstToMove" x="10" y="28" width="130"
+					  label="Save Dialog" click="saveInstantiation()" />
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+	<mx:Accordion id="socialMoveOverview" x="10" y="102" width="350" height="497"
+				  contentBackgroundAlpha=".7" contentBackgroundColor="#ffffff" change="socialMoveChange()">							
+		<s:NavigatorContent id="roleType" width="100%" height="100%" label="Role Types">
+			<s:List id="moveRoleTypeList" x="0" y="-4" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.moveRoleTypeListDP}"
+					doubleClickEnabled="true" doubleClick="updateSelectedRole(), this.checkCreated()">
+			</s:List>
+			<s:Button id="updateRole" x="270" y="10" label="Update" enabled="{moveRoleTypeListDP.length>0}" click="updateSelectedRole()"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent id="move_intent" width="100%" height="100%"
+							label="Intent">
+			<s:List id="moveIntentList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.moveIntentListDP}"
+					doubleClickEnabled="true" doubleClick="updateSelectedIntent()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newIntent" x="270" y="10" label="New" click="createNewIntent(), this.checkCreated()"/>
+			<s:Button id="updateIntent" x="270" y="39" label="Update" enabled="{moveIntentListDP.length > 0}" click="updateSelectedIntent()"/>
+			<s:Button id="deleteIntent" x="270" y="326" label="Delete" enabled="{moveIntentListDP.length > 0}" click="deleteSelectedIntent()"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Pre-Conditions">
+			<s:List id="movePreConList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.movePreConListDP}"
+					doubleClickEnabled="true" doubleClick="updateSelectedPreCon()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newPreCon" x="270" y="10" label="New" click="createNewPreCon(), this.checkCreated()"/>
+			<s:Button id="updatePreCon" x="270" y="39" label="Update" enabled="{movePreConListDP.length > 0}" click="updateSelectedPreCon()" />
+			<s:Button id="deletePreCon" x="270" y="326" label="Delete" enabled="{movePreConListDP.length > 0}" click="deleteSelectedPreCon()"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Initiator Influence Rule Set">
+			<s:List id="moveInitIRSList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.moveInitIRSListDP}"
+					doubleClickEnabled="true" doubleClick="updateSelectedInitIRS()" selectedIndex="0">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newInitIRS" x="270" y="10" label="New" click="createNewInitIRS(), this.checkCreated()"/>
+			<s:Button id="updateInitIRS" x="270" y="39" label="Update" enabled="{moveInitIRSListDP.length > 0}" click="updateSelectedInitIRS()"/>
+			<s:Button id="deleteInitIRS" x="270" y="327" label="Delete" enabled="{moveInitIRSListDP.length > 0}" click="deleteSelectedInitIRS()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Responder Influence Rule Set">
+			<s:List id="moveRespIRSList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.moveRespIRSListDP}"
+					doubleClickEnabled="true" doubleClick="updateSelectedRespIRS()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newRespIRS" x="270" y="10" label="New" click="createNewRespIRS(), this.checkCreated()"/>
+			<s:Button id="updateRespIRS" x="270" y="39" label="Update" enabled="{moveRespIRSListDP.length>0}" click="updateSelectedRespIRS()"/>
+			<s:Button id="deleteRespIRS" x="270" y="327" label="Delete" enabled="{moveRespIRSListDP.length>0}" click="deleteSelectedRespIRS()"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Effects">
+			<s:List id="moveEffectList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.moveEffectListDP}"
+					doubleClickEnabled="true" doubleClick="updateSelectedEffect()" selectedIndex="0">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newEffect" x="270" y="10" label="New" click="createNewEffect(), this.checkCreated()"/>
+			<s:Button id="updateEffect" x="270" y="39" label="Update" enabled="{moveEffectListDP.length>0}" click="updateSelectedEffect()" />
+			<s:Button id="deleteEffect" x="270" y="326" label="Delete" enabled="{moveEffectListDP.length>0}" click="deleteSelectedEffect()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Dialogue">
+			<s:List id="moveInstList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.moveInstListDP}"
+					doubleClickEnabled="true" doubleClick="updateSelectedInst()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newInst" x="270" y="10" label="New" click="createNewInst(), this.checkCreated()"/>
+			<s:Button id="updateInst" x="270" y="39" label="Update" enabled="{moveInstListDP.length>0}" click="updateSelectedInst()"/>
+			<s:Button id="deleteInst" x="270" y="327" label="Delete" enabled="{moveInstListDP.length>0}" click="deleteSelectedInst()"/>
+		</s:NavigatorContent>
+	</mx:Accordion>
+	<s:Label x="10" y="16" color="#F5E9EB" fontSize="20" fontWeight="bold"
+			 text="Social Move Overview"
+			 />
+	<s:HGroup  x="10" y="72" width="350">
+	<s:TextInput id="moveName"
+				 contentBackgroundColor="#FFFFFF" enabled="true"
+				 fontWeight="bold" prompt="Move Name" change="updateMoveName()"
+				 />
+		<s:Label text="{currentMove.vid}"/>
+	</s:HGroup>
+	<s:Button id="newMove" x="274" y="16" width="83" label="Create New" click="createNewMove()"
+			  />
+	<s:Button id="deleteMove" x="274" y="43" width="83" label="Delete" click="deleteSelectedMove()"
+			  />
+	<s:Button id="saveMove" x="227" y="16" width="44" label="Save" click="saveSelectedMove()"
+			  />
+	<mx:VRule x="366" y="55" width="8" height="525"
+			  />
+	<s:DropDownList id="moveList" x="10" y="43" width="256" contentBackgroundColor="#ffffff" 
+					dataProvider="{this.moveListDP}" change="loadNewMove(this.moveListDP.getItemAt(this.moveList.selectedIndex) as String);"></s:DropDownList>
+
+
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import events.EntityCreatedEvent;
+			import events.EntityLoadedEvent;
+			import events.LoadEntityEvent;
+			import events.SaveEntityEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.*;
+			
+			import valueObjects.SocialGameVO;
+			
+			
+			[Bindable] public var moveRoleTypeListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var moveIntentListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var movePreConListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var moveInitIRSListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var moveRespIRSListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var moveEffectListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var moveInstListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var moveListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+
+			public var currentGame:SocialGame = new SocialGame();
+			[Bindable]
+			public var currentMove:SocialGameVO;
+			private var cif:CiFSingleton;
+			private var intentType:String = "new";
+			private var preConType:String = "new";
+			private var initIRSType:String = "new";
+			private var respIRSType:String = "new";
+			private var effectType:String = "new";
+			private var instType:String = "new";
+			private var intentID:Number = 0;
+			private var preConID:Number = 0;
+			private var initIRSID:Number = 0;
+			private var respIRSID:Number = 0;
+			private var effectID:Number = 0;
+			private var instID:Number = 0;
+			private var intentNew:Boolean = false;
+			private var preConNew:Boolean = false;
+			private var initIRSNew:Boolean = false;
+			private var respIRSNew:Boolean = false;
+			private var updateBool:Boolean = false;
+			private var tempID:Number = 0;
+			
+			private static var INTENT:Number = 0;
+			private static var PRECON:Number = 1;
+			private static var INITIRS:Number = 2;
+			private static var RESPIRS:Number = 3;
+			private static var EFFECT:Number = 4;
+			private static var INST:Number = 5;
+			public static var socialGamesToVO:Dictionary = new Dictionary();
+			public static var ruleToVO:Dictionary = new Dictionary();
+			public static var responderToRule:Dictionary = new Dictionary();
+			public static var effectToVO:Dictionary = new Dictionary();
+			public static var responderToEffect:Dictionary = new Dictionary();
+			public static  var instantiationToVO:Dictionary = new Dictionary();
+			public static var responderToInstantiation:Dictionary = new Dictionary();
+			public static var lineOfDialogueToVO:Dictionary=new Dictionary();
+			public static var responderToLineOfDialogue:Dictionary = new Dictionary();
+			private var voToEffect:Dictionary = new Dictionary();
+			private var oldIdsToEffects:Dictionary = new Dictionary();
+			private var responderToPredicate:Dictionary=new Dictionary();
+			private var predicateToVO:Dictionary=new Dictionary();
+			private var responderToCollection:Dictionary=new Dictionary();
+			private var responderToGameID:Dictionary=new Dictionary();
+			private var callResponderToRule:Dictionary=new Dictionary();
+			private var ruleToEffect:Dictionary = new Dictionary();
+			private var callResponderToInstantiation:Dictionary = new Dictionary();
+			[Bindable]
+			public var modified:Boolean=false;
+			public function onCreationComplete(): void {
+				this.cif = CiFSingleton.getInstance();
+				this.currentGame.responderType = SocialGame.CHARACTER_TYPE;
+				updateMoveRoleTypeListDP();
+			}
+			
+			public function updateMoveRoleTypeListDP(): void {
+				var resultString:String = "Initiator - character\nResponder - ";
+				
+				resultString += SocialGame.getNameByType(this.currentGame.responderType);
+				resultString += "\nOther - ";
+				if (this.currentGame.requiresOther)
+					resultString += SocialGame.getNameByType(this.currentGame.otherType);
+				else
+					resultString += "None";
+				this.moveRoleTypeListDP.removeAll();
+				this.moveRoleTypeListDP.addItem(resultString);
+				this.moveRoleTypeList.selectedIndex = 0;
+			}
+						
+			public function moveEditorTabChange(): void {
+				this.socialMoveOverview.selectedIndex = this.moveEditor.selectedIndex;
+			}
+						
+			public function socialMoveChange(): void {
+				this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+			}
+			
+			public function moveEditorCreated(): void {
+				for (var i:Number = 0; i< this.moveEditor.length; i++)
+					this.moveEditor.selectedIndex = i;
+				
+				this.moveEditor.visible = false;
+				this.moveEditor.selectedIndex = 0;
+			}
+			
+			// Dispatch an event containing the ID of the move saved.
+		
+			public function saveSelectedMove():void {
+				if(this.cif.socialGamesLib.getByName(this.currentGame.name)==null)
+					this.cif.socialGamesLib.addGame(this.currentGame);
+				dispatchEvent(new SaveEntityEvent(SaveEntityEvent.SOCIAL_MOVE, currentGame.name));
+				modified=false;
+			}
+			
+			public function createNewMove(): void {
+				this.moveName.text = "";
+				this.currentGame = new SocialGame();
+				this.currentGame.responderType = SocialGame.CHARACTER_TYPE;
+				this.updateMoveRoleTypeListDP();
+				this.moveIntentListDP = new ArrayCollection();
+				this.movePreConListDP = new ArrayCollection();
+				this.moveInitIRSListDP = new ArrayCollection();
+				this.moveRespIRSListDP = new ArrayCollection();
+				this.moveEffectListDP = new ArrayCollection();
+				this.moveInstListDP = new ArrayCollection();
+				this.dte.instantiationListDP = new ArrayCollection();
+				this.moveList.selectedIndex = -1;
+				
+				if (this.updateIntent)
+					this.updateIntent.enabled = false;
+				if (this.deleteIntent)
+					this.deleteIntent.enabled = false;
+				if (this.updatePreCon)
+					this.updatePreCon.enabled = false;
+				if (this.deletePreCon)
+					this.deletePreCon.enabled = false;
+				if (this.updateInitIRS)
+					this.updateInitIRS.enabled = false;
+				if (this.deleteInitIRS)
+					this.deleteInitIRS.enabled = false;
+				if (this.updateRespIRS)
+					this.updateRespIRS.enabled = false;
+				if (this.deleteRespIRS)
+					this.deleteRespIRS.enabled = false;
+				if (this.updateEffect)
+					this.updateEffect.enabled = false;
+				if (this.deleteEffect)
+					this.deleteEffect.enabled = false;
+				if (this.updateInst)
+					this.updateInst.enabled = false;
+				if (this.deleteInst)
+					this.deleteInst.enabled = false;
+				if (this.moveEditor)
+					this.moveEditor.visible = false;
+			}
+			
+			public function updateMoveName(): void {
+				this.currentGame.name = this.moveName.text;
+			}
+			
+			
+			public function deleteSelectedMove():void {
+				if (this.moveList.selectedIndex >= 0)
+				{
+					var sg:SocialGame = this.cif.socialGamesLib.games[this.moveList.selectedIndex];
+					this.cif.socialGamesLib.removeGame(sg);
+					this.moveListDP.removeItemAt(this.moveList.selectedIndex);
+					if (this.moveListDP.length > 0)
+						this.moveList.selectedIndex = 0;
+					this.moveList.dispatchEvent(new IndexChangeEvent(IndexChangeEvent.CHANGE) );
+				}
+			}
+						
+			public function loadNewMove(gameName:String,aMove:SocialGameVO=null): void {
+				currentGame = this.cif.socialGamesLib.getByName(gameName);
+				if(aMove==null)
+					currentMove= socialGamesToVO[currentGame];
+				else currentMove = aMove;
+				if(currentMove==null) {
+					this.dispatchEvent(new LoadEntityEvent(LoadEntityEvent.SOCIAL_MOVE, 0,gameName));
+				} else {
+					var resultStr:String;
+					var pred:Predicate;
+					var ir:InfluenceRule;
+					// First acquire the first SocialGame from database.
+	
+//					this.currentGame = new SocialGame();
+					// load information into the accordion
+					this.moveIntentListDP.removeAll();
+					this.movePreConListDP.removeAll();
+					this.moveInitIRSListDP.removeAll();
+					this.moveRespIRSListDP.removeAll();
+					this.moveEffectListDP.removeAll();
+					this.moveInstListDP.removeAll();
+					this.dte.instantiationListDP.removeAll();
+					trace("current game loaded");
+					currentGame = this.cif.socialGamesLib.getByName(gameName);
+					this.moveName.text = currentGame.name;
+					this.updateMoveRoleTypeListDP();
+					// role type
+					currentMove.addEventListener(EntityLoadedEvent.RULES, function(evt:EntityLoadedEvent):void {
+						switch(evt.specificType) {
+							case INTENT:
+								trace("intent loaded");
+								for each (var intent:Rule in currentGame.intents)
+								{
+									if (intent.description != "")
+										moveIntentListDP.addItem(intent.name + "\n~~~ " + intent.description);	
+									else
+										moveIntentListDP.addItem(intent.name);
+								}								
+								break;
+							case PRECON:
+								trace("Precon loaded");
+								for each (var precon:Rule in currentGame.preconditions)
+								{
+									resultStr = new String();
+									
+									for each (pred in precon.predicates)
+									{
+										resultStr += pred.toString() + "\n";
+									}
+				
+									if (precon.name != "")
+										resultStr += "~~~ " + precon.name;
+										
+									movePreConListDP.addItem(resultStr);
+								}
+								break;
+							case INITIRS:
+								trace("Initirs loaded");
+								for each (ir in currentGame.initiatorIRS.influenceRules)
+								{
+									resultStr = ir.weight + ": ";
+									
+									for each (pred in ir.predicates)
+									{
+										resultStr += pred.toString() + "\n";
+									}
+									
+									if (ir.name != "")
+										resultStr += "~~~ " + ir.name;
+									
+									moveInitIRSListDP.addItem(resultStr);
+								}
+								break;
+							case RESPIRS:
+								trace("Respirs loaded");
+								for each (ir in currentGame.responderIRS.influenceRules)
+								{
+									resultStr = ir.weight + ": ";
+									
+									for each (pred in ir.predicates)
+									{
+										resultStr += pred.toString() + "\n";
+									}
+									
+									if (ir.name != "")
+										resultStr += "~~~ " + ir.name;
+									
+									moveRespIRSListDP.addItem(resultStr);
+								}
+								break;
+						}
+						});
+						currentMove.addEventListener(EntityLoadedEvent.EFFECTS, function():void {
+							trace("loading effects");
+							for each (var effect:Effect in currentGame.effects)
+							{	
+								resultStr = effect.instantiationID + ": " ;
+								if(effect.isAccept == true){resultStr+= "Accept: ";}
+								else {resultStr += "Reject: ";}
+								
+								if (effect.condition.predicates.length > 0)
+									resultStr += "if: ";
+								else
+									resultStr += "always true: ";
+								for each (pred in effect.condition.predicates)
+								{
+									resultStr += pred.toString() + "\n";
+								}
+								
+								resultStr += "==>";
+								for each (pred in effect.change.predicates)
+									resultStr += pred.toString() + "\n";
+									
+								if (effect.referenceAsNaturalLanguage != "")
+									resultStr += "~~~ " + effect.referenceAsNaturalLanguage;
+								
+								moveEffectListDP.addItem(resultStr);
+							}
+						});
+					currentMove.addEventListener(EntityLoadedEvent.INSTANTIATION, function():void {
+						for each (var inst:Instantiation in currentGame.instantiations)
+						{
+							resultStr = new String();
+							for each (var line:LineOfDialogue in inst.lines)
+							{
+								resultStr += line.primarySpeaker + ": " + line.initiatorLine + ", " + line.responderLine + ", " + line.otherLine + "\n";
+							}
+							
+							if (inst.name != "")
+								resultStr += "~~~ " + inst.name;
+							
+							dte.instantiationListDP.addItem(inst.id + ": " + inst.name);
+							moveInstListDP.addItem(resultStr);
+						}
+					});
+	
+					// if it hasn't been loaded yet, this logic is taken care of in the oncompletion calls for that
+					// particular UI element. This is ugly and hacky and I hate it, but I'm not sure how else to 
+					// get around the fact that flex dynamically loads things so we never know if it's been loaded
+					// yet or not
+
+
+					
+
+	
+
+					
+
+					
+					// (April) Trying to fix a bug where the instList in the effect editor stops updating
+					this.effectEditor.instList.dataProvider = this.dte.instantiationListDP;
+				}
+			}
+			
+			/********************************************************
+			 * Create new social move component utility functions
+			 ********************************************************/
+			public function checkCreated():void {
+				if(!this.intentNew){createNewIntent();}
+				if(!this.preConNew){createNewPreCon();}
+				if(!this.initIRSNew){createNewInitIRS();}
+				if(!this.respIRSNew){createNewRespIRS();}
+			}
+			
+			public function createNewIntent():void {
+				this.moveEditor.visible = true;
+				this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+				this.intentNew = true;
+				
+				// clear out predicate editor stuff
+				if(this.preConEditor)
+					this.intentEditor.reset();
+				this.intentType = "new";
+			}
+			
+			public function createNewPreCon():void {
+				this.moveEditor.visible = true;
+				this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+				this.preConNew = true;
+				if (this.preConEditor)
+					this.preConEditor.reset();
+				this.preConType = "new";
+			}
+						
+			public function createNewInitIRS():void {
+				this.moveEditor.visible = true;
+				this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+				this.initIRSNew = true;
+				if (this.initIRSEditor)
+					this.initIRSEditor.reset();
+				this.initIRSType = "new";
+			}
+			
+			public function createNewRespIRS():void {
+				this.moveEditor.visible = true;
+				this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+				this.respIRSNew = true;
+				if (this.respIRSEditor)
+					this.respIRSEditor.reset();
+				this.respIRSType = "new";
+			}
+			
+			public function createNewEffect():void {
+				this.moveEditor.visible = true;
+				this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+				if (this.effectEditor)
+					this.effectEditor.reset();
+				this.effectType = "new";
+			}
+			
+			public function createNewInst():void {
+				if(this.updateBool){updateBool = false; this.instID = tempID;}
+				this.moveEditor.visible = true;
+				this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+				this.moveInstList.selectedIndex = -1;
+				if (this.instEditor)
+					this.instEditor.reset();
+				this.instType = "new";	
+			}
+			
+			/********************************************************
+			 * Delete selected social move component utility functions
+			 ********************************************************/
+			public function deleteSelectedIntent(): void {
+				var selectedIntent:Number = this.moveIntentList.selectedIndex;
+				
+				this.moveIntentListDP.removeItemAt(selectedIntent);
+				this.currentGame.intents.splice(selectedIntent, 1);
+				this.moveEditor.visible = false;
+				
+				if (this.moveIntentListDP.length == 0)
+				{
+					this.deleteIntent.enabled = false;
+					this.updateIntent.enabled = false;
+				}
+				else
+					this.moveIntentList.selectedIndex = 0;
+			}
+			
+			public function deleteSelectedPreCon(): void {
+				var selectedPreCon:Number = this.movePreConList.selectedIndex;
+				
+				this.movePreConListDP.removeItemAt(selectedPreCon);
+				this.currentGame.preconditions.splice(selectedPreCon, 1);
+				this.moveEditor.visible = false;
+				
+				if (this.movePreConListDP.length == 0)
+				{
+					this.deletePreCon.enabled = false;
+					this.updatePreCon.enabled = false;
+				}
+				else
+					this.movePreConList.selectedIndex = 0;
+			}
+			
+			public function deleteSelectedInitIRS(): void {
+				var selectedInitIRS:Number = this.moveInitIRSList.selectedIndex;
+				
+				this.moveInitIRSListDP.removeItemAt(selectedInitIRS);
+				this.currentGame.initiatorIRS.influenceRules.splice(selectedInitIRS, 1);
+				this.moveEditor.visible = false;
+				
+				if (this.moveInitIRSListDP.length == 0)
+				{
+					this.deleteInitIRS.enabled = false;
+					this.updateInitIRS.enabled = false;
+				}
+				else
+					this.moveInitIRSList.selectedIndex = 0;
+			}
+			
+			public function deleteSelectedRespIRS(): void {
+				var selectedRespIRS:Number = this.moveRespIRSList.selectedIndex;
+				
+				this.moveRespIRSListDP.removeItemAt(selectedRespIRS);
+				this.currentGame.responderIRS.influenceRules.splice(selectedRespIRS, 1);
+				this.moveEditor.visible = false;
+				
+				if (this.moveRespIRSListDP.length == 0)
+				{
+					this.deleteRespIRS.enabled = false;
+					this.updateRespIRS.enabled = false;
+				}
+				else
+					this.moveRespIRSList.selectedIndex = 0;
+			}
+			
+			public function deleteSelectedEffect(): void {
+				var selectedEffect:Number = this.moveEffectList.selectedIndex;
+				
+				this.moveEffectListDP.removeItemAt(selectedEffect);
+				this.currentGame.effects.splice(selectedEffect, 1);
+				this.moveEditor.visible = false;
+				
+				if (this.moveEffectListDP.length == 0)
+				{
+					this.deleteEffect.enabled = false;
+					this.updateEffect.enabled = false;
+				}
+				else
+					this.moveEffectList.selectedIndex = 0;
+			}
+			
+			public function deleteSelectedInst(): void {
+				var selectedInst:Number = this.moveInstList.selectedIndex;
+				this.currentGame.instantiations.splice(selectedInst, 1);
+				this.moveInstListDP.removeItemAt(selectedInst);
+				this.dte.instantiationListDP.removeItemAt(selectedInst);
+				this.moveEditor.visible = false;
+				
+				if (this.moveInstListDP.length == 0)
+				{
+					this.deleteInst.enabled = false;
+					this.updateInst.enabled = false;
+				}
+				else
+					this.moveInstList.selectedIndex = 0;
+			}
+			
+			/********************************************************
+			 * Update selected social move component utility functions
+			 ********************************************************/
+			public function updateSelectedRole(): void {
+				if (this.moveRoleTypeList.selectedIndex >= 0)
+				{
+					this.moveEditor.visible = true;
+					this.roleTypeEditor.reset();
+					this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+					
+					this.roleTypeEditor.otherEnabled.selected = this.currentGame.requiresOther;
+					this.roleTypeEditor.otherEnabledChange();
+					
+					this.roleTypeEditor.respRoleType.selectedValue = SocialGame.getNameByType(this.currentGame.responderType);
+					if (this.currentGame.requiresOther)
+						this.roleTypeEditor.otherRoleType.selectedValue = SocialGame.getNameByType(this.currentGame.otherType);
+				}
+			}
+			
+			public function updateSelectedIntent(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.moveIntentList.selectedIndex >= 0)
+				{
+					this.intentEditor.reset();
+					this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+					this.intentEditor.predicateEditor.enabled = true;
+					for each (var pred:Predicate in this.currentGame.intents[this.moveIntentList.selectedIndex].predicates)
+					{
+						this.intentEditor.intents.addItem(pred.name);
+						this.intentEditor.workingIntents.push(pred);
+					}
+					var firstItem:Number = 0;
+					
+					this.intentEditor.predicateEditor.selectedIndex = firstItem;
+					
+					var intentType:Number = this.intentEditor.workingIntents[firstItem].intentType;
+					this.intentEditor.intentTypeList.selectedIndex = intentType;
+					this.intentEditor.changeState(intentType);
+					this.intentEditor.description.text = this.currentGame.intents[this.moveIntentList.selectedIndex].description;
+					this.intentEditor.updateDropDownValueByState();
+				}
+				this.intentType = "update";
+				this.moveEditor.visible = true;
+			}
+			
+			public function updateSelectedPreCon(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.movePreConList.selectedIndex >= 0)
+				{
+					var workingPreCon:Rule = this.currentGame.preconditions[this.movePreConList.selectedIndex];
+					// reset the UI
+					this.preConEditor.reset();
+					// set the tab on the move editor to be the same tab as the social move overview UI
+					this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+					// enable the predicate editor
+					this.preConEditor.predicateEditor.enabled = true;
+					// add each of the precondition predicates for this rule into the predicate list box
+					for each (var pred:Predicate in workingPreCon.predicates)
+					{
+						this.preConEditor.preConditions.addItem(pred.toString());
+						this.preConEditor.workingPreCons.push(pred);
+					}
+					var firstItem:Number = 0;
+					var selectedPred:Predicate = this.preConEditor.workingPreCons[firstItem];
+					
+					// select the first item in the predicate list box
+					this.preConEditor.predicateEditor.selectedIndex = firstItem;
+					
+					// Setup the predicate editor based on the selected item (which is the first one)
+					var preConType:Number = selectedPred.type;
+					this.preConEditor.preConTypeList.selectedIndex = preConType;
+					this.preConEditor.changeStateByType(preConType);
+					this.preConEditor.notBox.selected = selectedPred.negated; 
+					this.preConEditor.description.text = workingPreCon.name;
+					this.preConEditor.updateDropDownValueByState(selectedPred);
+				}
+				// we are in the update state
+				this.preConType = "update";
+				this.moveEditor.visible = true;	
+			}
+			
+			public function updateSelectedInitIRS(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.moveInitIRSList.selectedIndex >= 0)
+				{
+					var workingInfluenceRule:InfluenceRule = this.currentGame.initiatorIRS.influenceRules[this.moveInitIRSList.selectedIndex];
+					
+					this.initIRSEditor.reset();
+					this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+					this.initIRSEditor.predicateEditor.enabled = true;
+					for each (var pred:Predicate in workingInfluenceRule.predicates)
+					{
+						if (pred.name)
+							this.initIRSEditor.initIRS.addItem(pred.name);
+						else
+							this.initIRSEditor.initIRS.addItem(pred.toString());
+						this.initIRSEditor.workingInitIRS.push(pred);
+					}
+					var firstItem:Number = 0;
+					
+					this.initIRSEditor.predicateEditor.selectedIndex = firstItem;
+					
+					var IRSType:Number = this.initIRSEditor.workingInitIRS[firstItem].type;
+					this.initIRSEditor.initIRSTypeList.selectedIndex = IRSType;
+					this.initIRSEditor.changeState(IRSType);
+					this.initIRSEditor.description.text = workingInfluenceRule.name;
+					this.initIRSEditor.updateDropDownValueByState();
+					this.initIRSEditor.ruleWeight.value = workingInfluenceRule.weight;
+					this.initIRSID = workingInfluenceRule.id;
+					this.initIRSType = "update";
+					this.moveEditor.visible = true;
+				}
+			}
+			
+			public function updateSelectedRespIRS(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.moveRespIRSList.selectedIndex >= 0)
+				{
+					var workingInfluenceRule:InfluenceRule = this.currentGame.responderIRS.influenceRules[this.moveRespIRSList.selectedIndex];
+					
+					this.respIRSEditor.reset();
+					this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+					this.respIRSEditor.predicateEditor.enabled = true;
+					for each (var pred:Predicate in workingInfluenceRule.predicates)
+					{
+						if (pred.name)
+							this.respIRSEditor.respIRS.addItem(pred.name);
+						else
+							this.respIRSEditor.respIRS.addItem(pred.toString());
+						this.respIRSEditor.workingRespIRS.push(pred);
+					}
+					var firstItem:Number = 0;
+					
+					this.respIRSEditor.predicateEditor.selectedIndex = firstItem;
+					
+					var IRSType:Number = this.respIRSEditor.workingRespIRS[firstItem].type;
+					this.respIRSEditor.respIRSTypeList.selectedIndex = IRSType;
+					this.respIRSEditor.changeState(IRSType);
+					this.respIRSEditor.description.text = workingInfluenceRule.name;
+					this.respIRSEditor.updateDropDownValueByState();
+					this.respIRSEditor.ruleWeight.value = workingInfluenceRule.weight;
+					this.respIRSID = workingInfluenceRule.id;
+					this.respIRSType = "update";
+					this.moveEditor.visible = true;
+				}
+			}
+			
+			public function updateSelectedEffect(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.moveEffectList.selectedIndex >= 0)
+				{
+					var pred:Predicate = new Predicate();
+					var curEffect:Effect = this.currentGame.effects[this.moveEffectList.selectedIndex];
+
+					// reset the effect editor values and set the move editor tab to be the same as the social move overview tab
+					this.effectEditor.reset();
+					this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+
+					// set the accept/reject radio buttons
+					if (curEffect.isAccept ) {
+						this.effectEditor.acceptRejectEffect.selectedValue = "Accept";
+					} else {
+						this.effectEditor.acceptRejectEffect.selectedValue = "Reject";
+					}
+					
+					// set the effect description
+					this.effectEditor.description.text = curEffect.referenceAsNaturalLanguage;
+					
+					// set the instantiation ID
+					if (this.dte.instantiationListDP.length > 0 && curEffect.instantiationID >= 0)
+					{
+						// find the appropriate instantiation
+						for each (var inst:Instantiation in this.currentGame.instantiations)
+						{
+							if (inst.id == curEffect.instantiationID)
+							{
+								this.effectEditor.instList.selectedItem = curEffect.instantiationID + ": " + inst.name;
+								break;
+							}
+						}
+					}
+					
+					// Fill in the conditions into the "If this is true..." predicate list
+					for each (pred in curEffect.condition.predicates)
+					{
+						if (pred.name)
+							this.effectEditor.ifEffects.addItem(pred.name);
+						else
+							this.effectEditor.ifEffects.addItem(pred.toString());
+						this.effectEditor.workingIf.push(pred);
+					}
+					
+					// Fill in the changes into the "then this will happen" predicate list
+					for each (pred in curEffect.change.predicates)
+					{
+						if (pred.name)
+							this.effectEditor.thenEffects.addItem(pred.name);
+						else
+							this.effectEditor.thenEffects.addItem(pred.toString());
+						this.effectEditor.workingThen.push(pred);
+					}
+					
+					var firstItem:Number = 0;
+					var ifType:Number;
+					var thenType:Number;
+					
+					// select the first item in the predicate lists
+					this.effectEditor.ifPredEditor.selectedIndex = firstItem;
+					this.effectEditor.thenPredEditor.selectedIndex = firstItem;
+					
+					// if there is something in the if list, set the predicate type, change the state,
+					// update the drop down values, and enable the predicate list
+					if (this.effectEditor.workingIf.length > 0)
+					{
+						ifType = this.effectEditor.workingIf[firstItem].type;
+						this.effectEditor.ifTypeList.selectedIndex = ifType;
+						this.effectEditor.changeIfState(ifType);
+						this.effectEditor.updateIfDropDownValueByState();
+						this.effectEditor.ifPredEditor.enabled = true;
+					}
+					
+					// if there is something in the then list, set the predicate type, change the state
+					// update the drop down values, and enable the predicate list
+					if (this.effectEditor.workingThen.length > 0)
+					{
+						thenType = this.effectEditor.workingThen[firstItem].type;
+						this.effectEditor.thenTypeList.selectedIndex = thenType;
+						this.effectEditor.changeThenState(thenType);
+						this.effectEditor.updateThenDropDownValueByState();
+						this.effectEditor.thenPredEditor.enabled = true;
+					}
+				}
+				// set to type update, and make the whole thing visible
+				this.effectType = "update";
+				this.moveEditor.visible = true;
+			}
+			
+			public function updateSelectedInst(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.moveInstList.selectedIndex >= 0)
+				{
+					this.updateBool = true;
+					this.tempID = this.instID;
+					this.instID = this.currentGame.instantiations[this.moveInstList.selectedIndex].id;
+					this.moveEditor.selectedIndex = this.socialMoveOverview.selectedIndex;
+					this.instEditor.workingInst = this.currentGame.instantiations[this.moveInstList.selectedIndex].clone();
+					this.instEditor.description.text = this.instEditor.workingInst.name;
+					this.instEditor.updateInstList();
+					this.instEditor.instantiationList.selectedIndex = 0;
+					this.instEditor.updateDetailsUI();
+										
+				}
+				this.instType = "update";
+				this.moveEditor.visible = true;
+			}
+			
+			/********************************************************
+			 * Save selected social move component utility functions
+			 ********************************************************/
+			public function saveRoleTypes(): void {
+				this.currentGame.responderType = SocialGame.getTypeByName(this.roleTypeEditor.respRoleType.selectedValue.toString());
+				if (this.roleTypeEditor.otherEnabled.selected)
+				{
+					this.currentGame.requiresOther = true;
+					this.currentGame.otherType = SocialGame.getTypeByName(this.roleTypeEditor.otherRoleType.selectedValue.toString());
+				}
+				else
+					this.currentGame.requiresOther = false;
+				
+				updateMoveRoleTypeListDP();
+				modified=true;
+				this.moveEditor.visible = false;
+			}
+			
+			public function saveIntent():void
+			{
+				// Update the current social game
+				// Make sure there's something to save
+				if (intentEditor.workingIntents && intentEditor.workingIntents.length > 0)
+				{
+					var curRule:Rule = new Rule();
+					
+					// update rule with the author notes, and unique ID number
+					curRule.description = intentEditor.description.text;
+					curRule.id = intentID++;
+					
+					// load each of the predicates into the rule
+					for each (var pred:Predicate in intentEditor.workingIntents)
+					curRule.predicates.push(pred);
+					
+					// create a descriptive string for the Social Move Overview
+					var ruleString:String = new String();
+					for (var i:Number=0; i < intentEditor.intents.length; ++i)
+					{
+						ruleString += intentEditor.intents[i];
+						if (i < (intentEditor.intents.length - 1))
+							ruleString += " &\n";
+					}
+					curRule.name = ruleString;
+					
+					if (curRule.description)
+						ruleString += "\n~~~ " + curRule.description;
+					
+					// depending on if we're creating a new one or updating, save appropriately
+					if (this.intentType == "new")
+					{
+						currentGame.intents.push(curRule);						
+						// Update the intent list in the social move overview
+						this.moveIntentListDP.addItem(ruleString);
+						// Select the most recently added item
+						this.moveIntentList.selectedIndex = this.moveIntentListDP.length;
+						
+					}
+					else // we are updating an intent
+					{
+						var numRule:Number = this.moveIntentList.selectedIndex;
+						
+						currentGame.intents.splice(numRule, 1, curRule);
+						this.moveIntentListDP.removeItemAt(numRule);
+						this.moveIntentListDP.addItemAt(ruleString, numRule);
+						
+						this.moveIntentList.selectedIndex = numRule;
+					}
+					// Now we have at least one intent, so we can enable the Update button
+					if (!this.updateIntent.enabled)
+						this.updateIntent.enabled=true;
+					
+					if (!this.deleteIntent.enabled)
+						this.deleteIntent.enabled=true;
+					
+					this.moveEditor.visible = false;
+				}
+				modified=true;
+			}
+			
+			public function savePreCon():void
+			{
+				// Update the current social game
+				// Make sure there's something to save
+				if (preConEditor.workingPreCons && preConEditor.workingPreCons.length > 0)
+				{
+					var curRule:Rule = new Rule();
+					
+					// update rule with the author notes, and unique ID number
+					curRule.name = preConEditor.description.text;
+					curRule.id = preConID++;
+					
+					// load each of the predicates into the rule
+					for each (var pred:Predicate in preConEditor.workingPreCons)
+					curRule.predicates.push(pred);
+					
+					// create a descriptive string for the Social Move Overview
+					var ruleString:String = new String();
+					for (var i:Number=0; i < preConEditor.preConditions.length; ++i)
+					{
+						ruleString += preConEditor.preConditions[i];
+						if (i < (preConEditor.preConditions.length - 1))
+							ruleString += " &\n";
+					}
+					
+					if (curRule.name)
+						ruleString += "\n~~~ " + curRule.name;
+					
+					// depending on if we're creating a new one or updating, save appropriately
+					if (this.preConType == "new")
+					{
+						currentGame.preconditions.push(curRule);						
+						// Update the precondition list in the social move overview
+						this.movePreConListDP.addItem(ruleString);
+						// Select the most recently added item
+						this.movePreConList.selectedIndex = this.movePreConListDP.length;
+						
+					}
+					else // we are updating an precondition
+					{
+						var numRule:Number = this.movePreConList.selectedIndex;
+						
+						currentGame.preconditions.splice(numRule, 1, curRule);
+						this.movePreConListDP.removeItemAt(numRule);
+						this.movePreConListDP.addItemAt(ruleString, numRule);
+						
+						this.movePreConList.selectedIndex = numRule;
+					}
+					// Now we have at least one precondition, so we can enable the Update button
+					if (!this.updatePreCon.enabled)
+						this.updatePreCon.enabled=true;
+					
+					if (!this.deletePreCon.enabled)
+						this.deletePreCon.enabled=true;
+					
+					this.moveEditor.visible = false;
+				}		
+				modified=true;
+			}
+			
+			public function saveInitIRS():void
+			{
+				// Update the current social game
+				// Make sure there's something to save
+				if (initIRSEditor.workingInitIRS && initIRSEditor.workingInitIRS.length > 0)
+				{
+					var curRule:InfluenceRule = new InfluenceRule();
+					
+					// update rule with the author notes, and unique ID number
+					curRule.name = initIRSEditor.description.text;
+					curRule.id = initIRSID++;
+					curRule.weight = initIRSEditor.ruleWeight.value;
+					
+					// load each of the predicates into the rule
+					for each (var pred:Predicate in initIRSEditor.workingInitIRS)
+					curRule.predicates.push(pred);
+					
+					// create a descriptive string for the Social Move Overview
+					var ruleString:String = curRule.weight + ": ";
+					
+					for (var i:Number=0; i < initIRSEditor.initIRS.length; ++i)
+					{
+						ruleString += initIRSEditor.initIRS[i];
+						if (i < (initIRSEditor.initIRS.length - 1))
+							ruleString += " &\n";
+					}
+					
+					if (curRule.name)
+						ruleString += "\n~~~ " + curRule.name;
+					
+					// depending on if we're creating a new one or updating, save appropriately
+					if (this.initIRSType == "new")
+					{
+						currentGame.initiatorIRS.influenceRules.push(curRule);						
+						// Update the precondition list in the social move overview
+						this.moveInitIRSListDP.addItem(ruleString);
+						// Select the most recently added item
+						this.moveInitIRSList.selectedIndex = this.moveInitIRSListDP.length;
+						
+					}
+					else // we are updating an initiator influence rule set
+					{
+						var numRule:Number = this.moveInitIRSList.selectedIndex;
+						
+						currentGame.initiatorIRS.influenceRules.splice(numRule, 1, curRule);
+						this.moveInitIRSListDP.removeItemAt(numRule);
+						this.moveInitIRSListDP.addItemAt(ruleString, numRule);
+						
+						this.moveInitIRSList.selectedIndex = numRule;
+					}
+					// Now we have at least one influence rule set, so we can enable the Update button
+					if (!this.updateInitIRS.enabled)
+						this.updateInitIRS.enabled=true;
+					
+					if (!this.deleteInitIRS.enabled)
+						this.deleteInitIRS.enabled=true;
+					
+					this.moveEditor.visible = false;
+				}		
+				modified=true;
+			}
+			
+			public function saveRespIRS():void
+			{
+				// Update the current social game
+				// Make sure there's something to save
+				if (respIRSEditor.workingRespIRS && respIRSEditor.workingRespIRS.length > 0)
+				{
+					var curRule:InfluenceRule = new InfluenceRule();
+					
+					// update rule with the author notes, and unique ID number
+					curRule.name = respIRSEditor.description.text;
+					curRule.id = respIRSID++;
+					curRule.weight = respIRSEditor.ruleWeight.value;
+					
+					// load each of the predicates into the rule
+					for each (var pred:Predicate in respIRSEditor.workingRespIRS)
+					curRule.predicates.push(pred);
+					
+					// create a descriptive string for the Social Move Overview
+					var ruleString:String = curRule.weight + ": ";
+					
+					for (var i:Number=0; i < respIRSEditor.respIRS.length; ++i)
+					{
+						ruleString += respIRSEditor.respIRS[i];
+						if (i < (respIRSEditor.respIRS.length - 1))
+							ruleString += " &\n";
+					}
+					
+					if (curRule.name)
+						ruleString += "\n~~~ " + curRule.name;
+					
+					// depending on if we're creating a new one or updating, save appropriately
+					if (this.respIRSType == "new")
+					{
+						currentGame.responderIRS.influenceRules.push(curRule);						
+						// Update the precondition list in the social move overview
+						this.moveRespIRSListDP.addItem(ruleString);
+						// Select the most recently added item
+						this.moveRespIRSList.selectedIndex = this.moveRespIRSListDP.length;
+						
+					}
+					else // we are updating an initiator influence rule set
+					{
+						var numRule:Number = this.moveRespIRSList.selectedIndex;
+						
+						currentGame.responderIRS.influenceRules.splice(numRule, 1, curRule);
+						this.moveRespIRSListDP.removeItemAt(numRule);
+						this.moveRespIRSListDP.addItemAt(ruleString, numRule);
+						
+						this.moveRespIRSList.selectedIndex = numRule;
+					}
+
+					this.moveEditor.visible = false;
+				}		
+				modified=true;
+			}
+			
+			public function saveEffect():void
+			{
+				// Update the current social game
+				// Make sure there's something to save
+				if ((effectEditor.ifEffects && effectEditor.ifEffects.length > 0) || (effectEditor.thenEffects && effectEditor.thenEffects.length > 0))
+				{
+					var curEffect:Effect = new Effect();
+					var pred:Predicate = new Predicate();
+					
+					// update rule with the author notes, and unique ID number
+					curEffect.referenceAsNaturalLanguage = effectEditor.description.text;
+					var selectedInst:String = this.effectEditor.instList.selectedItem;
+					if (selectedInst)
+					{
+						var instStrings:Array = selectedInst.split(/:/);
+						var instNumber:int = parseInt(instStrings[0]);
+						
+						if (instNumber >= 0)
+							curEffect.instantiationID = instNumber; 
+					}
+					
+					curEffect.id = effectID++;
+					if (this.effectEditor.acceptRejectEffect.selectedValue.toString().toLowerCase() == "accept")
+						curEffect.isAccept = true;
+					else
+						curEffect.isAccept = false;
+
+					// load each of the predicates into the rule
+					for each (pred in effectEditor.workingIf)
+						curEffect.condition.predicates.push(pred);
+						
+					for each (pred in effectEditor.workingThen)
+						curEffect.change.predicates.push(pred);
+					
+					// create a descriptive string for the Social Move Overview
+					var ruleString:String = curEffect.instantiationID + ": " + this.effectEditor.acceptRejectEffect.selectedValue + ": ";
+					if (effectEditor.ifEffects.length > 0)
+						ruleString += "if: ";
+					else
+						ruleString += "always true: ";
+					
+					for (var i:Number=0; i < effectEditor.ifEffects.length; ++i)
+						ruleString += effectEditor.ifEffects[i] + "\n";
+					
+					ruleString += "==>";
+					for (var j:Number=0; j < effectEditor.thenEffects.length; ++j)
+						ruleString += effectEditor.thenEffects[j] + "\n";
+					
+					if (curEffect.referenceAsNaturalLanguage)
+						ruleString += "~~~ " + curEffect.referenceAsNaturalLanguage;
+					
+					// depending on if we're creating a new one or updating, save appropriately
+					if (this.effectType == "new")
+					{
+						currentGame.effects.push(curEffect);						
+						// Update the precondition list in the social move overview
+						this.moveEffectListDP.addItem(ruleString);
+						// Select the most recently added item
+						this.moveEffectList.selectedIndex = this.moveEffectListDP.length;
+						
+					}
+					else // we are updating an initiator influence rule set
+					{
+						var numRule:Number = this.moveEffectList.selectedIndex;
+						if(numRule >= 0) {
+						currentGame.effects.splice(numRule, 1, curEffect);
+						
+						this.moveEffectListDP.removeItemAt(numRule);
+						this.moveEffectListDP.addItemAt(ruleString, numRule);
+						
+						this.moveEffectList.selectedIndex = numRule;
+						} else 
+							this.moveEffectList.selectedIndex = numRule = 0;
+					}
+					modified=true;
+					
+					this.moveEditor.visible = false;
+				}		
+			}
+			
+			public function saveInstantiation():void
+			{
+				var oldInst:Instantiation = instEditor.workingInst;
+				// Update the current social game
+				// Make sure there's something to save
+				if (instEditor.instantiations && instEditor.instantiations.length > 0)
+				{
+					var curInst:Instantiation = instEditor.workingInst.clone();
+					
+					// update rule with the author notes, and unique ID number
+					curInst.name = instEditor.description.text;
+					curInst.id = instID++;
+					var curLineNumber:Number = 0;
+					for each (var line:LineOfDialogue in curInst.lines)
+						line.lineNumber = curLineNumber++;
+						
+					// create a descriptive string for the Social Move Overview
+					var instString:String = new String();
+					for (var i:Number=0; i < instEditor.instantiations.length; ++i)
+					{
+						instString += instEditor.instantiations[i];
+						instString += " \n";
+					}
+					
+					if (curInst.name)
+						instString += "~~~ " + curInst.name;
+					
+					// depending on if we're creating a new one or updating, save appropriately
+					if (this.instType == "new")
+					{
+						this.currentGame.instantiations.push(curInst);						
+						// Update the precondition list in the social move overview
+						this.moveInstListDP.addItem(instString);
+						// Select the most recently added item
+						this.moveInstList.selectedIndex = this.moveInstListDP.length;
+						this.dte.instantiationListDP.addItem(curInst.id + ": " + curInst.name);	
+					}
+					else // we are updating an initiator influence rule set
+					{
+						var numInst:Number = this.moveInstList.selectedIndex;
+						
+						this.currentGame.instantiations.splice(numInst, 1, curInst);
+						this.moveInstListDP.removeItemAt(numInst);
+						this.moveInstListDP.addItemAt(instString, numInst);
+						
+						this.dte.instantiationListDP.removeItemAt(numInst);
+						this.dte.instantiationListDP.addItemAt(curInst.id + ": " + curInst.name, numInst);	
+						this.moveInstList.selectedIndex = numInst;
+						
+					}
+					// Now we have at least one influence rule set, so we can enable the Update button
+
+					
+				}		
+				this.effectEditor.instList.dataProvider = this.dte.instantiationListDP;
+				modified=true;
+			}
+			
+		]]>
+	</fx:Script>
+
+</s:Group>

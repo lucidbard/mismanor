@@ -1,0 +1,61 @@
+12:39:26: %%% graphics initialized
+
+12:39:26: %%% state load complete
+
+12:39:27: %%% library load complete
+
+12:39:38: %%% opening screen clicked
+
+12:39:41: !!! player clicked on Violet
+
+12:39:41: Move offered: Conversation Flirt (Direct)
+12:39:41: Move offered: Break up (3-person)
+12:39:41: Move offered: Embarrass Self
+12:39:41: Move offered: Request Item
+12:39:41: 
+12:39:43: moveChosen()
+12:39:43: *** Playing Social Move: Embarrass Self at time 0
+Player(3) with Violet(11)
+Effect ID: 10
+
+12:39:43: Violet accepts Embarrass Self
+12:39:43: Kerry Lin: Hey, Violet! Do you wanna have sex with me?
+12:39:43: Violet: What?! Kerry Lin, what are you-?
+12:39:43: Kerry Lin: Haha hah hahah ah aha ha, I just wanted to see your face when I said that! I wasn't serious or anything.
+12:39:43: Violet: Well here is my aftermath face. Like it?
+12:39:43: Kerry Lin: Umm... no, not particularly.
+12:39:43: Violet: Well if you don't want to see that face anymore, then keep your shennanigans to yourself. 
+12:39:43: Kerry Lin: Oh, you hurt your wrist?
+12:39:43: Violet: What?
+12:39:43: Kerry Lin: It's scarred all over.
+12:39:43: Violet: Why are you looking at my wrists?
+12:39:43: Kerry Lin: Just the one.
+12:39:43: Violet: It's impure!
+12:39:43: Kerry Lin: Sorry...
+12:39:43: Why it was accepted/rejected: 
+44: ~status(initiator, embarrassed, -1)
+12: trait(responder, irritable)
+12: buddyNetwork(responder, initiator) lessthan 25
+8: trait(responder, hostile)
+8: trait(responder, outgoing)
+4: trait(responder, vengeful)
+4: trait(responder, snide)
+4: trait(responder, confident)
+4: trait(responder, domineering)
+
+12:39:44: respondingMove()
+12:39:44: *** Playing Social Move: Blame (2-person) at time 1
+Violet(22) with Player(-3)
+Effect ID: 4
+
+12:39:44: Kerry Lin rejects Blame (2-person)
+12:39:44: Violet: It’s all your fault! How could you?
+12:39:44: Kerry Lin: Actually it was not my fault. In fact, I tried to help you.
+12:39:44: Violet: It wasn’t? You did? Then whose fault was it?
+12:39:44: Kerry Lin: I don’t know, but it wasn’t me.
+12:39:44: Why it was accepted/rejected: 
+36: trait(initiator, irritable)
+36: trait(initiator, domineering)
+27: trustNetwork(initiator, responder) greaterthan 10
+
+

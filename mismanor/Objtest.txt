@@ -1,0 +1,175 @@
+**** Characters: 
+**Violet
+	female
+	charismatic
+	independent
+	observant
+	confident
+	persuasive
+	outgoing
+	irritable
+	domineering
+	vengeful
+	dishonest
+	hostile
+	snide
+	manipulating Player
+	busy
+	estranged from Colonel
+	is dating James
+	is holding Blue Book
+	is holding White Wine
+	known by Player
+	knows Violet
+	known by Violet
+	knows Blue Book
+	knows White Wine
+	knows Colonel
+	knows Player
+	known by Colonel
+	is dating Player
+
+Items in Inventory: 
+Blue Book
+	item
+	examinable
+	holdable
+	usable
+	hideable
+	held by by Violet
+	known by by Violet
+	known by by Colonel
+	known by by Player
+White Wine
+	item
+	examinable
+	holdable
+	usable
+	drinkable
+	held by by Violet
+	known by by Violet
+	known by by Colonel
+	known by by Player
+**James
+	male
+	kind
+	sympathetic
+	humble
+	forgiving
+	loyal
+	shy
+	jealous
+	honest
+	indecisive
+	is dating Violet
+	afraid of Violet
+	distracted
+	guilty
+	anxious
+	known by Player
+
+Items in Inventory: 
+None
+**Colonel
+	male
+	charismatic
+	trait not declared
+	outgoing
+	impulsive
+	disapproving
+	irritable
+	arrogant
+	oblivious
+	unforgiving
+	stubborn
+	gabby
+	hates James
+	distracted
+	estranged from Violet
+	anxious
+	known by Player
+	known by Violet
+	knows Violet
+	knows Blue Book
+	knows White Wine
+	knows Colonel
+	known by Colonel
+	knows Player
+
+Items in Inventory: 
+None
+**Player
+	female
+	knows Violet
+	knows James
+	knows Colonel
+	known by Player
+	knows Player
+	known by Violet
+	known by Colonel
+	knows Blue Book
+	knows White Wine
+	is dating Violet
+
+Items in Inventory: 
+None
+**** Items: 
+Wine
+	item
+	examinable
+	holdable
+	usable
+	drinkable
+Book
+	item
+	examinable
+	holdable
+	hideable
+White Wine
+	item
+	examinable
+	holdable
+	usable
+	drinkable
+	held by by Violet
+	known by by Violet
+	known by by Colonel
+	known by by Player
+Blue Book
+	item
+	examinable
+	holdable
+	usable
+	hideable
+	held by by Violet
+	known by by Violet
+	known by by Colonel
+	known by by Player
+Cult Statue
+	item
+	examinable
+	holdable
+	hideable
+	hidden
+Gate
+	item
+	examinable
+	usable
+	open
+	unlocked
+**** Knowledge: 
+Violet has a scar
+	violet's line
+	factual
+	active
+	hidden
+Colonel doesn't know about all the rooms
+	colonel's line
+	cult line
+	factual
+	active
+James is afraid of Violet
+	emotional
+	james's line
+	personal
+	active

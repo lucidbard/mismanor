@@ -1,0 +1,1073 @@
+<CiFState>
+  <ItemList>
+    <Item name="Wine" networkID="4" type="1">
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="examinable"/>
+      <Trait type="holdable"/>
+      <Trait type="usable"/>
+      <Status type="drinkable"/>
+      <Location room="dining room" x="450" y="434"/>
+      <img src="../lib/Wine2.png"/>
+    </Item>
+    <Item name="Book" networkID="5" type="1">
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="examinable"/>
+      <Trait type="holdable"/>
+      <Trait type="hideable"/>
+      <Location room="gardens" x="600" y="434"/>
+      <img src="../lib/Book.png"/>
+    </Item>
+    <Item name="White Wine" networkID="6" type="1">
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="examinable"/>
+      <Trait type="holdable"/>
+      <Trait type="usable"/>
+      <Status type="drinkable"/>
+      <Location room="inventory" x="450" y="334"/>
+      <img src="../lib/Wine_2.png"/>
+    </Item>
+    <Item name="Blue Book" networkID="7" type="1">
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="examinable"/>
+      <Trait type="holdable"/>
+      <Trait type="usable"/>
+      <Trait type="hideable"/>
+      <Location room="inventory" x="600" y="184"/>
+      <img src="../lib/Book_2.png"/>
+    </Item>
+    <Item name="Cult Statue" networkID="8" type="1">
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="examinable"/>
+      <Trait type="holdable"/>
+      <Trait type="hideable"/>
+      <Status type="hidden"/>
+      <Location room="gardens" x="600" y="284"/>
+      <img src="../lib/statue.png"/>
+    </Item>
+    <Item name="Gate" networkID="9" type="1">
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="item"/>
+      <Trait type="examinable"/>
+      <Trait type="usable"/>
+      <Status type="open"/>
+      <Status type="unlocked"/>
+      <Location room="gardens" x="600" y="350"/>
+      <img src="../lib/gate.png"/>
+    </Item>
+  </ItemList>
+  <KnowledgeList>
+    <Knowledge name="Violet has a scar on her wrist">
+      <Trait type="violet's line"/>
+      <Trait type="factual"/>
+      <Trait type="plotpoint"/>
+      <Trait type="plotpoint"/>
+      <Status type="active"/>
+    </Knowledge>
+    <Knowledge name="Colonel has a dagger collection">
+      <Trait type="factual"/>
+    </Knowledge>
+    <Knowledge name="Violet fears being abandoned">
+      <Trait type="emotional"/>
+      <Trait type="embarrassing"/>
+      <Trait type="secret"/>
+    </Knowledge>
+    <Knowledge name="Colonel wants to leave the manor">
+      <Trait type="emotional"/>
+      <Trait type="inflammatory"/>
+      <Trait type="secret"/>
+    </Knowledge>
+    <Knowledge name="Violet is a member of a cult">
+      <Trait type="factual"/>
+      <Trait type="violet's line"/>
+      <Trait type="cult line"/>
+      <Trait type="secret"/>
+      <Trait type="inflammatory"/>
+      <Trait type="plotpoint"/>
+      <Trait type="plotpoint"/>
+    </Knowledge>
+    <Knowledge name="Baroness has a drinking problem.">
+      <Trait type="knowledge"/>
+      <Trait type="personal"/>
+      <Trait type="backstory"/>
+      <Trait type="embarrassing"/>
+      <Trait type="plotpoint"/>
+      <Trait type="plotpoint"/>
+    </Knowledge>
+    <Knowledge name="Baroness is envious of Colonel's money.">
+      <Trait type="knowledge"/>
+      <Trait type="secret"/>
+      <Trait type="inflammatory"/>
+      <Trait type="plotpoint"/>
+    </Knowledge>
+    <Knowledge name="Baroness married into a rich family">
+      <Trait type="knowledge"/>
+    </Knowledge>
+    <Knowledge name="Baroness pities the help.">
+      <Trait type="knowledge"/>
+      <Trait type="personal"/>
+    </Knowledge>
+    <Knowledge name="Baroness thinks Violet is a golden child.">
+      <Trait type="knowledge"/>
+      <Trait type="emotional"/>
+      <Trait type="endearing"/>
+    </Knowledge>
+  </KnowledgeList>
+  <Cast>
+    <Character name="Liz" networkID="3">
+      <Trait type="female"/>
+      <Trait type="promiscuous"/>
+      <Trait type="charming"/>
+      <Trait type="honest"/>
+      <Trait type="confident"/>
+      <Trait type="persuasive"/>
+      <Trait type="outgoing"/>
+      <Trait type="impulsive"/>
+      <Trait type="jealous"/>
+      <Trait type="oblivious"/>
+      <Trait type="gabby"/>
+      <Trait type="nagging"/>
+      <Locution type="sweetie">sweetcakes</Locution>
+      <Locution type="shocked">Whoa!</Locution>
+      <Locution type="pejorative">knave</Locution>
+      <Locution type="greeting">Hellllo.</Locution>
+      <Locution type="positiveadj">fantastic</Locution>
+      <Status type="heartbroken" from="Liz" to=""/>
+      <Status type="angry at" from="Liz" to="Violet"/>
+      <Status type="loves" from="Liz" to="James"/>
+      <img src="../lib/violet.png"/>
+      <Location roomSide="right" yOffset="20" room="gardens"/>
+      <Inventory/>
+    </Character>
+    <Character name="Thomas" networkID="4">
+      <Trait type="male"/>
+      <Trait type="kind"/>
+      <Trait type="charming"/>
+      <Trait type="loyal"/>
+      <Trait type="confident"/>
+      <Trait type="outgoing"/>
+      <Trait type="impulsive"/>
+      <Trait type="indecisive"/>
+      <Trait type="stubborn"/>
+      <Trait type="vengeful"/>
+      <Trait type="tactful"/>
+      <Trait type="humble"/>
+      <Locution type="sweetie">Dear</Locution>
+      <Locution type="shocked">Yegads!</Locution>
+      <Locution type="pejorative">buffoon</Locution>
+      <Locution type="greeting">Hullo there</Locution>
+      <Locution type="positiveadj">bonny</Locution>
+      <Status type="virgin" from="Thomas" to=""/>
+      <Status type="vulnerable" from="Thomas" to=""/>
+      <Status type="angry at" from="Thomas" to="Violet"/>
+      <Status type="loves" from="Thomas" to="Colonel"/>
+      <img src="../lib/player.png"/>
+      <Location roomSide="left" yOffset="20" room="dining room"/>
+      <Inventory/>
+    </Character>
+    <Character name="Baroness" networkID="5">
+      <Trait type="female"/>
+      <Trait type="loyal"/>
+      <Trait type="confident"/>
+      <Trait type="irritable"/>
+      <Trait type="domineering"/>
+      <Trait type="arrogant"/>
+      <Trait type="oblivious"/>
+      <Trait type="nagging"/>
+      <Trait type="honest"/>
+      <Trait type="stubborn"/>
+      <Locution type="sweetie">Babs</Locution>
+      <Locution type="shocked">What?!</Locution>
+      <Locution type="pejorative">traitor</Locution>
+      <Locution type="greeting">My dear.</Locution>
+      <Locution type="positiveadj">great</Locution>
+      <Status type="tipsy" from="Baroness" to=""/>
+      <Status type="pities" from="Baroness" to="Liz"/>
+      <Status type="pities" from="Baroness" to="James"/>
+      <img src="../lib/violet.png"/>
+      <Location roomSide="right" yOffset="20" room="dining room"/>
+      <Inventory/>
+    </Character>
+    <Character name="Violet" networkID="0">
+      <Trait type="female"/>
+      <Trait type="charismatic"/>
+      <Trait type="independent"/>
+      <Trait type="observant"/>
+      <Trait type="confident"/>
+      <Trait type="persuasive"/>
+      <Trait type="outgoing"/>
+      <Trait type="irritable"/>
+      <Trait type="domineering"/>
+      <Trait type="vengeful"/>
+      <Trait type="dishonest"/>
+      <Trait type="hostile"/>
+      <Trait type="snide"/>
+      <Locution type="sweetie">Love</Locution>
+      <Locution type="shocked">Oh my.</Locution>
+      <Locution type="pejorative">idiot</Locution>
+      <Locution type="greeting">Why hello</Locution>
+      <Locution type="positiveadj">lovely</Locution>
+      <Status type="manipulating" from="Violet" to="Player"/>
+      <Status type="busy" from="Violet" to=""/>
+      <Status type="estranged from" from="Violet" to="Colonel"/>
+      <Status type="is dating" from="Violet" to="James"/>
+      <Status type="is holding" from="Violet" to="Blue Book"/>
+      <Status type="is holding" from="Violet" to="White Wine"/>
+      <img src="../lib/violet.png"/>
+      <Location roomSide="right" yOffset="20" room="living room"/>
+      <Inventory>
+        <Item name="Blue Book"/>
+        <Item name="White Wine"/>
+      </Inventory>
+    </Character>
+    <Character name="James" networkID="1">
+      <Trait type="male"/>
+      <Trait type="kind"/>
+      <Trait type="sympathetic"/>
+      <Trait type="humble"/>
+      <Trait type="forgiving"/>
+      <Trait type="loyal"/>
+      <Trait type="shy"/>
+      <Trait type="jealous"/>
+      <Trait type="honest"/>
+      <Trait type="indecisive"/>
+      <Locution type="sweetie">Lamby</Locution>
+      <Locution type="shocked">Aghhhck!</Locution>
+      <Locution type="pejorative">bully</Locution>
+      <Locution type="greeting">Hullo</Locution>
+      <Locution type="positiveadj">grand</Locution>
+      <Status type="is dating" from="James" to="Violet"/>
+      <Status type="afraid of" from="James" to="Violet"/>
+      <Status type="distracted" from="James" to=""/>
+      <Status type="guilty" from="James" to=""/>
+      <Status type="anxious" from="James" to=""/>
+      <img src="../lib/stableboy2.png"/>
+      <Location roomSide="left" yOffset="0" room="gardens"/>
+      <Inventory/>
+    </Character>
+    <Character name="Colonel" networkID="2">
+      <Trait type="male"/>
+      <Trait type="charismatic"/>
+      <Trait type="outgoing"/>
+      <Trait type="impulsive"/>
+      <Trait type="disapproving"/>
+      <Trait type="irritable"/>
+      <Trait type="arrogant"/>
+      <Trait type="oblivious"/>
+      <Trait type="unforgiving"/>
+      <Trait type="stubborn"/>
+      <Trait type="gabby"/>
+      <Locution type="sweetie">little apricot</Locution>
+      <Locution type="shocked">Wot?</Locution>
+      <Locution type="pejorative">scoundrel</Locution>
+      <Locution type="greeting">Indeed</Locution>
+      <Locution type="positiveadj">excellent</Locution>
+      <Status type="hates" from="Colonel" to="James"/>
+      <Status type="distracted" from="Colonel" to=""/>
+      <Status type="estranged from" from="Colonel" to="Violet"/>
+      <Status type="anxious" from="Colonel" to=""/>
+      <img src="../lib/colonel2.png"/>
+      <Location roomSide="left" yOffset="0" room="living room"/>
+      <Inventory/>
+    </Character>
+    <Character name="Player" networkID="6">
+      <Locution type="sweetie">dear</Locution>
+      <Locution type="shocked">Heavens!</Locution>
+      <Locution type="pejorative">simpleton</Locution>
+      <Locution type="greeting">Hello</Locution>
+      <Locution type="positiveadj">wonderful</Locution>
+      <img src="../lib/player.png"/>
+      <Location roomSide="left" yOffset="0" room="living room"/>
+      <Inventory/>
+    </Character>
+  </Cast>
+  <SFDB>
+    <StatusContext time="0">
+      <Predicate type="status" status="" first="stableboy" second="violet" negated="false" duration="0" name="" intent="false" intentType="-1" isSFDB="true" window="0" numTimesUniquelyTrueFlag="false" numTimesUniquelyTrue="0" numTimesRoleSlot=""/>
+    </StatusContext>
+    <SocialGameContext gameName="Reminisce" initiator="violet" responder="stableboy" initiatorScore="80" responderScore="40" time="0" effectID="0" other="colonel" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Show Off" initiator="violet" responder="stableboy" initiatorScore="80" responderScore="40" time="-1" effectID="0" other="colonel" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Insult" initiator="violet" responder="stableboy" initiatorScore="80" responderScore="40" time="-2" effectID="0" other="colonel" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Reminisce" initiator="violet" responder="colonel" initiatorScore="80" responderScore="40" time="-3" effectID="0" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Insult" initiator="stableboy" responder="colonel" initiatorScore="80" responderScore="40" time="-4" effectID="0" other="violet" socialGameContextReference="0"/>
+    <SocialGameContext gameName="Reminisce" initiator="stableboy" responder="violet" initiatorScore="80" responderScore="40" time="-5" effectID="0" socialGameContextReference="0"/>
+  </SFDB>
+  <CulturalKB>
+    <Proposition type="subjective" head="colonel" connection="likes" tail="pirates"/>
+    <Proposition type="subjective" head="violet" connection="dislikes" tail="flowers"/>
+    <Proposition type="subjective" head="colonel" connection="likes" tail="flowers"/>
+    <Proposition type="truth" head="pirates" connection="are" tail="mean"/>
+    <Proposition type="truth" head="flowers" connection="are" tail="pretty"/>
+  </CulturalKB>
+  <Network type="buddy" numChars="7">
+    <edge from="Liz" to="Thomas" value="40"/>
+    <edge from="Liz" to="Baroness" value="40"/>
+    <edge from="Liz" to="Violet" value="40"/>
+    <edge from="Liz" to="James" value="40"/>
+    <edge from="Liz" to="Colonel" value="40"/>
+    <edge from="Liz" to="Player" value="40"/>
+    <edge from="Thomas" to="Liz" value="40"/>
+    <edge from="Thomas" to="Baroness" value="30"/>
+    <edge from="Thomas" to="Violet" value="25"/>
+    <edge from="Thomas" to="James" value="25"/>
+    <edge from="Thomas" to="Colonel" value="25"/>
+    <edge from="Thomas" to="Player" value="40"/>
+    <edge from="Baroness" to="Liz" value="40"/>
+    <edge from="Baroness" to="Thomas" value="5"/>
+    <edge from="Baroness" to="Violet" value="40"/>
+    <edge from="Baroness" to="James" value="40"/>
+    <edge from="Baroness" to="Colonel" value="40"/>
+    <edge from="Baroness" to="Player" value="40"/>
+    <edge from="Violet" to="Liz" value="40"/>
+    <edge from="Violet" to="Thomas" value="25"/>
+    <edge from="Violet" to="Baroness" value="40"/>
+    <edge from="Violet" to="James" value="40"/>
+    <edge from="Violet" to="Colonel" value="40"/>
+    <edge from="Violet" to="Player" value="40"/>
+    <edge from="James" to="Liz" value="40"/>
+    <edge from="James" to="Thomas" value="25"/>
+    <edge from="James" to="Baroness" value="40"/>
+    <edge from="James" to="Violet" value="40"/>
+    <edge from="James" to="Colonel" value="40"/>
+    <edge from="James" to="Player" value="40"/>
+    <edge from="Colonel" to="Liz" value="40"/>
+    <edge from="Colonel" to="Thomas" value="25"/>
+    <edge from="Colonel" to="Baroness" value="40"/>
+    <edge from="Colonel" to="Violet" value="40"/>
+    <edge from="Colonel" to="James" value="40"/>
+    <edge from="Colonel" to="Player" value="40"/>
+    <edge from="Player" to="Liz" value="40"/>
+    <edge from="Player" to="Thomas" value="40"/>
+    <edge from="Player" to="Baroness" value="40"/>
+    <edge from="Player" to="Violet" value="40"/>
+    <edge from="Player" to="James" value="40"/>
+    <edge from="Player" to="Colonel" value="40"/>
+  </Network>
+  <Network type="trust" numChars="7">
+    <edge from="Liz" to="Thomas" value="40"/>
+    <edge from="Liz" to="Baroness" value="40"/>
+    <edge from="Liz" to="Violet" value="40"/>
+    <edge from="Liz" to="James" value="40"/>
+    <edge from="Liz" to="Colonel" value="40"/>
+    <edge from="Liz" to="Player" value="40"/>
+    <edge from="Thomas" to="Liz" value="40"/>
+    <edge from="Thomas" to="Baroness" value="30"/>
+    <edge from="Thomas" to="Violet" value="20"/>
+    <edge from="Thomas" to="James" value="20"/>
+    <edge from="Thomas" to="Colonel" value="20"/>
+    <edge from="Thomas" to="Player" value="40"/>
+    <edge from="Baroness" to="Liz" value="40"/>
+    <edge from="Baroness" to="Thomas" value="15"/>
+    <edge from="Baroness" to="Violet" value="10"/>
+    <edge from="Baroness" to="James" value="10"/>
+    <edge from="Baroness" to="Colonel" value="10"/>
+    <edge from="Baroness" to="Player" value="40"/>
+    <edge from="Violet" to="Liz" value="40"/>
+    <edge from="Violet" to="Thomas" value="20"/>
+    <edge from="Violet" to="Baroness" value="10"/>
+    <edge from="Violet" to="James" value="10"/>
+    <edge from="Violet" to="Colonel" value="10"/>
+    <edge from="Violet" to="Player" value="40"/>
+    <edge from="James" to="Liz" value="40"/>
+    <edge from="James" to="Thomas" value="15"/>
+    <edge from="James" to="Baroness" value="10"/>
+    <edge from="James" to="Violet" value="10"/>
+    <edge from="James" to="Colonel" value="10"/>
+    <edge from="James" to="Player" value="40"/>
+    <edge from="Colonel" to="Liz" value="40"/>
+    <edge from="Colonel" to="Thomas" value="20"/>
+    <edge from="Colonel" to="Baroness" value="10"/>
+    <edge from="Colonel" to="Violet" value="10"/>
+    <edge from="Colonel" to="James" value="10"/>
+    <edge from="Colonel" to="Player" value="40"/>
+    <edge from="Player" to="Liz" value="40"/>
+    <edge from="Player" to="Thomas" value="40"/>
+    <edge from="Player" to="Baroness" value="40"/>
+    <edge from="Player" to="Violet" value="40"/>
+    <edge from="Player" to="James" value="40"/>
+    <edge from="Player" to="Colonel" value="40"/>
+  </Network>
+  <Network type="familybond" numChars="7">
+    <edge from="Liz" to="Thomas" value="40"/>
+    <edge from="Liz" to="Baroness" value="40"/>
+    <edge from="Liz" to="Violet" value="40"/>
+    <edge from="Liz" to="James" value="40"/>
+    <edge from="Liz" to="Colonel" value="40"/>
+    <edge from="Liz" to="Player" value="40"/>
+    <edge from="Thomas" to="Liz" value="40"/>
+    <edge from="Thomas" to="Baroness" value="25"/>
+    <edge from="Thomas" to="Violet" value="15"/>
+    <edge from="Thomas" to="James" value="25"/>
+    <edge from="Thomas" to="Colonel" value="35"/>
+    <edge from="Thomas" to="Player" value="40"/>
+    <edge from="Baroness" to="Liz" value="40"/>
+    <edge from="Baroness" to="Thomas" value="10"/>
+    <edge from="Baroness" to="Violet" value="5"/>
+    <edge from="Baroness" to="James" value="50"/>
+    <edge from="Baroness" to="Colonel" value="80"/>
+    <edge from="Baroness" to="Player" value="40"/>
+    <edge from="Violet" to="Liz" value="40"/>
+    <edge from="Violet" to="Thomas" value="50"/>
+    <edge from="Violet" to="Baroness" value="5"/>
+    <edge from="Violet" to="James" value="20"/>
+    <edge from="Violet" to="Colonel" value="30"/>
+    <edge from="Violet" to="Player" value="40"/>
+    <edge from="James" to="Liz" value="40"/>
+    <edge from="James" to="Thomas" value="10"/>
+    <edge from="James" to="Baroness" value="80"/>
+    <edge from="James" to="Violet" value="5"/>
+    <edge from="James" to="Colonel" value="50"/>
+    <edge from="James" to="Player" value="40"/>
+    <edge from="Colonel" to="Liz" value="40"/>
+    <edge from="Colonel" to="Thomas" value="40"/>
+    <edge from="Colonel" to="Baroness" value="40"/>
+    <edge from="Colonel" to="Violet" value="40"/>
+    <edge from="Colonel" to="James" value="40"/>
+    <edge from="Colonel" to="Player" value="40"/>
+    <edge from="Player" to="Liz" value="40"/>
+    <edge from="Player" to="Thomas" value="40"/>
+    <edge from="Player" to="Baroness" value="40"/>
+    <edge from="Player" to="Violet" value="40"/>
+    <edge from="Player" to="James" value="40"/>
+    <edge from="Player" to="Colonel" value="40"/>
+  </Network>
+  <Network type="romance" numChars="7">
+    <edge from="Liz" to="Thomas" value="40"/>
+    <edge from="Liz" to="Baroness" value="40"/>
+    <edge from="Liz" to="Violet" value="40"/>
+    <edge from="Liz" to="James" value="40"/>
+    <edge from="Liz" to="Colonel" value="40"/>
+    <edge from="Liz" to="Player" value="40"/>
+    <edge from="Thomas" to="Liz" value="40"/>
+    <edge from="Thomas" to="Baroness" value="5"/>
+    <edge from="Thomas" to="Violet" value="25"/>
+    <edge from="Thomas" to="James" value="25"/>
+    <edge from="Thomas" to="Colonel" value="5"/>
+    <edge from="Thomas" to="Player" value="40"/>
+    <edge from="Baroness" to="Liz" value="40"/>
+    <edge from="Baroness" to="Thomas" value="10"/>
+    <edge from="Baroness" to="Violet" value="55"/>
+    <edge from="Baroness" to="James" value="5"/>
+    <edge from="Baroness" to="Colonel" value="15"/>
+    <edge from="Baroness" to="Player" value="40"/>
+    <edge from="Violet" to="Liz" value="40"/>
+    <edge from="Violet" to="Thomas" value="50"/>
+    <edge from="Violet" to="Baroness" value="35"/>
+    <edge from="Violet" to="James" value="25"/>
+    <edge from="Violet" to="Colonel" value="15"/>
+    <edge from="Violet" to="Player" value="40"/>
+    <edge from="James" to="Liz" value="40"/>
+    <edge from="James" to="Thomas" value="50"/>
+    <edge from="James" to="Baroness" value="5"/>
+    <edge from="James" to="Violet" value="15"/>
+    <edge from="James" to="Colonel" value="5"/>
+    <edge from="James" to="Player" value="40"/>
+    <edge from="Colonel" to="Liz" value="40"/>
+    <edge from="Colonel" to="Thomas" value="10"/>
+    <edge from="Colonel" to="Baroness" value="55"/>
+    <edge from="Colonel" to="Violet" value="15"/>
+    <edge from="Colonel" to="James" value="5"/>
+    <edge from="Colonel" to="Player" value="40"/>
+    <edge from="Player" to="Liz" value="40"/>
+    <edge from="Player" to="Thomas" value="40"/>
+    <edge from="Player" to="Baroness" value="40"/>
+    <edge from="Player" to="Violet" value="40"/>
+    <edge from="Player" to="James" value="40"/>
+    <edge from="Player" to="Colonel" value="40"/>
+  </Network>
+  <PlotPointList>
+    <PlotPoint id="0" knowledge="Violet has a scar on her wrist">
+      <Preconditions/>
+      <Instantiations>
+        <Instantiation type="hate" speaker="Violet" id="0" name="Violet hates the player">
+          <LineOfDialogue lineNumber="0" initiatorLine="Oh, you hurt your wrist?" responderLine="What?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="1" initiatorLine="It's scarred all over." responderLine="Why are you looking at my wrists?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="2" initiatorLine="Just the one." responderLine="It's impure!" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="3" initiatorLine="Sorry..." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Violet" id="1" name="Violet loves the player">
+          <LineOfDialogue lineNumber="0" initiatorLine="Oh, you hurt your wrist?" responderLine="What?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="1" initiatorLine="It's scarred all over." responderLine="Oh, that. It's just a scrape, nothing serious." otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="2" initiatorLine="It looks fresh." responderLine="You should know, I can be very clumsy sometimes." otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="neutral" speaker="Violet" id="2" name="Violet is neutral to the player">
+          <LineOfDialogue lineNumber="0" initiatorLine="Oh, you hurt your wrist?" responderLine="What?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="1" initiatorLine="It's scarred all over." responderLine=" Oh, that. I was bitten by a great tiger whilst on my African safari." otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="2" initiatorLine="You've been to Africa?" responderLine="Never. Although I've heard it's splendorous." otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="3" initiatorLine="I see..." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Violet" id="3" name="Violet likes the player">
+          <LineOfDialogue lineNumber="0" initiatorLine="Oh, you hurt your wrist?" responderLine="What?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="1" initiatorLine="It's scarred all over." responderLine=" Oh, that. I was bitten by a great tiger whilst on my African safari." otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="2" initiatorLine="You've been to Africa?" responderLine="Never. Although I've heard it's splendorous." otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+          <LineOfDialogue lineNumber="3" initiatorLine="I see..." responderLine="" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+      </Instantiations>
+    </PlotPoint>
+    <PlotPoint id="1" knowledge="Violet is a member of a cult">
+      <Preconditions>
+        <Precondition id="0"/>
+      </Preconditions>
+      <Instantiations>
+        <Instantiation type="hate" speaker="Violet" id="0" name="Violet hates the player">
+          <LineOfDialogue lineNumber="0" initiatorLine="Violet is in a cult and is told in a hateful way" responderLine="What?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Violet" id="1" name="Violet loves the player">
+          <LineOfDialogue lineNumber="0" initiatorLine="Violet is in a cult and is told in a loving way" responderLine="What?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="neutral" speaker="Violet" id="2" name="Violet is neutral to the player">
+          <LineOfDialogue lineNumber="0" initiatorLine="Violet is in a cult and is told in a neutral way" responderLine="What?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Violet" id="3" name="Violet likes the player">
+          <LineOfDialogue lineNumber="0" initiatorLine="Violet is in a cult and is told in a likeable way" responderLine="What?" otherLine="" primarySpeaker="initiator" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="responder" responderAddressing="initiator" otherAddressing="initiator" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+      </Instantiations>
+    </PlotPoint>
+    <PlotPoint id="2" knowledge="Baroness has a drinking problem.">
+      <Preconditions/>
+      <Instantiations>
+        <Instantiation type="neutral" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness lets player know that she has a drinking problem, neutrally." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness lets player know that she has a drinking problem, in a nice way." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness lets player know that she has a drinking problem, in a loving way." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness lets player know that she has a drinking problem, in a mean way." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+      </Instantiations>
+    </PlotPoint>
+    <PlotPoint id="-1" knowledge="Baroness is envious of Colonel's money.">
+      <Preconditions/>
+      <Instantiations>
+        <Instantiation type="neutral" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness tells player that she is envious of the Colonel's money, neutrally." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness tells player that she is envious of the Colonel's money, in a nice way." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness tells player that she is envious of the Colonel's money, in a loving way." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness tells player that she is envious of the Colonel's money, in a mean way." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+      </Instantiations>
+    </PlotPoint>
+    <PlotPoint id="4" knowledge="Baroness married into a rich family">
+      <Preconditions/>
+      <Instantiations>
+        <Instantiation type="neutral" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% that she married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in an amiable way that she married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a loving way that she married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a hateful way that she married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="neutral" speaker="Violet" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Violet" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in an amiable way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Violet" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a loving way that the Baroness married into a rich famil" responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Violet" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a hateful way that the Baroness married into a rich famil" responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="neutral" speaker="Colonel" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% that the Baroness married into a rich famil" responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Colonel" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in an amiable way that the Baroness married into a rich family" responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Colonel" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a loving way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Colonel" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a hateful way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="neutral" speaker="Liz" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Liz" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in an amiable way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Liz" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a loving way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Liz" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a hateful way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="neutral" speaker="Thomas" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Thomas" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in an amiable way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Thomas" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a loving way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Thomas" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="%i% tells %r% in a hateful way that the Baroness married into a rich family." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+      </Instantiations>
+    </PlotPoint>
+    <PlotPoint id="5" knowledge="Baroness pities the help.">
+      <Preconditions/>
+      <Instantiations>
+        <Instantiation type="neutral" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="The Baroness tells %r% that she pities those born into surfdom, stating that they must have worse lives than the upper class." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="The Baroness nicely tells %r% that she pities those born into surfdom, stating that they must have worse lives than the upper class." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="The Baroness lovingly tells %r% that she pities those born into surfdom, stating that they must have worse lives than the upper class." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="The Baroness hatefully shouts at %r% that she pities those born into surfdom, stating that they must have worse lives than the upper class." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+      </Instantiations>
+    </PlotPoint>
+    <PlotPoint id="6" knowledge="Baroness thinks Violet is a golden child.">
+      <Preconditions/>
+      <Instantiations>
+        <Instantiation type="neutral" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="Baroness gushes about Violet, saying how much of a golden child she thinks the girl is." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="like" speaker="" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="The Baroness gushes about Violet to %r%, saying how much of a golden child she thinks the girl is." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="love" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="The Baroness lovingly gushes to %r% about Violet, saying how much of a golden child she thinks the girl is." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+        <Instantiation type="hate" speaker="Baroness" id="-1" name="null">
+          <LineOfDialogue lineNumber="-1" initiatorLine="The Baroness says brusquely to %r%  how much of a golden child she thinks Violet is." responderLine="" otherLine="" primarySpeaker="" initiatorBodyAnimation="" initiatorFaceAnimation="" initiatorFaceState="" responderBodyAnimation="" responderFaceAnimation="" responderFaceState="" otherBodyAnimation="" otherFaceAnimation="" otherFaceState="" time="0" initiatorIsThought="false" responderIsThought="false" otherIsThought="false" initiatorIsDelayed="false" responderIsDelayed="false" otherIsDelayed="false" initiatorIsPicture="false" responderIsPicture="false" otherIsPicture="false" initiatorAddressing="" responderAddressing="" otherAddressing="" otherApproach="false" otherExit="false" isOtherChorus="false">
+            <PartialChange>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </PartialChange>
+            <ChorusRule>
+              <Rule name="Anonymous Rule" id="-1" description=""/>
+            </ChorusRule>
+          </LineOfDialogue>
+        </Instantiation>
+      </Instantiations>
+    </PlotPoint>
+  </PlotPointList>
+</CiFState>

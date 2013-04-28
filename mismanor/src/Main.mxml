@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:Mismanor="mismanor.*"
+					   width="1200"
+					   height="768"
+					   applicationComplete="onApplicationComplete(event)" xmlns:local="*">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import air.update.ApplicationUpdaterUI;
+			import air.update.events.UpdateEvent;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			
+			private var appUpdater:ApplicationUpdaterUI;
+			protected function onApplicationComplete(event:FlexEvent):void
+			{
+				
+				var appXML:XML = NativeApplication.nativeApplication.applicationDescriptor;
+				var ns:Namespace = appXML.namespace();
+				mismanor.lblAppVersion.text = appXML.ns::versionNumber;
+				/*lblAppName.text  = appXML.ns::name;*/
+				appUpdater = new ApplicationUpdaterUI();
+				appUpdater.isCheckForUpdateVisible = false;
+				appUpdater.configurationFile = new File("app:/updateConfig.xml"); 
+				appUpdater.initialize();
+				appUpdater.addEventListener(UpdateEvent.INITIALIZED, onInitUpdate);
+				appUpdater.addEventListener(ErrorEvent.ERROR, onInitError);
+				
+			}
+			
+			// if there's an error to the update show an alert
+			
+			private function onInitError(event:ErrorEvent):void
+			{
+				Alert.show(event.toString());
+			}
+			
+			// check to see if updated is needed
+			
+			private function onInitUpdate(event:UpdateEvent):void
+			{
+				appUpdater.checkNow();
+			}
+
+		]]>
+	</fx:Script>
+	<local:MismanorAIR width="100%" height="100%" id="mismanor"/>
+</s:WindowedApplication>

@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:Tool="tool.*"
+		 xmlns:services="services.*"
+		 width="1012" height="614" creationComplete="onCreationComplete()">
+	<fx:Declarations>
+		<s:CallResponder id="createMicrotheoryResult"/>
+		<s:CallResponder id="createRuleResult"/>
+		<services:SocialgamesService id="socialgamesService"
+											   fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+											   showBusyCursor="true"/>
+	</fx:Declarations>
+	
+	<!-- (April) this was copy-pasted and modified from Social Game Editor.
+		 I am taking the Preconditions and Initiator IRS and repurposing them.-->
+	
+	<mx:TabNavigator left="379" top="10" bottom="0" width="614" minWidth="0"
+					 backgroundAlpha="0.7" borderVisible="true" creationPolicy="all"
+					 dropShadowVisible="false" id="microtheoryEditor" selectedIndex="5" change="microtheoryEditorTabChange()" creationComplete="microtheoryEditorCreated()">
+		<s:NavigatorContent width="100%" height="100%" label="Definition">
+			<mx:VBox label="Definition Editor" width="100%" height="100%">
+				<Tool:DefinitionEditor id="defEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addDefToMicrotheory" x="10" y="28" width="130"
+					  label="Save Def to MicroT" click="saveDef()" />
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Microtheory IRS">
+			<mx:VBox label="Initiator Influence Rule Set Editor" width="100%" height="100%">
+				<Tool:MicrotheoryIRSEditor id="microIRSEditor" width="100%" height="100%" />
+			</mx:VBox>
+			<s:Button id="addMicroIRSToMicrotheory" x="10" y="28" width="130"
+					  label="Save IRS to MicroT" click="saveMicroIRS()" />
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+	<mx:Accordion id="microtheoryOverview" x="10" y="102" width="350" height="497" 
+				  contentBackgroundAlpha=".7" contentBackgroundColor="#ffffff" change="microtheoryChange()">							
+		<s:NavigatorContent width="100%" height="100%" label="Definition" fontWeight="normal">
+			<s:List id="theoryDefList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.theoryDefListDP}" creationComplete="theoryDefListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newDef" x="270" y="10" label="New" click="createNewDef(), this.checkCreated()"/>
+			<s:Button id="updateDef" x="270" y="39" label="Update" enabled="false" click="updateSelectedDef()" creationComplete="updateDefComplete()"/>
+			<s:Button id="saveToDBDef" x="270" y="68" label="Save to DB" enabled="false" click="saveSelectedDef()" creationComplete="saveDefComplete()"/>
+			<s:Button id="deleteDef" x="270" y="97" label="Delete" enabled="false" click="deleteSelectedDef()" creationComplete="deleteDefComplete()"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="Influence Rule Set">
+			<s:List id="microtheoryMicroIRSList" x="0" y="0" width="262" height="100%"
+					contentBackgroundAlpha="0.8" dataProvider="{this.microtheoryMicroIRSListDP}" creationComplete="microtheoryMicroIRSListComplete()">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="justify" />
+				</s:layout>
+			</s:List>
+			<s:Button id="newMicroIRS" x="270" y="10" label="New" click="createNewMicroIRS(), this.checkCreated()"/>
+			<s:Button id="updateMicroIRS" x="270" y="39" label="Update" enabled="false" click="updateSelectedMicroIRS()" creationComplete="updateMicroIRSComplete()"/>
+			<s:Button id="deleteMicroIRS" x="270" y="68" label="Delete" enabled="false" click="deleteSelectedMicroIRS()" creationComplete="deleteMicroIRSComplete()"/>
+		</s:NavigatorContent>
+	</mx:Accordion>
+	<s:Label x="10" y="16" color="#F5E9EB" fontSize="20"
+			 text="Microtheory Overview"
+			 />
+	<s:TextInput id="microtheoryName" x="10" y="72" width="350"
+				 contentBackgroundColor="#FFFFFF" enabled="true"
+				 prompt="Microtheory Name" change="updateMicrotheoryName()"
+				 />
+	<s:Button id="newMicrotheory" x="274" y="16" width="83" label="Create New" click="createNewMicrotheory()"
+			  />
+	<s:Button id="deleteMicrotheory" x="274" y="43" width="83" label="Delete" click="deleteSelectedMicrotheory()"
+			  />
+	<mx:VRule x="366" y="55" width="8" height="525"
+			  />
+	<s:DropDownList id="microtheoryList" x="10" y="43" width="256" contentBackgroundColor="#ffffff" 
+					dataProvider="{this.microtheoryListDP}" change="loadNewMicrotheory()"></s:DropDownList>
+	
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			
+			import spark.events.*;
+			
+			import valueObjects.MicrotheoryVO;
+			import valueObjects.RuleVO;
+			
+			//import valueObjects.MicrotheoryVO;
+			
+			[Bindable] public var theoryDefListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var microtheoryMicroIRSListDP:ArrayCollection = new ArrayCollection();
+			[Bindable] public var microtheoryListDP:ArrayCollection = new ArrayCollection();
+			
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			
+			public var currentTheory:CiF.Microtheory = new CiF.Microtheory();
+			private var cif:CiFSingleton;
+			// Are these necessary?
+			private var defType:String = "new";
+			private var microIRSType:String = "new";
+			private var defID:Number = 0;
+			private var microIRSID:Number = 0;
+			
+			//booleans for if objects have been created
+			private var newDefBool:Boolean = false;
+			private var newMicroIRSBool:Boolean = false;
+			
+			private static var def:Number = 0;
+			private static var microIRS:Number = 1;
+			
+			public function onCreationComplete(): void {
+				this.cif = CiFSingleton.getInstance();
+			}
+			
+			public function microtheoryEditorTabChange(): void {
+				this.microtheoryOverview.selectedIndex = this.microtheoryEditor.selectedIndex;
+			}
+			
+			public function microtheoryChange(): void {
+				this.microtheoryEditor.selectedIndex = this.microtheoryOverview.selectedIndex;
+			}
+			
+			public function microtheoryEditorCreated(): void {
+				for (var i:Number = 0; i< this.microtheoryEditor.length; i++)
+					this.microtheoryEditor.selectedIndex = i;
+				
+				this.microtheoryEditor.visible = false;
+				this.microtheoryEditor.selectedIndex = 0;
+			}
+			
+			public function createNewMicrotheory(): void {
+				this.microtheoryName.text = "";
+				this.currentTheory = new Microtheory();
+
+				this.theoryDefListDP = new ArrayCollection();
+				this.microtheoryMicroIRSListDP = new ArrayCollection();
+				this.microtheoryListDP = new ArrayCollection();
+
+				//this.dte.instantiationListDP = new ArrayCollection(); (April) What does this do?
+				this.microtheoryList.selectedIndex = -1;
+				
+				if (this.updateDef)
+					this.updateDef.enabled = false;
+				if (this.deleteDef)
+					this.deleteDef.enabled = false;
+				if (this.updateMicroIRS)
+					this.updateMicroIRS.enabled = false;
+				if (this.deleteMicroIRS)
+					this.deleteMicroIRS.enabled = false;
+
+				if (this.microtheoryEditor)
+					this.microtheoryEditor.visible = false;
+			}
+			
+			public function updateMicrotheoryName(): void {
+				this.currentTheory.name = this.microtheoryName.text;
+			}
+			
+			public function deleteSelectedMicrotheory():void {
+				if (this.microtheoryList.selectedIndex >= 0)
+				{
+					this.cif.microtheories.splice(this.microtheoryList.selectedIndex, 1);
+					this.microtheoryListDP.removeItemAt(this.microtheoryList.selectedIndex);
+					if (this.microtheoryListDP.length > 0)
+						this.microtheoryList.selectedIndex = 0;
+					this.microtheoryList.dispatchEvent(new IndexChangeEvent(IndexChangeEvent.CHANGE) );
+				}
+			}
+			
+			public function loadNewMicrotheory(): void {
+				var resultStr:String;
+				var pred:Predicate;
+				var ir:InfluenceRule;
+				if (this.microtheoryList.selectedIndex >= 0)
+					this.currentTheory = this.cif.microtheories[this.microtheoryList.selectedIndex].clone();
+				
+				else this.currentTheory = new Microtheory();
+				// load information into the accordion
+				this.microtheoryName.text = currentTheory.name;
+				this.theoryDefListDP.removeAll();
+				this.microtheoryMicroIRSListDP.removeAll();
+				//this.dte.instantiationListDP.removeAll();
+
+				var def:Rule = currentTheory.definition
+				resultStr = new String();
+				
+				for each (pred in def.predicates)
+				{
+					resultStr += pred.toString() + "\n";
+				}
+				
+				if (def.name != "")
+					resultStr += "~~~ " + def.name;
+				
+				this.theoryDefListDP.addItem(resultStr);
+				this.defID = def.id + 1; // make sure the next Definition has a unique id
+				for each (ir in currentTheory.initiatorIRS.influenceRules)
+				{
+					resultStr = ir.weight + ": ";
+					
+					for each (pred in ir.predicates)
+					{
+						resultStr += pred.name + "\n";
+					}
+					
+					if (ir.name != "")
+						resultStr += "~~~ " + ir.name;
+					
+					this.microtheoryMicroIRSListDP.addItem(resultStr);
+					this.microIRSID = ir.id + 1; // make sure the next initiator IRS has a unique id
+				}
+				
+				if (this.theoryDefListDP.length > 0)
+				{
+					if (this.theoryDefList)
+						this.theoryDefList.selectedIndex = 0;
+					
+					if (this.updateDef)
+						this.updateDef.enabled = true;
+					
+					if (this.deleteDef)
+						this.deleteDef.enabled = true;
+				}
+				
+				if (this.microtheoryMicroIRSListDP.length > 0)
+				{
+					if (this.microtheoryMicroIRSList)
+						this.microtheoryMicroIRSList.selectedIndex = 0;
+					
+					if (this.updateMicroIRS)
+						this.updateMicroIRS.enabled = true;
+					
+					if (this.deleteMicroIRS)
+						this.deleteMicroIRS.enabled = true;
+				}	
+				
+				if (this.theoryDefListDP.length > 0)
+					this.saveToDBDef.enabled = true;
+				else
+					this.saveToDBDef.enabled = false;
+				
+			}
+			
+			/********************************************************
+			 * Create new microtheory component utility functions
+			 ********************************************************/
+			public function checkCreated():void{
+				if(!newDefBool){
+					this.createNewDef();
+					this.newDefBool = true;
+				}
+				if(!newMicroIRSBool){
+					this.createNewMicroIRS();
+					this.newMicroIRSBool = true;
+				}
+			}
+			public function createNewDef():void {
+				this.microtheoryEditor.visible = true;
+				this.microtheoryEditor.selectedIndex = this.microtheoryOverview.selectedIndex;
+				if (this.defEditor)
+					this.defEditor.reset();
+				this.defType = "new";
+			}
+			
+			public function createNewMicroIRS():void {
+				this.microtheoryEditor.visible = true;
+				this.microtheoryEditor.selectedIndex = this.microtheoryOverview.selectedIndex;
+				if (this.microIRSEditor)
+					this.microIRSEditor.reset();
+				this.microIRSType = "new";
+			}
+			
+			/********************************************************
+			 * Delete selected microtheory component utility functions
+			 ********************************************************/
+			
+			public function deleteSelectedDef(): void {
+				var selectedDef:Number = this.theoryDefList.selectedIndex;
+				
+				this.theoryDefListDP.removeItemAt(selectedDef);
+				this.currentTheory.definition = null;
+				this.microtheoryEditor.visible = false;
+				
+				if (this.theoryDefListDP.length == 0)
+				{
+					this.deleteDef.enabled = false;
+					this.updateDef.enabled = false;
+				}
+				else
+					this.theoryDefList.selectedIndex = 0;
+			}
+			
+			public function deleteSelectedMicroIRS(): void {
+				var selectedMicroIRS:Number = this.microtheoryMicroIRSList.selectedIndex;
+				
+				this.microtheoryMicroIRSListDP.removeItemAt(selectedMicroIRS);
+				this.currentTheory.initiatorIRS.influenceRules.splice(selectedMicroIRS, 1);
+				this.microtheoryEditor.visible = false;
+				
+				if (this.microtheoryMicroIRSListDP.length == 0)
+				{
+					this.deleteMicroIRS.enabled = false;
+					this.updateMicroIRS.enabled = false;
+				}
+				else
+					this.microtheoryMicroIRSList.selectedIndex = 0;
+			}
+			
+			/********************************************************
+			 * Update selected microtheory component utility functions
+			 ********************************************************/
+			public function updateSelectedDef(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.theoryDefList.selectedIndex >= 0)
+				{
+					var workingDef:Rule = this.currentTheory.definition;
+					// reset the UI
+					this.defEditor.reset();
+					// set the tab on the microtheory editor to be the same tab as the microtheory overview UI
+					this.microtheoryEditor.selectedIndex = this.microtheoryOverview.selectedIndex;
+					// enable the predicate editor
+					this.defEditor.predicateEditor.enabled = true;
+					// add each of the Definition predicates for this rule into the predicate list box
+					for each (var pred:Predicate in workingDef.predicates)
+					{
+						this.defEditor.definitions.addItem(pred.toString());
+						this.defEditor.workingDefs.push(pred);
+					}
+					var firstItem:Number = 0;
+					var selectedPred:Predicate = this.defEditor.workingDefs[firstItem];
+					
+					// select the first item in the predicate list box
+					this.defEditor.predicateEditor.selectedIndex = firstItem;
+					
+					// Setup the predicate editor based on the selected item (which is the first one)
+					var DefType:Number = selectedPred.type;
+					this.defEditor.defTypeList.selectedIndex = DefType;
+					this.defEditor.changeStateByType(DefType);
+					this.defEditor.notBox.selected = selectedPred.negated; 
+					this.defEditor.description.text = workingDef.name;
+					this.defEditor.updateDropDownValueByState(selectedPred);
+				}
+				// we are in the update state
+				this.defType = "update";
+				this.microtheoryEditor.visible = true;	
+			}
+			
+			/********************************************************
+			 * Save selected microtheory component utility functions
+			 ********************************************************/
+			public function saveSelectedDef(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.theoryDefList.selectedIndex >= 0)
+				{
+					var workingDef:Rule = this.currentTheory.definition;
+					trace(currentTheory.toJSON());
+					var microtheory:MicrotheoryVO = new MicrotheoryVO();
+					//microtheory.init(currentTheory);
+					//microtheory.toJSON();
+					createMicrotheory(microtheory);
+				}
+			}
+			
+			
+			public function updateSelectedMicroIRS(): void {
+				// load stuff into predicate editor, if something is selected
+				if (this.microtheoryMicroIRSList.selectedIndex >= 0)
+				{
+					var workingInfluenceRule:InfluenceRule = this.currentTheory.initiatorIRS.influenceRules[this.microtheoryMicroIRSList.selectedIndex];
+					this.microIRSEditor.reset();
+					this.microtheoryEditor.selectedIndex = this.microtheoryOverview.selectedIndex;
+					this.microIRSEditor.intentEditor.enabled = true;
+					
+					for each (var pred:Predicate in workingInfluenceRule.predicates)
+					{
+						if (pred.intent == true && this.microIRSEditor.intents.length == 0){
+							if (pred.name)
+								this.microIRSEditor.intents.addItem(pred.name);
+							else
+								this.microIRSEditor.intents.addItem(pred.toString());
+							this.microIRSEditor.workingIntents.push(pred);
+						} else {
+							if (pred.name)
+								this.microIRSEditor.microIRS.addItem(pred.name);
+							else
+								this.microIRSEditor.microIRS.addItem(pred.toString());
+							this.microIRSEditor.workingMicroIRS.push(pred);
+						}
+					}
+					
+					var firstItem:Number = 0;
+					var IRSType:Number
+					
+					
+					if (microIRSEditor.workingMicroIRS.length > 0){
+						this.microIRSEditor.predicateEditor.enabled = true;
+						this.microIRSEditor.predicateEditor.selectedIndex = firstItem;
+						IRSType = this.microIRSEditor.workingMicroIRS[firstItem].type;
+						this.microIRSEditor.microIRSTypeList.selectedIndex = IRSType;
+						this.microIRSEditor.changeState(IRSType);
+						this.microIRSEditor.updateDropDownValueByState(this.microIRSEditor.workingMicroIRS[this.microIRSEditor.predicateEditor.selectedIndex]);
+					} else {
+						this.microIRSEditor.predicateEditor.enabled = false;
+						this.microIRSEditor.intentEditor.selectedIndex = firstItem;
+						IRSType = this.microIRSEditor.workingIntents[firstItem].intentType;
+						this.microIRSEditor.intentTypeList.selectedIndex = IRSType;
+						this.microIRSEditor.changeIntentState(IRSType);
+						this.microIRSEditor.updateDropDownValueByState(this.microIRSEditor.workingIntents[this.microIRSEditor.intentEditor.selectedIndex]);
+					}
+					this.microIRSEditor.description.text = workingInfluenceRule.name;
+					this.microIRSEditor.ruleWeight.value = workingInfluenceRule.weight;
+					this.microIRSID = workingInfluenceRule.id;
+					this.microIRSType = "update";
+					this.microtheoryEditor.visible = true;
+				}
+			}
+			
+			/********************************************************
+			 * Save selected microtheory component utility functions
+			 ********************************************************/
+
+			public function saveDef():void
+			{
+				// Update the current social game
+				// Make sure there's something to save
+				if (defEditor.workingDefs && defEditor.workingDefs.length > 0)
+				{
+					var curRule:Rule = new Rule();
+					
+					// update rule with the author notes, and unique ID number
+					curRule.name = defEditor.description.text;
+					curRule.id = defID++;
+					
+					// load each of the predicates into the rule
+					for each (var pred:Predicate in defEditor.workingDefs)
+					curRule.predicates.push(pred);
+					
+					// create a descriptive string for the Social Microtheory Overview
+					var ruleString:String = new String();
+					for (var i:Number=0; i < defEditor.definitions.length; ++i)
+					{
+						ruleString += defEditor.definitions[i];
+						if (i < (defEditor.definitions.length - 1))
+							ruleString += " &\n";
+					}
+					
+					if (curRule.name)
+						ruleString += "\n~~~ " + curRule.name;
+					
+					// depending on if we're creating a new one or updating, save appropriately
+					if (this.defType == "new")
+					{
+						currentTheory.definition = curRule;					
+						// Update the Definition list in the microtheory overview
+						this.theoryDefListDP.removeAll();
+						this.theoryDefListDP.addItem(ruleString);
+						// Select the most recently added item
+						this.theoryDefList.selectedIndex = this.theoryDefListDP.length;
+						
+					}
+					else // we are updating an Definition
+					{
+						var numRule:Number = this.theoryDefList.selectedIndex;
+						
+						currentTheory.definition = curRule;
+						this.theoryDefListDP.removeItemAt(numRule);
+						this.theoryDefListDP.addItemAt(ruleString, numRule);
+						
+						this.theoryDefList.selectedIndex = numRule;
+					}
+					// Now we have at least one Definition, so we can enable the Update button
+					if (!this.updateDef.enabled)
+						this.updateDef.enabled=true;
+					
+					if (!this.deleteDef.enabled)
+						this.deleteDef.enabled=true;
+					
+					this.microtheoryEditor.visible = false;
+				}		
+			}
+			
+			public function saveMicroIRS():void
+			{
+				// Update the current social game
+				// Make sure there's something to save
+				if (microIRSEditor.workingIntents && microIRSEditor.workingIntents.length == 1)
+				{
+					var curRule:InfluenceRule = new InfluenceRule();
+					
+					// update rule with the author notes, and unique ID number
+					curRule.name = microIRSEditor.description.text;
+					curRule.id = microIRSID++;
+					curRule.weight = microIRSEditor.ruleWeight.value;
+					
+					// load each of the predicates into the rule
+					// Intent first
+					curRule.predicates.push(microIRSEditor.workingIntents[0]);
+					// Then others
+					for each (var pred:Predicate in microIRSEditor.workingMicroIRS)
+						curRule.predicates.push(pred);
+					
+					// create a descriptive string for the Social Microtheory Overview
+					var ruleString:String = curRule.weight + ": ";
+					
+					ruleString += microIRSEditor.intents[0];
+					if (microIRSEditor.microIRS.length > 0) ruleString += " &\n";
+					
+					for (var i:Number=0; i < microIRSEditor.microIRS.length; ++i)
+					{
+						ruleString += microIRSEditor.microIRS[i];
+						if (i < (microIRSEditor.microIRS.length - 1))
+							ruleString += " &\n";
+					}
+					
+					if (curRule.name)
+						ruleString += "\n~~~ " + curRule.name;
+					
+					// depending on if we're creating a new one or updating, save appropriately
+					if (this.microIRSType == "new")
+					{
+						currentTheory.initiatorIRS.influenceRules.push(curRule);						
+						// Update the Definition list in the microtheory overview
+						this.microtheoryMicroIRSListDP.addItem(ruleString);
+						// Select the most recently added item
+						this.microtheoryMicroIRSList.selectedIndex = this.microtheoryMicroIRSListDP.length;
+						
+					}
+					else // we are updating an initiator influence rule set
+					{
+						var numRule:Number = this.microtheoryMicroIRSList.selectedIndex;
+						
+						currentTheory.initiatorIRS.influenceRules.splice(numRule, 1, curRule);
+						this.microtheoryMicroIRSListDP.removeItemAt(numRule);
+						this.microtheoryMicroIRSListDP.addItemAt(ruleString, numRule);
+						
+						this.microtheoryMicroIRSList.selectedIndex = numRule;
+					}
+					// Now we have at least one influence rule set, so we can enable the Update button
+					if (!this.updateMicroIRS.enabled)
+						this.updateMicroIRS.enabled=true;
+					
+					if (!this.deleteMicroIRS.enabled)
+						this.deleteMicroIRS.enabled=true;
+					
+					this.microtheoryEditor.visible = false;
+				}		
+			}
+			
+			/***********************************************
+			 * Utility functions for setting up the UI
+			 * in the Social Microtheory Overview accordion
+			 * *********************************************/
+			
+			/* PRE-CONDITION */
+			public function theoryDefListComplete(): void {
+				if (this.theoryDefListDP.length > 0)
+					theoryDefList.selectedIndex = 0;
+			}
+			
+			public function deleteDefComplete(): void {
+				if (this.theoryDefListDP.length > 0)
+					deleteDef.enabled = true;
+				else
+					deleteDef.enabled = false;
+			}
+			
+			public function updateDefComplete(): void {
+				if (this.theoryDefListDP.length > 0)
+					updateDef.enabled = true;
+				else
+					updateDef.enabled = false;
+			}
+			
+			public function saveDefComplete(): void {
+				if (this.theoryDefListDP.length > 0)
+					saveToDBDef.enabled = true;
+				else
+					saveToDBDef.enabled = false;
+			}
+			
+			/* Initiator Influence Rule Sets */
+			public function microtheoryMicroIRSListComplete(): void {
+				if (this.microtheoryMicroIRSListDP.length > 0)
+					microtheoryMicroIRSList.selectedIndex = 0;
+			}
+			
+			public function deleteMicroIRSComplete(): void {
+				if (this.microtheoryMicroIRSListDP.length > 0)
+					deleteMicroIRS.enabled = true;
+				else
+					deleteMicroIRS.enabled = false;
+			}
+			
+			public function updateMicroIRSComplete(): void {
+				if (this.microtheoryMicroIRSListDP.length > 0)
+					updateMicroIRS.enabled = true;
+				else
+					updateMicroIRS.enabled = false;
+			}
+						
+			
+			protected function createRule(item:RuleVO):void
+			{
+				//createRuleResult.token = socialgamesService.createRule(item);
+			}
+			
+			
+			protected function createMicrotheory(item:MicrotheoryVO):void
+			{
+				//createMicrotheoryResult.token = socialgamesService.createMicrotheory(item);
+			}
+			
+		]]>
+	</fx:Script>
+
+</s:Group>

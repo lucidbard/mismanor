@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:valueObjects="valueObjects.*"
+		 xmlns:services="services.*"
+		 width="500" height="350" backgroundColor="#FFFFFF" borderVisible="true"
+		 initialize="init();" currentState="Loading" title="Mismanor Design Tool" stateChangeComplete="initializedAndLoginHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import core.util.CompareValidator;
+			
+			import events.LoginEvent;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ValidationResultEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.validators.EmailValidator;
+			import mx.validators.StringValidator;
+			
+			import spark.events.TextOperationEvent;
+			
+			import valueObjects.User;
+			[Bindable]
+			private var cookieAction:Boolean;
+			[Bindable]
+			private var autoLogin:Boolean;
+			private var passwordAgainVal:CompareValidator = new CompareValidator();
+			private var emailVal:EmailValidator = new EmailValidator();
+			private var emailVal2:EmailValidator = new EmailValidator();
+			private var usernameVal2:StringValidator = new StringValidator();
+			private var passwordVal2:StringValidator = new StringValidator();
+			
+			protected function button_registerHandler(event:MouseEvent):void
+			{
+				var user2:User = new User();
+				user2.username = username.text;
+				user2.password = password.text;
+				user2.email = emailTextInput.text;
+				createUserResult.token = userService.createUser(user2);
+			}
+			
+			protected function createUserResult_resultHandler(event:ResultEvent):void
+			{
+				mx.controls.Alert.show('Thank you for registering. You may login now!');
+				currentState = "Login";
+				loginButton.enabled=true;
+			}
+			
+			private var userid:int;
+			private var usertype:String;
+			[Bindable]
+			private var usernameAL:String = "";
+			[Bindable]
+			private var passwordAL:String = "";
+			private var initializedBool:Boolean = false;
+			
+			private function checkLogin(event:ResultEvent):void
+			{
+				userid = event.result.loginsuccess;
+				usertype = event.result.usertype;
+				if (userid != 0)
+				{
+					dispatchEvent(new LoginEvent(LoginEvent.LOGGED_IN,userid));
+				}
+				else
+				{
+					mx.controls.Alert.show('Invalid username/password');
+				}
+			}
+			
+			protected function init():void
+			{
+				getCookie.send();
+				addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:Event):void {
+				});
+			}
+			
+			protected function getCookie_resultHandler(event:ResultEvent):void
+			{
+				if(event.result.storedCookie == true)
+				{
+					if(event.result.autoLogin) {
+						usernameAL = event.result.creds.username;
+						passwordAL = event.result.creds.password;
+						autologin.send();
+					} else {
+							cookieAction = true;
+							usernameAL = event.result.creds.username;
+							passwordAL = event.result.creds.password;
+							loginButton.enabled = true;
+					}
+				}
+				else
+				{
+					cookieAction == false;
+				}
+				currentState="Login";
+			}
+			
+			protected function registerEmail_changeHandler(event:Event):void {
+				if (emailTextInput.text && emailTextInput.text.length>5)
+				{
+					var valEmail:ValidationResultEvent;
+					emailVal.source = emailTextInput;
+					emailVal.property = "text";
+					emailVal.required = true;
+				}
+				valEmail= emailVal.validate();
+				if(valEmail.type == "valid") {
+					Save.enabled = true;
+				} else {
+					Save.enabled = false;
+				}
+			}
+
+			protected function register_changeHandler(event:Event):void
+			{
+				if (username.text)
+				{
+					var valUsername:ValidationResultEvent;
+					usernameVal2.source = username;
+					usernameVal2.property = "text";
+					usernameVal2.required = true;
+					usernameVal2.minLength=6;
+				}
+				if (password.text)
+				{
+					var valPassword:ValidationResultEvent;
+					passwordVal2.source = password;
+					passwordVal2.property = "text";
+					passwordVal2.required = true;
+					passwordVal2.minLength=6;
+				}
+				if (passwordAgain.text) {
+					var valPasswordAgain:ValidationResultEvent;
+					passwordAgainVal.source = passwordAgain;
+					passwordAgainVal.valueToCompare = password.text;
+					passwordAgainVal.property = "text";
+					passwordAgainVal.required = true;
+					passwordAgainVal.errorMessage = "Passwords do not match.";
+				}
+				
+				valUsername = usernameVal2.validate();
+				valPassword = passwordVal2.validate();
+				valPasswordAgain = passwordAgainVal.validate();
+				if(valUsername.type == "valid" && valPassword.type == "valid" && valPasswordAgain.type == "valid")
+					Save.enabled = true;
+				else
+					Save.enabled = false;
+			}
+			
+			protected function loggedOut_changeHandler(event:Event):void
+			{
+				if(username.text.length >= 6 && password.text.length >= 6)
+					loginButton.enabled = true;
+				else
+					loginButton.enabled = false;
+			}
+			
+			protected function emailTextInput_focusOutHandler(event:FocusEvent):void
+			{
+				if (emailTextInput.text)
+				{
+					var valEmail:ValidationResultEvent;
+					emailVal2.source = emailTextInput;
+					emailVal2.property = "text";
+					emailVal2.required = true;
+				}
+				valEmail= emailVal2.validate();
+				if(valEmail.type == "valid")
+					sendLoginInfo.enabled = true;
+				else
+					sendLoginInfo.enabled = false;				
+			}
+			
+			protected function initializedAndLoginHandler(event:FlexEvent):void
+			{
+				if(currentState == "Login" && !initializedBool) {
+					username.text = usernameAL;
+					password.text = passwordAL;
+					initializedBool=true;
+					loginButton.enabled=true;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="Login"/>
+		<s:State name="Register"/>
+		<s:State name="forgotPW"/>
+		<s:State name="Loading"/>
+	</s:states>
+	<fx:Declarations>
+		<valueObjects:User id="user"/>
+		<services:UserService id="userService"
+							  fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+							  showBusyCursor="true"/>
+		<s:CallResponder id="createUserResult" result="createUserResult_resultHandler(event)"/>
+		<s:HTTPService id="login_user" result="checkLogin(event)" showBusyCursor="true" method="POST" url="http://54.245.105.219/designtool/flex/services/login.php" useProxy="false">
+			<s:request xmlns="">
+				<username>
+					{username.text}
+				</username>
+				<password>
+					{password.text}
+				</password>
+				<logincookie>
+					{setCookie.selected}
+				</logincookie>
+				<autoLogin>
+					{autoLogin}
+				</autoLogin>
+			</s:request>
+		</s:HTTPService>
+		<s:HTTPService id="autologin" result="checkLogin(event)" showBusyCursor="true" method="POST" url="http://54.245.105.219/designtool/flex/services/login.php" useProxy="false">
+			<s:request xmlns="">
+				<username>
+					{usernameAL}
+				</username>
+				<password>
+					{passwordAL}
+				</password>
+				<logincookie>
+					{true}
+				</logincookie>
+				<autoLogin>
+					{true}
+				</autoLogin>
+			</s:request>
+		</s:HTTPService>
+		<s:HTTPService id="getCookie" result="getCookie_resultHandler(event)" method="POST" url="http://54.245.105.219/designtool/flex/services/getCookie.php"/>
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout gap="11" horizontalAlign="center" requestedRowCount="3"
+						  paddingBottom="30" paddingTop="45"/>
+	</s:layout>
+	<s:layout.forgotPW>
+		<s:BasicLayout/>
+	</s:layout.forgotPW>
+
+	<s:Form includeIn="Login,Register,forgotPW" top="35" width="80%" height="60%"
+			backgroundColor="#E4E4E4" horizontalCenter="0" textAlign="left"
+			height.forgotPW="20%" defaultButton.forgotPW="{sendLoginInfo}"
+			defaultButton.Login="{loginButton}"
+			defaultButton.Register="{Save}">
+		<s:layout>
+			<s:FormLayout/>
+		</s:layout>
+		<s:FormItem includeIn="Login,Register" width="100%" label="Username">
+			<s:TextInput x="0" y="0" width="100%" prompt="Username" textAlign="left" id="username" 
+						 text="{user.username}" change.Login="loggedOut_changeHandler(event)" focusOut.Register="register_changeHandler(event)"/>
+		</s:FormItem>
+		<s:FormItem includeIn="Login,Register" width="100%" label="Password">
+			<s:TextInput width="100%" prompt="Password" textAlign="left" id="password" text="{user.password}" displayAsPassword="true" change.Login="loggedOut_changeHandler(event)" focusOut.Register="register_changeHandler(event)"/>
+		</s:FormItem>
+		<s:FormItem includeIn="Register" width="100%" label="Enter Password Again:">
+			<s:TextInput width="100%" prompt="Enter Password Again" textAlign="left" id="passwordAgain" displayAsPassword="true" change.Register="register_changeHandler(event)"/>
+		</s:FormItem>
+		<s:FormItem includeIn="Register,forgotPW" width="100%" label="Email">
+			<s:TextInput width="100%" prompt="Email" textAlign="left" id="emailTextInput" text="{user.email}" change.Register="registerEmail_changeHandler(event)" focusOut.forgotPW="emailTextInput_focusOutHandler(event)"/>
+		</s:FormItem>
+		
+	</s:Form>
+	<s:Group includeIn="Login,Register,forgotPW" bottom="10" width="80%" horizontalCenter="0">
+		<s:Button id="loginButton" includeIn="Login" width="35%" left="20" top="10"
+				  label="Login" focusEnabled="true" click="login_user.send();" enabled="false"/>
+		<s:Button id="forgotPassword" includeIn="Login" right="20" top="10" width="55%"
+				  label="Forgot Login Info?" click="currentState=&quot;forgotPW&quot;"/>
+		<s:Button id="Save" includeIn="Register" left="20" width="35%" height="35" label="Save" click="{button_registerHandler(event)}" enabled="false"/>
+		<s:CheckBox includeIn="Login" left="20" width="50%" height="15" y="35" label="Remember Me" id="setCookie"  selected="{cookieAction}" />
+		<s:CheckBox includeIn="Login" left="80" width="50%" height="15" y="35" label="Auto Login" id="setAutoLogin"  selected="{autoLogin}" />
+		<s:Button includeIn="Login" id="registerButton" right="20" y="35" label="Register" click="{currentState='Register'}"/>
+		<s:Button includeIn="forgotPW" id="sendLoginInfo" label="Send Login Info" left="20" width="45%" height="35" enabled="false"/>
+		<s:Button includeIn="Register,forgotPW" right="20" label="Back"
+				  click="currentState=&quot;Login&quot;" height="35"
+				  width="35%"/>
+	</s:Group>
+	<s:Label includeIn="Loading" fontFamily="Georgia" fontSize="33"
+			 text="Loading &#xd;Mismanor Design Tool" textAlign="center" verticalAlign="middle"/>
+</s:Panel>

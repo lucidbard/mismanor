@@ -1,0 +1,136 @@
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="SocialgamesService">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">SocialgamesService</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services.socialgamesservice</item>
+      <item name="Endpoint">http://localhost/expressive.ai/mismanor/flex/gateway.php</item>
+      <item name="Destination">SocialgamesService</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">PHP</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="PHP_RELATIVE_LOCATION">flex/services/SocialgamesService.php</item>
+      <item name="PHP_SERVER_ROOT">C:\wamp\www\expressive.ai\mismanor</item>
+      <item name="DEFAULT_ENTITY_PACKAGE">SocialGame</item>
+      <item name="PHP_SERVICES_FOLDER">C:\wamp\www\expressive.ai\mismanor\flex\services</item>
+      <item name="PHP_LOCATION">C:/wamp/www/expressive.ai/mismanor/flex/services/SocialgamesService.php</item>
+      <item name="LINKED_FILE">SocialgamesService.php</item>
+      <item name="PHP_SERVER_ROOT_URL">http://localhost/expressive.ai/mismanor/</item>
+      <item name="ABSOLUTE_ENDPOINT">http://localhost/expressive.ai/mismanor/flex/gateway.php</item>
+      <item name="PHP_CLASS_NAME">SocialgamesService</item>
+    </annotation>
+    <function name="getAllSocial_games" return-type="Social_games[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getSocial_gamesByID" return-type="Social_games">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createSocial_games" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="Social_games"/>
+    </function>
+    <function name="updateSocial_games" return-type="void">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="Social_games"/>
+    </function>
+    <function name="deleteSocial_games" return-type="void">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="count" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getSocial_games_paged" return-type="Social_games[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="startIndex" type="integer"/>
+      <parameter name="numItems" type="integer"/>
+    </function>
+  </service>
+  <entity name="Social_games" persistent="true">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">Social_games</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">SocialgamesService</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="DataManagement">
+      <item name="create">createSocial_games</item>
+      <item name="update">updateSocial_games</item>
+      <item name="get">getSocial_gamesByID</item>
+      <item name="delete">deleteSocial_games</item>
+      <item name="fillFunc">getAllSocial_games,getSocial_games_paged</item>
+      <item name="managingService">SocialgamesService</item>
+    </annotation>
+    <annotation name="getSocial_gamesByID">
+      <item name="propertySpecifier">id,version,name,requiresOther,type,othertype</item>
+    </annotation>
+    <annotation name="getAllSocial_games">
+      <item name="propertySpecifier">id,version,name,requiresOther,type,othertype</item>
+    </annotation>
+    <annotation name="getSocial_games_paged">
+      <item name="propertySpecifier">id,version,name,requiresOther,type,othertype</item>
+      <item name="pagingEnabled">true</item>
+      <item name="positionalPagingParameters">true</item>
+      <item name="countOperation">count</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">SocialGame</item>
+    </annotation>
+    <id name="id" type="integer"/>
+    <property name="version" type="integer" required="true"/>
+    <property name="name" type="string" required="true"/>
+    <property name="requiresOther" type="integer" required="true"/>
+    <property name="type" type="integer" required="true"/>
+    <property name="othertype" type="integer" required="true"/>
+  </entity>
+</model>

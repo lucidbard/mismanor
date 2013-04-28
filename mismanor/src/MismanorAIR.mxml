@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<local:MisManor xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:local="*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mismanor.XMLIO;
+			public override function loadState(path:String=""): void {
+				if(path=="")
+					path="finalstate.xml";
+				var stateFile:File = File.applicationDirectory.resolvePath(path);
+				var stateFileStream:FileStream = new FileStream();
+				stateFileStream.open(stateFile,FileMode.READ);
+				var stateXML:XML = new XML(stateFileStream.readUTFBytes(stateFileStream.bytesAvailable));
+				stateLoaded = true;
+				
+				this.gameState = XMLIO.parseGameState(stateXML);
+				if (!isAIPlayer)
+				{
+					initPlayer();
+					initGraphics();
+					gameMap.initMap();
+				}/*
+				else if (stateLoaded && libLoaded)
+				{
+				initAIPlayer();
+				gameLoopForAI();
+				}	*/	
+			}
+			
+			
+			public override function loadLibrary(path:String=""):void {
+				if(path=="")
+					path="finallibrary.xml";
+				trace("in library");
+				var libraryFile:File = File.applicationDirectory.resolvePath(path);
+				var libraryFileStream:FileStream = new FileStream();
+				libraryFileStream.open(libraryFile,FileMode.READ);
+				var libraryXML:XML = new XML(libraryFileStream.readUTFBytes(libraryFileStream.bytesAvailable));
+				
+				libLoaded = true;
+				
+				XMLIO.parseLibrary(libraryXML);
+				/*
+				if (isAIPlayer && libLoaded && stateLoaded)
+				{
+				initAIPlayer();
+				gameLoopForAI();
+				}
+				*/
+			}
+		]]>
+	</fx:Script>
+</local:MisManor>

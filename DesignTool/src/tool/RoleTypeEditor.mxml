@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:Tool="tool.*"
+		 width="610" height="300"
+		 >
+	<fx:Declarations>
+		<s:RadioButtonGroup id="initRoleType"/>
+		<s:RadioButtonGroup id="respRoleType"/>
+		<s:RadioButtonGroup id="otherRoleType"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Rect x="9" y="10" width="591" height="280">
+		<s:fill>
+			<s:SolidColor color="#ffffff" alpha="0.8"/>
+		</s:fill>
+	</s:Rect>
+	<s:Label x="30" y="51" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Initiator"/>
+	<s:VGroup x="30" y="71" width="262" height="44" fontSize="14" fontWeight="bold">
+		<s:RadioButton label="character" enabled="false" groupName="initRoleType" selected="true"/>
+	</s:VGroup>
+	<s:Label x="30" y="115" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Responder"/>
+	<s:HGroup x="28" y="138" width="135" height="44" fontSize="14" fontWeight="bold">
+		<s:RadioButton label="character" enabled="true" groupName="respRoleType" selected="true"/>
+		<s:RadioButton label="item" enabled="true" groupName="respRoleType" selected="false"/>
+	</s:HGroup>
+	<s:Label id="otherLabel" x="31" y="181" backgroundAlpha="1.0" color="#522E34" fontSize="20"
+			 fontWeight="bold" text="Other" alpha="0.5" />
+	<s:CheckBox id="otherEnabled" x="28" y="202" label="Enable Other" fontSize="14"
+				fontWeight="bold" selected="false" change="otherEnabledChange()"/>
+	<s:HGroup id="otherRoleTypeGroup" x="28" y="229" width="135" height="44" fontSize="14" fontWeight="bold" visible="false">
+		<s:RadioButton label="character" groupName="otherRoleType" selected="true"/>
+		<s:RadioButton label="item" groupName="otherRoleType"/>
+		<s:RadioButton label="knowledge" groupName="otherRoleType"/>
+	</s:HGroup>
+	<mx:HRule x="10" y="292" width="592" height="10"
+			  />
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+			public function otherEnabledChange():void {
+				if (otherEnabled.selected)
+				{
+					this.otherRoleTypeGroup.visible = true;
+					this.otherLabel.alpha = 1;
+				}
+				else
+				{
+					this.otherRoleTypeGroup.visible = false;
+					this.otherLabel.alpha = 0.5;
+				}
+			}
+			
+			// set everything to defaults, ready for new pre-condition to be created
+			public function reset(): void
+			{
+				this.otherRoleTypeGroup.visible = false;
+				this.otherLabel.alpha = .5;
+				this.otherRoleType.selectedValue = "character";
+				this.initRoleType.selectedValue = "character";
+				this.respRoleType.selectedValue = "character";
+			}
+		]]>
+	</fx:Script>
+</s:Group>

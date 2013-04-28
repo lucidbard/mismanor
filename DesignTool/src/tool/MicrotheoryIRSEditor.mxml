@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="622" height="480" creationComplete="onCreationComplete()">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="network"/>
+		<s:State name="knowledge"/>
+		<s:State name="trait"/>
+		<s:State name="status"/>
+		<s:State name="SFDBLabel"/>
+		<s:State name="CKB"/>
+		<s:State name="intentNetwork"/>
+		<s:State name="intentStatus"/>
+	</s:states>
+	
+	<s:Label x="10" y="8" color="#522E34" fontSize="12" text="Note: Must have 1 (and only 1) intent and 0 or more predicates"/>
+	<s:TextInput id="description" x="156" y="27" width="446"
+				 contentBackgroundColor="#FFFFFF" enabled="true"
+				  prompt="Author Notes" 
+				 />
+	<s:List id="microIRSTypeList" x="10" y="191" width="130" height="90"
+			contentBackgroundColor="#FFFFFF"></s:List>
+	<s:List id="intentTypeList" x="10" y="81" width="130" height="75"
+			contentBackgroundColor="#FFFFFF"></s:List>
+	<s:Label x="10" y="61" color="#522E34" fontSize="20" text="Intent"/>
+	<s:Label x="10" y="167" color="#522E34" fontSize="20" text="Predicates"/>
+	<s:Label x="10" y="319" color="#522E34" fontSize="20"
+			  text="Details"
+			 />
+	<s:Button x="156" y="191" label="Add" click="addMicroIRS(microIRSTypeList.selectedIndex)"/>
+	<s:Button x="156" y="220" label="Remove" click="removeMicroIRS(predicateEditor.selectedIndex)"/>
+	<s:Button x="156" y="81" label="Add"
+			  click="addIntent(intentTypeList.selectedIndex)"/>
+	<s:Button x="156" y="110" label="Remove"
+			  click="removeIntent(predicateEditor.selectedIndex)"/>
+	<s:List id="intentEditor" x="234" y="81" width="368" height="75" click="clickOnIntentEditor(intentEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF" dataProvider="{this.intents}" enabled="false"
+			 selectedIndex="1" ></s:List>
+	<s:List id="predicateEditor" x="234" y="191" width="368" height="90"
+			click="clickOnPredicateEditor(predicateEditor.selectedIndex)"
+			contentBackgroundColor="#FFFFFF" dataProvider="{this.microIRS}" enabled="false"
+			 selectedIndex="0" ></s:List>
+	<s:DropDownList id="knowledgeList" includeIn="knowledge" x="110"
+					y="349" width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.knowledgeTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="statusListIRS" includeIn="status" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.statusTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="statusListIntent" includeIn="intentStatus" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.statusTypes}"
+					selectedIndex="0"
+					change="updateIntentEditor(intentEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="networkListIRS" includeIn="network" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.networkTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="networkListIntent" includeIn="intentNetwork" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.networkTypes}"
+					selectedIndex="0"
+					change="updateIntentEditor(intentEditor.selectedIndex)"></s:DropDownList>
+	<s:DropDownList id="firstRoleIRS" includeIn="knowledge,network,status,trait,SFDBLabel" x="110" y="378"
+					width="175" change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="firstRoleIntent" includeIn="intentNetwork,intentStatus" x="110" y="378"
+					width="175" change="updateIntentEditor(intentEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="secondRoleIRS" includeIn="network,status,SFDBLabel" x="428" y="378" width="175"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:DropDownList id="secondRoleIntent" includeIn="intentNetwork,intentStatus" x="428" y="378" width="175"
+					change="updateIntentEditor(intentEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.roleTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="SFDBLabel" x="10" y="352" width="96" height="21"
+			 fontSize="14" text="SFDB Label"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:DropDownList id="sfdbLabelList" includeIn="SFDBLabel" x="110" y="349"
+					width="493" contentBackgroundColor="#FFFFFF"
+					dataProvider="{this.dte.sfdbLabelTypes}"
+					selectedIndex="0"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"></s:DropDownList>
+	<s:Label includeIn="network,status,intentNetwork,intentStatus,SFDBLabel" x="328" y="381" width="96" height="21" fontSize="14"
+			  text="Second Role" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="knowledge,network,status,trait,intentNetwork,intentStatus,SFDBLabel" x="10" y="381" width="96" height="21" fontSize="14"
+			  text="First Role" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="SFDBLabel" x="-4" y="410" width="428" height="21" fontSize="14"
+			 text="SFDB event must have occured within how many turns (0 is all time)" textAlign="right" verticalAlign="middle"/>
+	<s:NumericStepper id="sfdbLabelWindow" includeIn="SFDBLabel" x="428" y="407"
+					  change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="999" minimum="0" stepSize="1"/>
+	<s:DropDownList id="comparator" includeIn="network" x="110" y="407" width="175"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.compTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="network" x="328" y="410" width="96" height="21" fontSize="14"
+			  text="Weight" textAlign="right" verticalAlign="middle"/>
+	<s:Label x="130" y="55" width="96" height="21"
+			 fontSize="14"  text="Rule Weight" textAlign="right"
+			 verticalAlign="middle" />
+	<s:NumericStepper id="networkWeight" includeIn="network" x="432" y="407"
+					  change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					  contentBackgroundColor="#FFFFFF" maximum="100" minimum="0" stepSize="1"/>
+	<s:Label includeIn="network" x="10" y="410" width="96" height="21" fontSize="14"
+			  text="Comparator" textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="status,intentStatus" x="10" y="352" width="96" height="21"
+			 fontSize="14"  text="Status"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="network,intentNetwork" x="10" y="352" width="96" height="21"
+			 fontSize="14"  text="Network"
+			 textAlign="right" verticalAlign="middle"/>
+	<s:Label includeIn="knowledge" x="10" y="352" width="96" height="21"
+			 fontSize="14"  text="Knowledge"
+			 textAlign="right" verticalAlign="middle"/>
+	<mx:HRule x="10" y="292" width="592" height="10"
+			  />
+	<s:CheckBox id="notBox" includeIn="knowledge,network,status,trait,SFDBLabel" x="110" y="323" label="Not"
+				fontSize="14"  change="updatePredicateEditor(predicateEditor.selectedIndex)"/>
+	<s:NumericStepper id="ruleWeight" x="235" y="53"
+					  contentBackgroundColor="#FFFFFF" maximum="10" minimum="-10" stepSize="1"
+					  value="0" />
+	<s:DropDownList id="traitList" includeIn="trait" x="110" y="349" width="493"
+					change="updatePredicateEditor(predicateEditor.selectedIndex)"
+					contentBackgroundColor="#FFFFFF" dataProvider="{this.dte.traitTypes}"
+					selectedIndex="0"></s:DropDownList>
+	<s:Label includeIn="trait" x="10" y="352" width="96" height="21" fontSize="14" 
+			 text="Trait" textAlign="right" verticalAlign="middle"/>
+	<fx:Script>
+		<![CDATA[
+			import CiF.*;
+			
+			import mx.collections.ArrayCollection;
+			
+			import tool.*;
+			
+			[Bindable] private var dte:DesignToolEngine = DesignToolEngine.getInstance();
+			[Bindable] public var intents:ArrayCollection; 
+			[Bindable] public var microIRS:ArrayCollection; 
+			public var workingIntents:Vector.<Predicate> = new Vector.<Predicate>(); // Note: only first one ever matters
+			public var workingMicroIRS:Vector.<Predicate> = new Vector.<Predicate>();
+			public var preExists:Boolean = false;
+			
+			public function onCreationComplete():void {
+				this.microIRS = new ArrayCollection();
+				this.microIRSTypeList.dataProvider = this.dte.predTypes;
+				this.microIRSTypeList.selectedIndex = 0;
+				this.intents = new ArrayCollection();
+				this.intentTypeList.dataProvider = this.dte.intentTypes;
+				this.intentTypeList.selectedIndex = 0;
+			}	
+			
+			public function checkPreExists():void {
+				if(this.workingMicroIRS.length == 0){
+					this.preExists = false;
+				}
+				if(!preExists){
+					this.addMicroIRS(microIRSTypeList.selectedIndex);
+					this.preExists = true;
+				}
+			}
+			
+			// Takes a predicate clones it, updates the appropriate field based on UI state
+			// returns the cloned predicate
+			public function updatePredicateByState(workingPredicate:Predicate):Predicate
+			{
+				var newPredicate:Predicate = workingPredicate.clone();
+				
+				if (workingPredicate.intent == false) {
+					newPredicate.first = this.firstRoleIRS.selectedItem;
+					newPredicate.negated = this.notBox.selected;
+				} else {
+					newPredicate.first = this.firstRoleIntent.selectedItem;
+					newPredicate.negated = this.notBox.selected;
+				}
+				
+				switch (this.currentState)
+				{
+					case "network":
+						newPredicate.networkType = this.networkListIRS.selectedIndex;
+						newPredicate.second = this.secondRoleIRS.selectedItem;
+						newPredicate.comparator = this.comparator.selectedItem;
+						newPredicate.networkValue = this.networkWeight.value;
+						if (secondRoleIRS.enabled == false) secondRoleIRS.enabled = true;
+						break;
+					case "knowledge":
+						newPredicate.knowledge = this.knowledgeList.selectedIndex;
+						break;
+					case "status":
+						newPredicate.second = this.secondRoleIRS.selectedItem;
+						newPredicate.status = this.statusListIRS.selectedIndex;
+						if (secondRoleIRS.enabled == false && getCurrentStatusDirectedIRS()){
+							secondRoleIRS.enabled = true;
+						} else if (secondRoleIRS.enabled == true && !getCurrentStatusDirectedIRS()) {
+							secondRoleIRS.enabled = false;
+						}
+						break;
+					case "trait":
+						newPredicate.trait = this.traitList.selectedIndex;
+						if (secondRoleIRS.enabled == true) secondRoleIRS.enabled = false;
+						break;
+					case "SFDBLabel":
+						newPredicate.sfdbLabel = this.sfdbLabelList.selectedIndex;
+						newPredicate.second = this.secondRoleIRS.selectedItem;
+						newPredicate.isSFDB = true;
+						newPredicate.window = this.sfdbLabelWindow.value;
+						if (secondRoleIRS.enabled == false) secondRoleIRS.enabled = true;
+						break;
+					case "intentNetwork":
+						newPredicate.networkType = this.networkListIntent.selectedIndex;
+						if (this.intentTypeList.selectedIndex == Predicate.INTENT_NETWORK_UP)
+							newPredicate.comparator = "+";
+						else
+							newPredicate.comparator = "-";
+						newPredicate.networkValue = 0;
+						newPredicate.first = this.firstRoleIntent.selectedItem;
+						newPredicate.second = this.secondRoleIntent.selectedItem;
+						if (secondRoleIntent.enabled == false) secondRoleIntent.enabled = true;
+						break;
+					case "intentStatus":
+						if (this.intentTypeList.selectedIndex == Predicate.INTENT_ADD_STATUS)
+							newPredicate.negated = false;
+						else
+							newPredicate.negated = true;
+						newPredicate.status = this.statusListIntent.selectedIndex;
+						newPredicate.first = this.firstRoleIntent.selectedItem;
+						newPredicate.second = this.secondRoleIntent.selectedItem;
+						if (secondRoleIntent.enabled == false && getCurrentStatusDirectedIntent()){
+							secondRoleIntent.enabled = true;
+						} else if (secondRoleIntent.enabled == true && !getCurrentStatusDirectedIntent()) {
+							secondRoleIntent.enabled = false;
+						}
+						break;
+					default:
+						trace ("state not found");
+				}
+				return newPredicate;
+				
+			}
+			
+			// Changes the string in the predicate editor box based on futzing with the drop downs
+			// ItemSelected refers to the line currently active in the predicate editor
+			// Also updates the working Initiator IRS list
+			public function updatePredicateEditor(itemSelected:Number):void
+			{
+				var workingPredicate:Predicate = this.workingMicroIRS[itemSelected];
+				if (!workingPredicate)
+					trace("Crap, this isn't working. Bug Anne.");
+				// create the predicate string
+				var resultString:String = new String();
+				
+				workingMicroIRS[itemSelected].type = this.microIRSTypeList.selectedIndex;
+				workingMicroIRS[itemSelected] = updatePredicateByState(workingPredicate);
+				resultString += this.workingMicroIRS[this.predicateEditor.selectedIndex].toString();
+				workingMicroIRS[itemSelected].name = resultString;
+				microIRS[itemSelected] = resultString;
+			}
+			
+			// Changes the string in the predicate editor box based on futzing with the drop downs
+			// ItemSelected refers to the line currently active in the predicate editor
+			// Also updates the working Initiator IRS list
+			public function updateIntentEditor(itemSelected:Number):void
+			{
+				var workingPredicate:Predicate = this.workingIntents[itemSelected];
+				var resultString:String = "";
+				if (!workingPredicate)
+					trace("Crap, this isn't working. Bug April.");
+
+				workingIntents[itemSelected].intentType = this.intentTypeList.selectedIndex;
+				resultString += Predicate.getIntentNameByNumber(workingPredicate.intentType) + ": ";
+				resultString += getDropDownValueByStateIntent();
+				workingIntents[itemSelected] = updatePredicateByState(workingPredicate);
+				resultString += this.workingIntents[this.intentEditor.selectedIndex].toString();
+				workingIntents[itemSelected].name = resultString;
+				workingIntents[itemSelected].first = this.firstRoleIntent.selectedItem;
+				workingIntents[itemSelected].second = this.secondRoleIntent.selectedItem;
+				intents[itemSelected] = resultString;
+			}
+			
+			// Gets the value of the appropriate drop down given the current state
+			// (April) Actually gets a little bit more info now!
+			public function getDropDownValueByStateIntent():String
+			{
+				switch (this.currentState)
+				{
+					case "intentNetwork":
+						return (networkListIntent.selectedItem + " (" + this.firstRoleIntent.selectedItem + " toward " + this.secondRoleIntent.selectedItem + ")");
+					case "intentStatus":
+						if (!getCurrentStatusDirectedIntent())
+							return (this.firstRoleIntent.selectedItem + " is " + statusListIntent.selectedItem);
+						else 
+							return (this.firstRoleIntent.selectedItem + " " + statusListIntent.selectedItem + " " + this.secondRoleIntent.selectedItem);
+					default:
+						trace("unknown state: " + this.currentState);
+						return null;
+				}
+			}
+			
+			// Updates the appropriate drop down based on the state
+			// Sets it to the value stored in the chosen line in the predicate editor
+			public function updateDropDownValueByState(workingPredicate:Predicate):void
+			{		
+				if (workingPredicate.intent == false){
+					this.firstRoleIRS.selectedItem = workingPredicate.primary;
+					this.notBox.selected = workingPredicate.negated;
+				} else {
+					this.firstRoleIntent.selectedItem = workingPredicate.primary;
+					this.notBox.selected = workingPredicate.negated;
+				}
+				
+				switch (this.currentState)
+				{
+					case "network":
+						this.networkListIRS.selectedIndex = workingPredicate.networkType;
+						this.secondRoleIRS.selectedItem = workingPredicate.secondary;
+						this.networkWeight.value = workingPredicate.networkValue;
+						this.comparator.selectedItem = workingPredicate.comparator;
+						if (secondRoleIRS.enabled == false) secondRoleIRS.enabled = true;
+						break;
+					case "status":
+						this.statusListIRS.selectedIndex = workingPredicate.status;
+						if (secondRoleIRS.enabled == false && getCurrentStatusDirectedIRS()){
+							secondRoleIRS.enabled = true;
+						} else if (secondRoleIRS.enabled == true && !getCurrentStatusDirectedIRS()) {
+							secondRoleIRS.enabled = false;
+						}
+						break;
+					case "knowledge":
+						this.knowledgeList.selectedIndex = workingPredicate.knowledge;
+						break;
+					case "trait":
+						this.traitList.selectedIndex = workingPredicate.trait;
+						if (secondRoleIRS.enabled == true) secondRoleIRS.enabled = false;
+						break;
+					case "SFDBLabel":
+						this.sfdbLabelList.selectedIndex = workingPredicate.sfdbLabel;
+						this.secondRoleIRS.selectedItem = workingPredicate.secondary;
+						if (secondRoleIRS.enabled == false) secondRoleIRS.enabled = true;
+						this.sfdbLabelWindow.value = workingPredicate.window;
+						break;
+					case "intentNetwork":
+						this.networkListIntent.selectedIndex = workingPredicate.networkType;
+						if (secondRoleIntent.enabled == false) secondRoleIntent.enabled = true;
+						break;
+					case "intentStatus":
+						this.statusListIntent.selectedIndex = workingPredicate.status;
+						if (secondRoleIntent.enabled == false && getCurrentStatusDirectedIntent()){
+							secondRoleIntent.enabled = true;
+						} else if (secondRoleIntent.enabled == true && !getCurrentStatusDirectedIntent()) {
+							secondRoleIntent.enabled = false;
+						}
+						break;
+					default:
+						"updateDropDownValueByState: State not found";
+						break;
+				}
+			}
+			
+			// Updates UI elements based on selecting a line in the predicate editor
+			public function clickOnPredicateEditor(itemSelected:Number):void {
+				var workingPredicate:Predicate = this.workingMicroIRS[itemSelected];
+				
+				changeState(workingPredicate.type);
+				updateDropDownValueByState(this.workingMicroIRS[this.predicateEditor.selectedIndex]);
+			}			
+			
+			// Changes the UI state based on a given predicate type
+			public function changeState(predType:Number):void {
+				setCurrentState(Predicate.getNameByType(predType));
+			}
+			
+			// Updates UI elements based on selecting a line in the predicate editor
+			public function clickOnIntentEditor(itemSelected:Number):void {
+				var workingPredicate:Predicate = this.workingIntents[itemSelected];
+				
+				changeIntentState(workingPredicate.intentType);
+				updateDropDownValueByState(this.workingIntents[this.intentEditor.selectedIndex]);
+			}			
+			
+			// Changes the UI state based on a given intent Type
+			public function changeIntentState(intentType:Number):void {
+				switch (intentType)
+				{
+					case Predicate.INTENT_NETWORK_UP:
+					case Predicate.INTENT_NETWORK_DOWN:
+						setCurrentState("intentNetwork");
+						break;
+					case Predicate.INTENT_ADD_STATUS:
+					case Predicate.INTENT_REMOVE_STATUS:
+						setCurrentState("intentStatus");
+						break;
+					default:
+						trace("Unknown intent type");
+						break;
+				}				
+			}
+			
+			// Add initiator IRS predicate to the predicate editor box
+			// Enables the predicate editor box if it was currently disabled
+			// Adds a string to the window in mostly human readable form
+			// Changes the state of the UI based on the predicate chosen
+			// Adds a filled out predicate to the working initiator IRS list
+			// Moves the selection in the predicate editor to the most recently added item
+			public function addMicroIRS(MicroIRSType:Number):void {
+				var resultString:String = new String();
+				var selectedPredicate:Number = this.predicateEditor.selectedIndex;
+				
+				changeState(MicroIRSType);
+				
+				// Add this to the working predicates
+				var workingPredicate:Predicate = new Predicate();
+				workingPredicate.type = MicroIRSType;
+				workingPredicate = updatePredicateByState(workingPredicate);
+				
+				resultString += workingPredicate.toString();
+				workingPredicate.name = resultString;
+				
+				this.workingMicroIRS.push(workingPredicate);
+				this.microIRS.addItem(resultString);
+				if (!this.predicateEditor.enabled)
+				{
+					this.predicateEditor.enabled = true;
+				}
+				
+				this.predicateEditor.selectedIndex = this.workingMicroIRS.length-1;				
+			}
+			
+			// Removes the selected initiator IRS from the predicate editor box and the working initiator IRS list
+			// Disables the predicate editor box if there is nothing left in it
+			// Moves the selection to the first item
+			public function removeMicroIRS(selection:Number):void {
+				try {
+					this.microIRS.removeItemAt(selection);
+					this.workingMicroIRS.splice(selection, 1);
+				} catch (e:Error) {
+					return; // TODO: Create a popup error message that something must be selected to remove it?
+				}
+				if (this.microIRS.length == 0)
+				{
+					this.predicateEditor.enabled = false;
+					setCurrentState("default");
+				}
+				else
+				{
+					this.predicateEditor.selectedIndex = 0;
+					changeState(workingMicroIRS[this.predicateEditor.selectedIndex].type);
+					updateDropDownValueByState(this.workingMicroIRS[this.predicateEditor.selectedIndex]);
+				}
+			}
+			
+			// Add an intent to the predicate editor box
+			// Enables the predicate editor box if it was currently disabled
+			// Adds a string to the window in mostly human readable form
+			// Changes the state of the UI based on the intent chosen
+			// Adds a filled out predicate to the working intents list
+			// Moves the selection in the predicate editor to the most recently added item
+			public function addIntent(intentType:Number):void {
+				var resultString:String = Predicate.getIntentNameByNumber(intentType) + ": ";
+				var selectedPredicate:Number = this.intentEditor.selectedIndex;
+				
+				changeIntentState(intentType);
+				
+				resultString += getDropDownValueByStateIntent();
+				
+				// Add this to the working predicates
+				var workingPredicate:Predicate = new Predicate();
+				workingPredicate.intent = true;
+				workingPredicate.intentType = intentType;
+				workingPredicate = updatePredicateByState(workingPredicate);
+				workingPredicate.name = resultString;
+				this.workingIntents.splice(0, 1, workingPredicate);
+				
+				// Can only be one intent
+				this.intents.removeAll();
+				// Stick it in there
+				this.intents.addItem(resultString);
+				if (!this.intentEditor.enabled)
+				{
+					this.intentEditor.enabled = true;
+				}
+				
+				this.intentEditor.selectedIndex = this.workingIntents.length;
+			}
+			
+			// Removes the selected intent from the predicate editor box and the working intent list
+			// Disables the predicate editor box if there is nothing left in it
+			// Moves the selection to the first item
+			public function removeIntent(selection:Number):void {
+				this.intents.removeAll();
+				this.intentEditor.enabled = false;
+				setCurrentState("default");
+			}
+			
+			// set everything back to defaults, ready for new pre-condition to be created
+			public function reset(): void
+			{
+				this.microIRS.removeAll();
+				this.intents.removeAll();
+				this.predicateEditor.enabled = false;
+				this.intentEditor.enabled = false;
+				this.microIRSTypeList.selectedIndex = 0;
+				this.intentTypeList.selectedIndex = 0;
+				this.ruleWeight.value = 0;
+				setCurrentState("network");
+				this.networkListIRS.selectedIndex = 0;
+				setCurrentState("intentNetwork");
+				this.networkListIntent.selectedIndex = 0;
+				setCurrentState("knowledge");
+				this.knowledgeList.selectedIndex = 0;
+				setCurrentState("status");
+				this.statusListIRS.selectedIndex = 0;
+				setCurrentState("intentStatus");
+				this.statusListIntent.selectedIndex = 0;
+				setCurrentState("trait");
+				this.traitList.selectedIndex = 0;
+				setCurrentState("SFDBLabel");
+				this.sfdbLabelList.selectedIndex = 0;
+				setCurrentState("default");
+				this.description.text = "";
+				
+				this.workingMicroIRS = new Vector.<Predicate>;
+				this.workingIntents = new Vector.<Predicate>;
+			}
+			
+			// Checks if the current status is directed or not
+			// Used to change output strings and to disable responder dropdowns
+			public function getCurrentStatusDirectedIRS():Boolean {
+				if (Status.getStatusNumberByName(statusListIRS.selectedItem) >= Status.FIRST_DIRECTED_STATUS ||
+					Status.getStatusNumberByName(statusListIRS.selectedItem) == Status.CAT_FEELING_BAD_ABOUT_SOMEONE ||
+					Status.getStatusNumberByName(statusListIRS.selectedItem) == Status.CAT_FEELING_GOOD_ABOUT_SOMEONE)
+					return true;
+				else
+					return false;
+			}
+			
+			// Checks if the current status is directed or not
+			// Used to change output strings and to disable responder dropdowns
+			public function getCurrentStatusDirectedIntent():Boolean {
+				if (Status.getStatusNumberByName(statusListIntent.selectedItem) >= Status.FIRST_DIRECTED_STATUS ||
+					Status.getStatusNumberByName(statusListIntent.selectedItem) == Status.CAT_FEELING_BAD_ABOUT_SOMEONE ||
+					Status.getStatusNumberByName(statusListIntent.selectedItem) == Status.CAT_FEELING_GOOD_ABOUT_SOMEONE)
+					return true;
+				else
+					return false;
+			}
+			
+		]]>
+	</fx:Script>
+
+</s:Group>
