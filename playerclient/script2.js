@@ -28,8 +28,8 @@ var topText = new Kinetic.Text({
     y: 0,
     fontSize: 20,
     fontFamily: 'Calibri',
-    text: 'Begin Kinetic Lab',
-    fill: colorRed
+    text: 'Click and Drag the center circle.',
+    fill: colorBlue
 });
 
 topText.setOffset({
