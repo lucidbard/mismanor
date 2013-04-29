@@ -16,8 +16,8 @@ var centerY = canvas.height / 2;
 // =================== [ Kinetic Stuff ] =====================    
 var stage = new Kinetic.Stage({
     container: 'container',
-    width: 400,
-    height: 300
+    width: 512,
+    height: 512
 });
 
 var sCenterX = stage.getWidth() / 2;
